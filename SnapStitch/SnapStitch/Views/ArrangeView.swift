@@ -9,46 +9,56 @@ struct ArrangeView: View {
     var body: some View {
         List {
             Section {
-                ForEach(viewModel.images) { image in
+                ForEach(Array(viewModel.images.enumerated()), id: \.element.id) { position, image in
                     Button {
                         editingImage = image
                     } label: {
                         HStack(spacing: 12) {
+                            FrameIndexLabel(index: position + 1, total: viewModel.images.count)
+                                .frame(width: 34, alignment: .leading)
+
                             Image(uiImage: image.croppedImage)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 48, height: 64)
                                 .clipShape(RoundedRectangle(cornerRadius: 6))
+                                .overlay(RoundedRectangle(cornerRadius: 6).stroke(Theme.screenLine, lineWidth: 1))
 
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Screenshot")
                                     .font(.subheadline.weight(.medium))
+                                    .foregroundStyle(Theme.ink)
                                 if !image.redactions.isEmpty {
                                     Label("\(image.redactions.count) redaction(s)", systemImage: "eye.slash")
                                         .font(.caption)
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(Theme.accent)
                                 }
                             }
 
                             Spacer()
                             Image(systemName: "slider.horizontal.3")
-                                .foregroundStyle(.secondary)
+                                .foregroundStyle(Theme.inkFaint)
                         }
                     }
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(Theme.ink)
+                    .listRowBackground(Theme.panel)
                 }
                 .onMove { viewModel.move(from: $0, to: $1) }
                 .onDelete { viewModel.remove(at: $0) }
             } header: {
-                Text("Drag to reorder · tap to crop or redact")
+                Eyebrow(text: "Drag to reorder · tap to crop or redact")
             }
 
             Section {
                 PhotosPicker(selection: $selectedItems, maxSelectionCount: 0, matching: .images) {
                     Label("Add More Screenshots", systemImage: "plus")
                 }
+                .foregroundStyle(Theme.accent)
+                .listRowBackground(Theme.panel)
             }
         }
+        .scrollContentBackground(.hidden)
+        .stitchBackground()
         .toolbar { EditButton() }
         .sheet(item: $editingImage) { image in
             ImageEditorView(image: image)
@@ -81,6 +91,7 @@ private struct ImageEditorView: View {
                     ForEach(Tab.allCases) { Text($0.title).tag($0) }
                 }
                 .pickerStyle(.segmented)
+                .tint(Theme.accent)
                 .padding()
 
                 switch tab {
@@ -90,6 +101,7 @@ private struct ImageEditorView: View {
                     RedactEditorView(image: image)
                 }
             }
+            .stitchBackground()
             .navigationTitle("Edit Screenshot")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

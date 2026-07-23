@@ -12,7 +12,10 @@ struct ContentView: View {
                     ArrangeView()
                 }
             }
+            .stitchBackground()
             .navigationTitle("SnapStitch")
+            .toolbarBackground(Theme.panel, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .toolbar {
                 if !viewModel.images.isEmpty {
                     ToolbarItem(placement: .navigationBarTrailing) {

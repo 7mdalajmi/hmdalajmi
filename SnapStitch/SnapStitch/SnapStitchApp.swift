@@ -8,6 +8,7 @@ struct SnapStitchApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(viewModel)
+                .tint(Theme.accent)
         }
     }
 }

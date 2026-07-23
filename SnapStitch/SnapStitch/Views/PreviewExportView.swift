@@ -23,12 +23,13 @@ struct PreviewExportView: View {
                     .padding(.top, 80)
                 }
             }
-            .background(Color(.systemGroupedBackground))
+            .background(Theme.background)
 
             Divider()
+                .background(Theme.panelLine)
 
             Form {
-                Section("Layout") {
+                Section {
                     Picker("Direction", selection: $viewModel.direction) {
                         ForEach(StitchDirection.allCases) { direction in
                             Label(direction.title, systemImage: direction.systemImage).tag(direction)
@@ -37,16 +38,25 @@ struct PreviewExportView: View {
                     HStack {
                         Text("Spacing")
                         Slider(value: $viewModel.spacing, in: 0...40)
-                        Text("\(Int(viewModel.spacing))pt").foregroundStyle(.secondary).monospacedDigit()
+                            .tint(Theme.accent)
+                        Text("\(Int(viewModel.spacing))pt")
+                            .font(Theme.mono(12))
+                            .foregroundStyle(Theme.inkFaint)
                     }
                     ColorPicker("Background", selection: $viewModel.backgroundColor, supportsOpacity: false)
+                } header: {
+                    Eyebrow(text: "Layout")
                 }
+                .listRowBackground(Theme.panel)
+                .foregroundStyle(Theme.ink)
+                .tint(Theme.accent)
 
-                Section("Export") {
+                Section {
                     Picker("Format", selection: $viewModel.exportFormat) {
                         ForEach(ExportFormat.allCases) { Text($0.title).tag($0) }
                     }
                     .pickerStyle(.segmented)
+                    .tint(Theme.accent)
 
                     Button {
                         viewModel.export()
@@ -56,12 +66,19 @@ struct PreviewExportView: View {
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
+                    .tint(Theme.accent)
+                    .foregroundStyle(Theme.accentInk)
                     .disabled(!viewModel.canStitch)
+                } header: {
+                    Eyebrow(text: "Export")
                 }
+                .listRowBackground(Theme.panel)
             }
-            .frame(height: 320)
+            .frame(height: 340)
             .scrollContentBackground(.hidden)
+            .background(Theme.background)
         }
+        .stitchBackground()
         .navigationTitle("Preview & Export")
         .navigationBarTitleDisplayMode(.inline)
         .task(id: refreshKey) {

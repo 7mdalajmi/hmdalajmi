@@ -21,6 +21,7 @@
 		E49F5C50CB754EF588D53DF1 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = C84451384B4A4D5C8E949D8E /* ShareSheet.swift */; };
 		EB5B1D9D5B2846319D378D44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 669ABEDD64D64609A3A91CAC /* Assets.xcassets */; };
 		4BE9604E469C4021B6B0889E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB872D8C0F414D3FB7C0B96C /* Preview Assets.xcassets */; };
+		DB115FA069C84A4F92A3A93C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25A3E319F984FA3B83326C4 /* Theme.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		EB872D8C0F414D3FB7C0B96C /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		C2B67BDFF80E407AB7C32EE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CAD7A4BF9DF446129140E40E /* SnapStitch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnapStitch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A25A3E319F984FA3B83326C4 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +68,7 @@
 			children = (
 				0DCA2BC7FB82497698C228B4 /* SnapStitchApp.swift */,
 				08774B6673D041F68FED73D7 /* ContentView.swift */,
+				A25A3E319F984FA3B83326C4 /* Theme.swift */,
 				704F7F3FC71140F9B48880C7 /* Models */,
 				BEFB3C856D6B4EC0BC426E36 /* ViewModels */,
 				AF06983DC20C4650AA86B537 /* Services */,
@@ -205,6 +208,7 @@
 			files = (
 				4F76AD7558B54DE6BBCE870A /* SnapStitchApp.swift in Sources */,
 				391094CA24B04DB580B863F5 /* ContentView.swift in Sources */,
+				DB115FA069C84A4F92A3A93C /* Theme.swift in Sources */,
 				E9CA744B9B7F42F6BD848D03 /* StitchModels.swift in Sources */,
 				01D73155551A4869B46A88E1 /* StitchViewModel.swift in Sources */,
 				0562CF4FBDB44147A931CA8D /* ImageStitcher.swift in Sources */,

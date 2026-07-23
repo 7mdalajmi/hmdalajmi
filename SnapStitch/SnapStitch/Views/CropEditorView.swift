@@ -9,7 +9,7 @@ struct CropEditorView: View {
         VStack(spacing: 20) {
             GeometryReader { geo in
                 ZStack {
-                    Color(.secondarySystemBackground)
+                    Theme.screenLine
 
                     Image(uiImage: image.original)
                         .resizable()
@@ -27,22 +27,26 @@ struct CropEditorView: View {
                 }
             }
             .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Theme.panelLine, lineWidth: 1))
             .padding(.horizontal)
 
             VStack(alignment: .leading, spacing: 16) {
-                VStack(alignment: .leading) {
-                    Text("Crop from top")
+                VStack(alignment: .leading, spacing: 6) {
+                    Eyebrow(text: "Crop from top")
                     Slider(value: $image.cropTop, in: 0...0.9)
+                        .tint(Theme.accent)
                 }
-                VStack(alignment: .leading) {
-                    Text("Crop from bottom")
+                VStack(alignment: .leading, spacing: 6) {
+                    Eyebrow(text: "Crop from bottom")
                     Slider(value: $image.cropBottom, in: 0...0.9)
+                        .tint(Theme.accent)
                 }
 
                 Button("Reset Crop") {
                     image.cropTop = 0
                     image.cropBottom = 0
                 }
+                .tint(Theme.accent)
                 .disabled(image.cropTop == 0 && image.cropBottom == 0)
             }
             .padding(.horizontal)

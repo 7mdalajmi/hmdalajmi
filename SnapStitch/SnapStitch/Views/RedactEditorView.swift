@@ -16,6 +16,7 @@ struct RedactEditorView: View {
                 ForEach(RedactionStyle.allCases) { Text($0.title).tag($0) }
             }
             .pickerStyle(.segmented)
+            .tint(Theme.accent)
             .padding(.horizontal)
 
             GeometryReader { geo in
@@ -40,8 +41,8 @@ struct RedactEditorView: View {
                     if let start = dragStart, let current = dragCurrent {
                         let rect = normalizedRect(start, current)
                         Rectangle()
-                            .fill(Color.accentColor.opacity(0.35))
-                            .overlay(Rectangle().stroke(Color.accentColor, lineWidth: 2))
+                            .fill(Theme.accent.opacity(0.35))
+                            .overlay(Rectangle().stroke(Theme.accent, lineWidth: 2))
                             .frame(width: rect.width * canvasSize.width, height: rect.height * canvasSize.height)
                             .position(
                                 x: rect.midX * canvasSize.width,
@@ -69,11 +70,13 @@ struct RedactEditorView: View {
                 )
             }
             .clipShape(RoundedRectangle(cornerRadius: 12))
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Theme.panelLine, lineWidth: 1))
             .padding(.horizontal)
 
-            Text("Drag over the parts of the screenshot you want to hide.")
+            Text("Drag over the parts of the screenshot you want to hide. Processed on-device.")
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Theme.inkSoft)
+                .padding(.horizontal)
 
             if !image.redactions.isEmpty {
                 Button(role: .destructive) {
@@ -86,6 +89,7 @@ struct RedactEditorView: View {
             Spacer()
         }
         .padding(.top)
+        .stitchBackground()
     }
 
     private func normalizedRect(_ a: CGPoint, _ b: CGPoint) -> CGRect {
@@ -106,6 +110,7 @@ struct RedactEditorView: View {
     private func redactionOverlay(for box: RedactionBox, in size: CGSize) -> some View {
         Rectangle()
             .fill(Color(box.style == .solid ? UIColor(cgColor: box.color) : .black).opacity(box.style == .solid ? 1 : 0.4))
+            .overlay(RoundedRectangle(cornerRadius: 2).stroke(Theme.accent, lineWidth: 1))
             .overlay(
                 Image(systemName: box.style == .blur ? "drop.fill" : (box.style == .pixelate ? "square.grid.3x3.fill" : "eye.slash.fill"))
                     .foregroundStyle(.white.opacity(0.8))
