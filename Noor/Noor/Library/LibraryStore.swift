@@ -66,8 +66,10 @@ final class LibraryStore {
     @ObservationIgnored private var activeImports = 0
     @ObservationIgnored private var memoryWarningObserver: NSObjectProtocol?
 
-    /// Thumbnail slots kept in memory (~1 MB each once drawn); least recently requested go first.
-    private static let slotLimit = 240
+    /// Thumbnail slots kept in memory (~1-1.4 MB of decoded bitmap each); least recently requested
+    /// go first. 120 is about 2.5 screens of the largest iPad grid while staying near 150 MB, because
+    /// the grid stays alive (and keeps its slots) underneath the editor.
+    private static let slotLimit = 120
     /// The editor saves about once a second while the user works; re-render the library thumbnail
     /// only once edits pause, so it never competes with the live preview.
     private static let refreshDelay: Duration = .milliseconds(1500)
@@ -151,10 +153,11 @@ final class LibraryStore {
             slot = existing
             slot.lastAccess = accessTick
         } else {
+            // Trim first, so the slot being created can never be evicted by its own insertion.
+            trimSlotsIfNeeded()
             slot = LibraryThumbnailSlot()
             slot.lastAccess = accessTick
             slots[project.id] = slot
-            trimSlotsIfNeeded()
         }
 
         let digest = thumbnailDigest(for: project)
@@ -206,7 +209,7 @@ final class LibraryStore {
     /// Drops the least recently requested slots. Cells on screen keep showing the image they already
     /// have; they only ask again when they are rebuilt.
     private func trimSlotsIfNeeded() {
-        guard slots.count > LibraryStore.slotLimit else { return }
+        guard slots.count >= LibraryStore.slotLimit else { return }
         let target = LibraryStore.slotLimit * 3 / 4
         let evictable = slots
             .filter { $0.value.pendingDigest == nil }
@@ -313,7 +316,7 @@ final class LibraryStore {
 
     /// Inspects the staged original off the main thread and assembles its project folder.
     private func createProject(from original: ImportedOriginal, createdAt: Date) async throws -> PhotoProject {
-        try await Task.detached(priority: .userInitiated) {
+        try await Task.detached(priority: .userInitiated) { () throws -> PhotoProject in
             defer { original.discardStaging() }
             return try LibraryFiles.makeProject(stagedFile: original.url,
                                                 fileName: original.fileName,

@@ -72,7 +72,9 @@ struct SettingsView: View {
                 }
             }
             .task {
-                usage = await app.library.storageUsage()
+                // Through a method: the local `@Bindable var app` above must not be captured by
+                // this (Sendable) task closure.
+                await refreshUsage()
             }
         }
         .tint(Theme.accent)
@@ -118,10 +120,14 @@ struct SettingsView: View {
         }
     }
 
+    private func refreshUsage() async {
+        usage = await app.library.storageUsage()
+    }
+
     private func clearThumbnailCache() async {
         isClearingCache = true
         await app.library.clearThumbnailCache()
-        usage = await app.library.storageUsage()
+        await refreshUsage()
         isClearingCache = false
     }
 
