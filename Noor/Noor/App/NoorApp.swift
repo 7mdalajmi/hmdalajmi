@@ -86,7 +86,7 @@ struct RootView: View {
     private static func kind(of url: URL) -> OpenedFileKind {
         let ext = url.pathExtension.lowercased()
         switch ext {
-        case "noorpreset", "xmp":
+        case PresetCodec.fileExtension, "xmp":
             return .preset
         case "dng":
             return .dng

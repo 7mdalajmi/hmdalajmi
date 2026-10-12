@@ -172,7 +172,9 @@ struct SettingsView: View {
         case .original:
             return "The same kind of file as the original, at its best quality. Unedited photos are copied byte for byte."
         case .heif10:
-            return "The best lossy format. Keeps wide color and HDR."
+            // Gain-map HDR export needs iOS 18 (CIImageRepresentationOption.hdrImage).
+            if #available(iOS 18.0, *) { return "The best lossy format. Keeps wide color and HDR." }
+            return "The best lossy format. Keeps wide color."
         case .tiff16:
             return "A lossless 16-bit master. Large files."
         case .png16:
