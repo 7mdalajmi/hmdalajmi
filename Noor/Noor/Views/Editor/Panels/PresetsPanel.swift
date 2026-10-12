@@ -50,6 +50,8 @@ struct PresetsPanel: View {
         let selected = Self.resolvedChip(storedID: storedChipID, among: chips)
         let presets = Self.presets(for: selected, in: library)
         let activePreset = model.activePresetID.flatMap { library.preset(id: $0) }
+        // The previewed preset was deleted elsewhere (e.g. in the preset manager).
+        let isActivePresetMissing = model.activePresetID != nil && activePreset == nil
         let showsAmount = isAmountVisible && (activePreset?.supportsAmount ?? false)
 
         VStack(spacing: 0) {
@@ -80,6 +82,10 @@ struct PresetsPanel: View {
         }
         .onChange(of: model.activePresetID) { _, activeID in
             if activeID == nil { isAmountVisible = false }
+        }
+        .onChange(of: isActivePresetMissing) { _, isMissing in
+            // Never keep a preview of a preset that no longer exists (same as deleting it here).
+            if isMissing { model.cancelPreset() }
         }
         .sensoryFeedback(.selection, trigger: selectionTick) { _, _ in hapticsEnabled }
         .sheet(isPresented: $isManagerPresented) {

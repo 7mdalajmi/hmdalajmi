@@ -32,7 +32,8 @@ extension UTType {
 
     /// Every content type the preset importer accepts (for `.fileImporter`): Noor presets, Lightroom
     /// `.xmp` presets, "DNG presets" (settings inside a DNG) and folders of presets.
-    static var noorPresetImportTypes: [UTType] {
+    /// The single list used by every preset file picker.
+    static let noorPresetImportTypes: [UTType] = {
         var types: [UTType] = [.noorPreset, .lightroomXMP, .folder, .rawImage, .json, .xml]
         for ext in ["xmp", "dng", "noorpreset"] {
             if let type = UTType(filenameExtension: ext), !types.contains(type) {
@@ -40,7 +41,7 @@ extension UTType {
             }
         }
         return types
-    }
+    }()
 }
 
 // MARK: - Model

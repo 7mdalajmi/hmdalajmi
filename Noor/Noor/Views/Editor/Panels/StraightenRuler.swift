@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 import Foundation
 
 // MARK: - Straighten ruler
@@ -11,6 +12,9 @@ import Foundation
 /// haptic. Double-tap resets to 0°. It is a physical rotation direction, so it is always laid out
 /// left-to-right. The value bubble shows the angle with the user's locale ("−2.3°").
 ///
+/// The drag only starts when the finger moves mostly sideways (`PanelDragSurface`), so a vertical
+/// swipe that starts on the ruler scrolls the panel instead of turning the photo.
+///
 /// The ruler does not own the value: it reports changes through `onChange` and brackets each
 /// gesture with `onEditingChanged(true/false)` so the caller can record one undo step.
 @MainActor
@@ -22,12 +26,11 @@ struct StraightenRuler: View {
 
     @Environment(\.locale) private var locale
     @Environment(\.noorHapticsEnabled) private var hapticsEnabled
+    @Environment(\.isEnabled) private var isEnabled
     @State private var drag: RulerDrag?
-    @State private var sessionCounter = 0
     @State private var detentTick = 0
     @State private var edgeTick = 0
     @State private var resetTick = 0
-    @GestureState private var isTouching = false
 
     init(value: Double,
          range: ClosedRange<Double> = EditRecipe.Limits.straighten.closed,
@@ -52,21 +55,18 @@ struct StraightenRuler: View {
                 RulerRenderer.draw(in: &context, size: size, value: shown, range: currentRange, labels: labels)
             }
             .frame(height: 40)
-            .contentShape(Rectangle())
-            .gesture(dragGesture)
-            .onTapGesture(count: 2) { reset() }
+        }
+        // The whole ruler (bubble included) is the touch target.
+        .overlay {
+            PanelDragSurface(isEnabled: isEnabled,
+                             shouldBegin: { $0.isMostlyHorizontal },
+                             onDrag: { handleDrag($0) },
+                             onDoubleTap: { reset() })
         }
         .environment(\.layoutDirection, .leftToRight)
         .sensoryFeedback(.alignment, trigger: detentTick) { _, _ in hapticsEnabled }
         .sensoryFeedback(.impact(weight: .medium, intensity: 0.6), trigger: edgeTick) { _, _ in hapticsEnabled }
         .sensoryFeedback(.selection, trigger: resetTick) { _, _ in hapticsEnabled }
-        .onChange(of: isTouching) { _, touching in
-            guard !touching, let id = drag?.id else { return }
-            // The gesture was cancelled by the system (onEnded never ran): close the edit.
-            Task { @MainActor in
-                if drag?.id == id { dragEnded() }
-            }
-        }
         .onDisappear { dragEnded() }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("Straighten"))
@@ -104,25 +104,27 @@ struct StraightenRuler: View {
 
     // MARK: Gesture
 
-    private var dragGesture: some Gesture {
-        DragGesture(minimumDistance: 3)
-            .updating($isTouching) { _, state, _ in state = true }
-            .onChanged { gesture in dragChanged(gesture) }
-            .onEnded { _ in dragEnded() }
+    private func handleDrag(_ gesture: PanelDrag) {
+        switch gesture.phase {
+        case .began:
+            guard drag == nil else { return }
+            // Relative: the movement that started the drag does not change the angle.
+            drag = RulerDrag(value: quantized(value), lastX: gesture.translation.width)
+            onEditingChanged(true)
+        case .changed:
+            dragChanged(gesture.translation)
+        case .ended:
+            dragEnded()
+        }
     }
 
-    private func dragChanged(_ gesture: DragGesture.Value) {
-        guard var current = drag else {
-            sessionCounter += 1
-            drag = RulerDrag(id: sessionCounter, value: quantized(value), lastX: gesture.translation.width)
-            onEditingChanged(true)
-            return
-        }
-        let dx = gesture.translation.width - current.lastX
-        current.lastX = gesture.translation.width
+    private func dragChanged(_ translation: CGSize) {
+        guard var current = drag else { return }
+        let dx = translation.width - current.lastX
+        current.lastX = translation.width
 
         // Precision scrubbing: the further the finger strays vertically, the finer the control.
-        let dy = abs(gesture.translation.height)
+        let dy = abs(translation.height)
         let precision: Double = dy > 120 ? 0.25 : (dy > 60 ? 0.5 : 1)
         let degreesPerPoint = precision / Double(RulerMetrics.pointsPerDegree)
         let old = current.value
@@ -188,7 +190,6 @@ struct StraightenRuler: View {
 
 /// One drag of the ruler.
 private struct RulerDrag {
-    let id: Int
     /// Working angle (the caller's value may lag one update behind).
     var value: Double
     /// Last horizontal translation seen, for incremental deltas.
@@ -257,5 +258,185 @@ private enum RulerRenderer {
         // The fixed centre mark (the accent marks the current value).
         let mark = Path(roundedRect: CGRect(x: centerX - 1, y: bottom - 22, width: 2, height: 22), cornerRadius: 1)
         context.fill(mark, with: .color(Theme.accent))
+    }
+}
+
+// MARK: - UIKit drag surface (shared by the straighten ruler and the grading wheels)
+
+/// One update from a `PanelDragSurface`, in the surface's own coordinates (top-left origin).
+struct PanelDrag {
+    enum Phase {
+        case began, changed, ended
+    }
+
+    var phase: Phase
+    /// Where the finger went down.
+    var startLocation: CGPoint
+    /// Where the finger is now.
+    var location: CGPoint
+    /// Seconds between touch-down and the start of the drag (press-and-hold detection).
+    var heldFor: TimeInterval
+
+    /// Finger movement since touch-down.
+    var translation: CGSize {
+        CGSize(width: location.x - startLocation.x, height: location.y - startLocation.y)
+    }
+}
+
+/// What a `PanelDragSurface` knows when the finger starts to move, to decide whether the drag
+/// belongs to the control or to the enclosing panel.
+struct PanelDragStart {
+    /// Where the finger went down.
+    var location: CGPoint
+    /// Movement so far.
+    var translation: CGSize
+    /// Whether the enclosing vertical scroll view (the panel) has anything to scroll.
+    var panelCanScroll: Bool
+
+    /// More sideways than up/down.
+    var isMostlyHorizontal: Bool {
+        abs(translation.width) > abs(translation.height)
+    }
+}
+
+/// A transparent UIKit view that owns a one-finger drag (and an optional double-tap) for a control
+/// that lives inside a vertical panel `ScrollView`.
+///
+/// SwiftUI's `DragGesture` cannot decline a touch once it has started, so inside a scroll view it
+/// either blocks scrolling or fights with it. A `UIPanGestureRecognizer` can: it begins only when
+/// `shouldBegin` accepts the movement, and the enclosing scroll view's pan waits for that decision.
+/// Swipes the control declines therefore scroll the panel, and once a drag has begun the panel
+/// never moves under the finger. Accessibility is left to the SwiftUI control underneath.
+struct PanelDragSurface: UIViewRepresentable {
+    var isEnabled: Bool
+    /// Called when the finger starts to move; `false` leaves the touch to the panel.
+    var shouldBegin: (PanelDragStart) -> Bool
+    var onDrag: (PanelDrag) -> Void
+    var onDoubleTap: (() -> Void)?
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator()
+    }
+
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.isOpaque = false
+        view.isAccessibilityElement = false
+        view.accessibilityElementsHidden = true
+
+        let coordinator = context.coordinator
+        let pan = UIPanGestureRecognizer(target: coordinator, action: #selector(Coordinator.handlePan(_:)))
+        pan.maximumNumberOfTouches = 1
+        pan.delegate = coordinator
+        view.addGestureRecognizer(pan)
+        coordinator.pan = pan
+
+        let doubleTap = UITapGestureRecognizer(target: coordinator,
+                                               action: #selector(Coordinator.handleDoubleTap(_:)))
+        doubleTap.numberOfTapsRequired = 2
+        view.addGestureRecognizer(doubleTap)
+        coordinator.doubleTap = doubleTap
+
+        configure(coordinator)
+        return view
+    }
+
+    func updateUIView(_ uiView: UIView, context: Context) {
+        configure(context.coordinator)
+    }
+
+    private func configure(_ coordinator: Coordinator) {
+        coordinator.shouldBegin = shouldBegin
+        coordinator.onDrag = onDrag
+        coordinator.onDoubleTap = onDoubleTap
+        // Disabling a recognizer mid-gesture cancels it, which reports `.ended`.
+        coordinator.pan?.isEnabled = isEnabled
+        coordinator.doubleTap?.isEnabled = isEnabled && onDoubleTap != nil
+    }
+
+    /// Target and delegate of the recognizers. Main-thread only (UIKit gesture callbacks).
+    @MainActor
+    final class Coordinator: NSObject, UIGestureRecognizerDelegate {
+        var shouldBegin: (PanelDragStart) -> Bool = { _ in false }
+        var onDrag: (PanelDrag) -> Void = { _ in }
+        var onDoubleTap: (() -> Void)?
+        weak var pan: UIPanGestureRecognizer?
+        weak var doubleTap: UITapGestureRecognizer?
+
+        /// Touch-down of the current pan (UIKit reports the translation only from recognition).
+        private var touchDownLocation = CGPoint.zero
+        /// `UITouch.timestamp` of the touch-down (seconds of system uptime).
+        private var touchDownTime: TimeInterval = 0
+        private var heldFor: TimeInterval = 0
+
+        @objc func handlePan(_ recognizer: UIPanGestureRecognizer) {
+            let location = recognizer.location(in: recognizer.view)
+            switch recognizer.state {
+            case .began:
+                heldFor = max(ProcessInfo.processInfo.systemUptime - touchDownTime, 0)
+                onDrag(event(.began, at: location))
+            case .changed:
+                onDrag(event(.changed, at: location))
+            case .ended, .cancelled, .failed:
+                onDrag(event(.ended, at: location))
+            default:
+                break
+            }
+        }
+
+        @objc func handleDoubleTap(_ recognizer: UITapGestureRecognizer) {
+            guard recognizer.state == .ended else { return }
+            onDoubleTap?()
+        }
+
+        private func event(_ phase: PanelDrag.Phase, at location: CGPoint) -> PanelDrag {
+            PanelDrag(phase: phase, startLocation: touchDownLocation, location: location, heldFor: heldFor)
+        }
+
+        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+            if gestureRecognizer === pan, gestureRecognizer.state == .possible, gestureRecognizer.numberOfTouches == 0 {
+                touchDownLocation = touch.location(in: gestureRecognizer.view)
+                touchDownTime = touch.timestamp
+            }
+            return true
+        }
+
+        func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+            guard let pan = gestureRecognizer as? UIPanGestureRecognizer, pan === self.pan else { return true }
+            let location = pan.location(in: pan.view)
+            var translation = CGSize(width: location.x - touchDownLocation.x,
+                                     height: location.y - touchDownLocation.y)
+            if translation == .zero {
+                let velocity = pan.velocity(in: pan.view)
+                translation = CGSize(width: velocity.x, height: velocity.y)
+            }
+            return shouldBegin(PanelDragStart(location: touchDownLocation,
+                                              translation: translation,
+                                              panelCanScroll: Coordinator.panelCanScroll(from: pan.view)))
+        }
+
+        /// Makes an enclosing scroll view's pan wait until this pan has decided (and failed for a
+        /// declined swipe), so the two never race for the same touch.
+        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
+                               shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+            guard gestureRecognizer === pan,
+                  let scrollView = otherGestureRecognizer.view as? UIScrollView else { return false }
+            return otherGestureRecognizer === scrollView.panGestureRecognizer
+        }
+
+        /// Whether the nearest vertically scrollable ancestor has content taller than itself.
+        private static func panelCanScroll(from view: UIView?) -> Bool {
+            var next = view?.superview
+            while let current = next {
+                if let scrollView = current as? UIScrollView, scrollView.isScrollEnabled {
+                    let insets = scrollView.adjustedContentInset
+                    let visible = scrollView.bounds.height - insets.top - insets.bottom
+                    if scrollView.contentSize.height > visible + 1 { return true }
+                }
+                next = current.superview
+            }
+            return false
+        }
     }
 }

@@ -14,7 +14,7 @@ import UniformTypeIdentifiers
 ///
 /// From Files, `stageFile(at:)` copies under security-scoped access and a coordinated read, which also
 /// downloads iCloud Drive placeholders first.
-struct ImportedOriginal: Transferable {
+struct ImportedOriginal: Transferable, Sendable {
     /// The staged copy (exact bytes of the original).
     let url: URL
     /// Name the original had where it came from (may be a system-generated name for Photos items).

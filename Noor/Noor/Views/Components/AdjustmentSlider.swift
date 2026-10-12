@@ -36,7 +36,8 @@ enum SliderTrackStyle: Equatable {
 struct AdjustmentSlider: View {
     // MARK: Configuration
 
-    private let title: LocalizedStringKey
+    /// The row's label (also the VoiceOver label).
+    private let label: Text
     @Binding private var value: Double
     private let range: ClosedRange<Double>
     private let defaultValue: Double
@@ -89,7 +90,26 @@ struct AdjustmentSlider: View {
          track: SliderTrackStyle = .standard,
          isEnabled: Bool = true,
          onEditingChanged: @escaping (Bool) -> Void = { _ in }) {
-        self.title = title
+        self.init(label: Text(title),
+                  value: value,
+                  range: range,
+                  defaultValue: defaultValue,
+                  fractionDigits: fractionDigits,
+                  track: track,
+                  isEnabled: isEnabled,
+                  onEditingChanged: onEditingChanged)
+    }
+
+    /// Same as above with a ready-made label (e.g. `Text` from a `LocalizedStringResource`).
+    init(label: Text,
+         value: Binding<Double>,
+         range: ClosedRange<Double>,
+         defaultValue: Double = 0,
+         fractionDigits: Int = 0,
+         track: SliderTrackStyle = .standard,
+         isEnabled: Bool = true,
+         onEditingChanged: @escaping (Bool) -> Void = { _ in }) {
+        self.label = label
         self._value = value
         self.range = range
         self.defaultValue = defaultValue
@@ -116,7 +136,7 @@ struct AdjustmentSlider: View {
         .sensoryFeedback(.impact(weight: .medium, intensity: 0.6), trigger: edgeHits) { _, _ in hapticsEnabled }
         .sensoryFeedback(.selection, trigger: resets) { _, _ in hapticsEnabled }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(title))
+        .accessibilityLabel(label)
         .accessibilityValue(Text(verbatim: formatted(value)))
         .accessibilityAdjustableAction { direction in adjust(direction) }
         .accessibilityAction(named: Text("Reset")) { reset() }
@@ -125,7 +145,7 @@ struct AdjustmentSlider: View {
     /// Label (reading-start edge) and live value (reading-end edge). Mirrors in RTL.
     private var labelRow: some View {
         HStack(alignment: .firstTextBaseline, spacing: Theme.Space.s) {
-            Text(title)
+            label
                 .font(.footnote)
                 .lineLimit(2)
             Spacer(minLength: Theme.Space.s)

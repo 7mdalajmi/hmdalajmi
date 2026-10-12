@@ -45,7 +45,7 @@ struct PreviewRequest: Sendable {
 /// the detail tier (`fullBase`, render scale 1) is the exact export look, cropped to the visible region
 /// so its cost follows the visible pixels, not the photo size.
 ///
-/// Thread safety: `submit`, `onHistogram` and `proxyScale` may be used from any thread (one lock guards
+/// Thread safety: `submit`, `stop`, `onHistogram` and `proxyScale` may be used from any thread (one lock guards
 /// the shared fields); `attach(canvas:)` runs on the main thread. Everything else, including the
 /// histogram computer and every `CIFilter`, is confined to the render queue. The canvas view (main
 /// actor) is never touched from the render queue: its viewport and surround are read from the
@@ -71,6 +71,8 @@ final class PreviewRenderer: @unchecked Sendable {
     private var pendingRequest: PreviewRequest?
     private var target: CanvasTarget?
     private var targetGeneration: UInt64 = 0
+    /// Set by `stop()`: no request is accepted or drawn afterwards.
+    private var isStopped = false
     private var histogramHandler: (@Sendable (Histogram) -> Void)?
     private var resolvedProxyLongEdge: CGFloat?
     private var measuredProxyScale: CGFloat?
@@ -111,9 +113,30 @@ final class PreviewRenderer: @unchecked Sendable {
         let layer = canvas.metalLayer
         let state = canvas.renderState
         lock.lock()
+        defer { lock.unlock() }
+        guard !isStopped else { return }
         targetGeneration &+= 1
         target = CanvasTarget(canvas: WeakCanvas(canvas), layer: layer, state: state, id: targetGeneration)
+    }
+
+    /// Ends drawing for good (the editor closed). Any thread. Drops the queued request, the canvas and
+    /// the histogram handler; later `submit` / `attach` calls are ignored. Then, on the render queue
+    /// (so after a frame that may still be rendering, and never on the main thread, where waiting
+    /// for the document's decode lock could stall the UI), frees the document's full-resolution
+    /// decode and the preview caches. A frame already in progress may still finish.
+    func stop() {
+        lock.lock()
+        isStopped = true
+        pendingRequest = nil
+        target = nil
+        histogramHandler = nil
         lock.unlock()
+        let document = self.document
+        let engine = self.engine
+        queue.async {
+            document.purgeFullResolution()
+            engine.clearCaches()
+        }
     }
 
     /// Queues `request`; a newer request submitted before the render queue gets to it replaces it.
@@ -122,6 +145,10 @@ final class PreviewRenderer: @unchecked Sendable {
     func submit(_ request: PreviewRequest) {
         var next = request
         lock.lock()
+        guard !isStopped else {
+            lock.unlock()
+            return
+        }
         if let replaced = pendingRequest, replaced.wantsHistogram {
             next.wantsHistogram = true
         }

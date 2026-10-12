@@ -55,7 +55,7 @@ final class CanvasRenderState: @unchecked Sendable {
         set { lock.lock(); storedViewport = newValue; lock.unlock() }
     }
 
-    /// Neutral grey behind the photo (letterbox), as a colour-managed Core Image colour.
+    /// Neutral grey behind the photo (letterbox), as a Core Image colour in the working space.
     var surroundColor: CIColor {
         get { lock.lock(); defer { lock.unlock() }; return storedSurround }
         set { lock.lock(); storedSurround = newValue; lock.unlock() }
@@ -533,9 +533,19 @@ final class CanvasView: UIView, UIGestureRecognizerDelegate {
         renderState.surroundColor = CanvasView.surroundColor(for: surround)
     }
 
-    /// The Settings surround as a colour-managed Core Image colour (sRGB greys from the theme).
+    /// The Settings surround (`Theme.surround`, the same colour SwiftUI paints around the canvas) as a
+    /// Core Image colour. Converted explicitly into the renderer's working space (extended linear
+    /// Display P3) and tagged with it, so the drawn letterbox matches the theme exactly whether or
+    /// not Core Image colour-matches a `CIColor` from its own space.
     private static func surroundColor(for surround: CanvasSurround) -> CIColor {
-        CIColor(cgColor: UIColor(Theme.surround(surround)).cgColor)
+        let source = UIColor(Theme.surround(surround)).cgColor
+        let space = RenderEngine.shared.workingSpace
+        if let converted = source.converted(to: space, intent: .defaultIntent, options: nil),
+           let c = converted.components, c.count >= 3,
+           let color = CIColor(red: c[0], green: c[1], blue: c[2], colorSpace: space) {
+            return color
+        }
+        return CIColor(cgColor: source)
     }
 }
 

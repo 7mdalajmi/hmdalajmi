@@ -54,8 +54,9 @@ final class LibraryStore {
 
     // MARK: Private state
 
-    @ObservationIgnored private let pipeline = LibraryThumbnailPipeline()
-    @ObservationIgnored private let ioQueue = DispatchQueue(label: "com.hmdalajmi.noor.library.io", qos: .utility)
+    // Constants are never tracked by `@Observable`, so they need no `@ObservationIgnored`.
+    private let pipeline = LibraryThumbnailPipeline()
+    private let ioQueue = DispatchQueue(label: "com.hmdalajmi.noor.library.io", qos: .utility)
     /// One observable slot per project, so a finished thumbnail refreshes only its own cell.
     @ObservationIgnored private var slots: [UUID: LibraryThumbnailSlot] = [:]
     /// Stable recipe digests, cached per project (recomputed only when the recipe changes).
@@ -376,7 +377,9 @@ final class LibraryStore {
     /// space until one of them is removed) and the same recipe. It sorts right after the source.
     func duplicate(_ project: PhotoProject) {
         guard let source = self.project(id: project.id) else { return }
-        let createdAt = source.createdAt.addingTimeInterval(-0.001)
+        // 1 µs (well above `Date`'s resolution): items of one import batch are 1 ms apart, so a
+        // 1 ms offset could tie with, or sort after, the next photo of the source's batch.
+        let createdAt = source.createdAt.addingTimeInterval(-0.000_001)
         let digest = thumbnailDigest(for: source)
         let sourceImage: UIImage? = slots[source.id].flatMap { $0.imageDigest == digest ? $0.image : nil }
 
@@ -530,20 +533,30 @@ private struct LibraryThumbnailRequest: Sendable {
 ///
 /// Thread safety: cache reads run on one private `OperationQueue` and renders on another (two at a
 /// time each, utility QoS), so a slow RAW render never holds up thumbnails that are already on disk.
-/// The only shared mutable state, a tiny most-recently-used list of open `PhotoDocument`s (so
-/// re-rendering the photo being edited reuses its decoded thumbnail base), is guarded by `lock`.
-/// `PhotoDocument` itself is thread-safe.
+/// The shared mutable state, a tiny most-recently-used list of open `PhotoDocument`s (so re-rendering
+/// the photo being edited reuses its decoded thumbnail base) and the stack of waiting renders, is
+/// guarded by `lock`. `PhotoDocument` itself is thread-safe.
 private final class LibraryThumbnailPipeline: @unchecked Sendable {
     /// Long edge of library thumbnails, in pixels.
     static let longEdge: CGFloat = 600
     private static let jpegQuality = 0.85
     private static let documentLimit = 2
 
+    /// A render waiting for a worker.
+    private struct RenderJob {
+        let request: LibraryThumbnailRequest
+        let fileURL: URL
+        let completion: @Sendable (UIImage?) -> Void
+    }
+
     private let diskQueue = LibraryThumbnailPipeline.makeQueue(name: "com.hmdalajmi.noor.library.thumbnails.disk")
     private let renderQueue = LibraryThumbnailPipeline.makeQueue(name: "com.hmdalajmi.noor.library.thumbnails.render")
     private let lock = NSLock()
     /// Most recently used last. Guarded by `lock`.
     private var documents: [(url: URL, document: PhotoDocument)] = []
+    /// Newest last; workers take the newest first, so after a fast scroll through an uncached library
+    /// the cells on screen render before the ones already scrolled past. Guarded by `lock`.
+    private var pendingRenders: [RenderJob] = []
 
     private static func makeQueue(name: String) -> OperationQueue {
         let queue = OperationQueue()
@@ -562,10 +575,22 @@ private final class LibraryThumbnailPipeline: @unchecked Sendable {
                 completion(cached)
                 return
             }
-            self.renderQueue.addOperation { [self] in
-                let image = autoreleasepool { self.render(request, to: fileURL) }
-                completion(image)
-            }
+            self.enqueueRender(RenderJob(request: request, fileURL: fileURL, completion: completion))
+        }
+    }
+
+    /// One worker operation per job; each operation runs the newest job still waiting (LIFO).
+    private func enqueueRender(_ job: RenderJob) {
+        lock.lock()
+        pendingRenders.append(job)
+        lock.unlock()
+        renderQueue.addOperation { [self] in
+            lock.lock()
+            let next = pendingRenders.popLast()
+            lock.unlock()
+            guard let next else { return }
+            let image = autoreleasepool { self.render(next.request, to: next.fileURL) }
+            next.completion(image)
         }
     }
 
@@ -758,6 +783,10 @@ private enum LibraryFiles {
     static func makeProject(stagedFile: URL, fileName: String, declaredType: UTType?,
                             createdAt: Date) throws -> PhotoProject {
         let info = try PhotoDocument(url: stagedFile).info
+        // `Int(_:)` traps on a non-finite size; such a file cannot be edited anyway.
+        guard info.uprightSize.width.isFinite, info.uprightSize.height.isFinite else {
+            throw PhotoDocumentError.unreadable
+        }
         let storedName = libraryFileName(proposed: fileName, info: info, declaredType: declaredType,
                                          date: info.captureDate ?? createdAt)
         var typeIdentifier = info.typeIdentifier
@@ -840,7 +869,8 @@ private enum LibraryFiles {
     // MARK: Names
 
     /// The name the original keeps inside its project folder: the name it had, made safe, with its
-    /// extension. System-generated picker names (UUIDs, query strings) become `Noor_yyyyMMdd_HHmmss`.
+    /// extension. System-generated picker names (UUIDs, query strings, "FullSizeRender") become
+    /// `Noor_yyyyMMdd_HHmmss`.
     static func libraryFileName(proposed: String, info: SourceInfo, declaredType: UTType?, date: Date) -> String {
         var name = proposed
             .replacingOccurrences(of: "/", with: "-")
@@ -867,6 +897,8 @@ private enum LibraryFiles {
 
     private static func looksGenerated(_ base: String) -> Bool {
         if base.contains("=") || base.contains("&") { return true }
+        // Photos hands edited assets over as "FullSizeRender"; every one would get the same name.
+        if base.hasPrefix("FullSizeRender") { return true }
         return base.count >= 36 && UUID(uuidString: String(base.prefix(36))) != nil
     }
 

@@ -24,6 +24,49 @@ struct SourceInfo: Hashable, Sendable {
     var captureDate: Date?           // EXIF DateTimeOriginal, if present
 }
 
+// Written out instead of synthesized: synthesis would need `CGSize: Hashable`, a conformance that
+// only recent SDKs declare (and possibly only for newer OS versions). `CGSize` is hashed through its
+// `CGFloat` components. Keep both members in step with the stored properties above.
+extension SourceInfo {
+    static func == (lhs: SourceInfo, rhs: SourceInfo) -> Bool {
+        // One condition per clause keeps type checking linear.
+        guard lhs.typeIdentifier == rhs.typeIdentifier,
+              lhs.fileExtension == rhs.fileExtension,
+              lhs.isRAW == rhs.isRAW,
+              lhs.uprightSize.width == rhs.uprightSize.width,
+              lhs.uprightSize.height == rhs.uprightSize.height,
+              lhs.bitsPerComponent == rhs.bitsPerComponent,
+              lhs.isFloat == rhs.isFloat,
+              lhs.hasAlpha == rhs.hasAlpha,
+              lhs.profileName == rhs.profileName,
+              lhs.hasGainMap == rhs.hasGainMap,
+              lhs.isHDR == rhs.isHDR,
+              lhs.asShotKelvin == rhs.asShotKelvin,
+              lhs.asShotTint == rhs.asShotTint,
+              lhs.cameraName == rhs.cameraName,
+              lhs.captureDate == rhs.captureDate else { return false }
+        return true
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(typeIdentifier)
+        hasher.combine(fileExtension)
+        hasher.combine(isRAW)
+        hasher.combine(uprightSize.width)
+        hasher.combine(uprightSize.height)
+        hasher.combine(bitsPerComponent)
+        hasher.combine(isFloat)
+        hasher.combine(hasAlpha)
+        hasher.combine(profileName)
+        hasher.combine(hasGainMap)
+        hasher.combine(isHDR)
+        hasher.combine(asShotKelvin)
+        hasher.combine(asShotTint)
+        hasher.combine(cameraName)
+        hasher.combine(captureDate)
+    }
+}
+
 /// One base image ready for the recipe pipeline.
 struct RenderBase {
     let image: CIImage               // upright, extent origin (0,0), working space, may exceed 1.0 when isHDR
@@ -76,6 +119,8 @@ final class PhotoDocument: @unchecked Sendable {
     private let hasHDRTransfer: Bool
     /// Camera defaults of a RAW file; nil for bitmaps.
     private let rawDefaults: RAWDefaults?
+    /// The type hint the inspection `CIRAWFilter` accepted; every later RAW filter uses the same one.
+    private let rawIdentifierHint: String?
     /// Apple gain-map headroom from the MakerApple tags (iOS 17 fallback for `headroom`).
     private let appleGainMapHeadroom: Float?
     private let fullLongEdge: CGFloat
@@ -194,10 +239,12 @@ final class PhotoDocument: @unchecked Sendable {
         // CIRAWFilter has the final word.
         let declaredRAW = PhotoDocument.isRAWType(typeIdentifier)
         let hasDNGTags = properties[kCGImagePropertyDNGDictionary as String] != nil
+        // Only a RAW type is a useful hint; DNG data typed as TIFF (or unknown data) is sniffed instead.
+        let rawHint: String? = declaredRAW ? typeIdentifier : nil
         var rawFilter: CIRAWFilter?
         var rawOutput: CIImage?
         if declaredRAW || hasDNGTags || imageCount == 0 {
-            rawFilter = CIRAWFilter(imageData: data, identifierHint: typeIdentifier.isEmpty ? nil : typeIdentifier)
+            rawFilter = CIRAWFilter(imageData: data, identifierHint: rawHint)
             rawOutput = rawFilter?.outputImage
             if rawOutput == nil { rawFilter = nil }
         }
@@ -291,6 +338,7 @@ final class PhotoDocument: @unchecked Sendable {
         self.orientation = isRAW ? .up : orientation
         self.hasHDRTransfer = hasHDRTransfer
         self.rawDefaults = defaults
+        self.rawIdentifierHint = isRAW ? rawHint : nil
         self.appleGainMapHeadroom = hasAppleGainMap ? PhotoDocument.appleHeadroom(from: properties) : nil
         self.fullLongEdge = max(uprightSize.width, uprightSize.height)
         // The inspection filter is fresh and still at camera defaults: it becomes the proxy filter.
@@ -647,7 +695,7 @@ final class PhotoDocument: @unchecked Sendable {
     }
 
     private func makeRAWFilter() -> CIRAWFilter? {
-        CIRAWFilter(imageData: data, identifierHint: info.typeIdentifier.isEmpty ? nil : info.typeIdentifier)
+        CIRAWFilter(imageData: data, identifierHint: rawIdentifierHint)
     }
 
     /// Applies the RAW stage (or the camera defaults when `settings` is nil) to `filter`. Every property

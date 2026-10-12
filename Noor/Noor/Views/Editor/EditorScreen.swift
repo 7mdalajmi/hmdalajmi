@@ -3,8 +3,8 @@ import SwiftUI
 /// The navigation destination for one photo: opens the original, builds the `EditorModel` and
 /// shows `EditorView`.
 ///
-/// `PhotoDocument` creation only inspects metadata; it is requested from a detached task so that
-/// it can run off the main thread when the library allows it. A spinner
+/// `PhotoDocument` creation only inspects metadata; it runs on a detached task, off the main
+/// thread (`LibraryStore.document(for:)` is nonisolated). A spinner
 /// appears only if opening takes longer than 300 ms; a failure shows a friendly explanation with a
 /// way back. Leaving the screen closes the model (save, stop rendering, purge caches); the model
 /// itself saves when the app goes to the background.
@@ -68,11 +68,10 @@ struct EditorScreen: View {
         }
         let library = app.library
         do {
-            // Read-only metadata inspection; never touches the original's bytes. Runs off the main
-            // thread when the store's `document(for:)` is nonisolated; if it is main-actor isolated
-            // the call simply hops back to the main actor (still only a metadata read).
+            // Read-only metadata inspection (file IO); never modifies the original. `document(for:)`
+            // is nonisolated and synchronous, so it runs entirely on this background task.
             let document = try await Task.detached(priority: .userInitiated) {
-                try await library.document(for: project)
+                try library.document(for: project)
             }.value
             guard !Task.isCancelled else { return }
             model = EditorModel(project: project, document: document, library: library, presets: app.presets)

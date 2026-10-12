@@ -7,6 +7,7 @@ import SwiftUI
 /// (the renderer skips the stage entirely then). Fine detail can only be judged on true pixels,
 /// so the panel reminds the user to look at 100 %; the canvas renders the full-resolution
 /// original at that zoom.
+@MainActor
 struct DetailPanel: View {
     let model: EditorModel
 

@@ -50,6 +50,7 @@ enum NoorKernels {
     static let lumaDenoise = colorKernel("noorLumaDenoise")
     static let colorMatrix = colorKernel("noorColorMatrix")
     static let outputFit = colorKernel("noorOutputFit")
+    static let outputCeiling = colorKernel("noorOutputCeiling")
     static let curves = generalKernel("noorCurves")
     static let resample = generalKernel("noorResample")
 
@@ -521,5 +522,13 @@ extension NoorKernels {
     static func applyOutputFit(_ image: CIImage, knee: Float, inMax: Float, outMax: Float) -> CIImage {
         guard let kernel = outputFit else { return image }
         return kernel.apply(extent: image.extent, arguments: [image, knee, inMax, outMax]) ?? image
+    }
+
+    /// The hue-preserving ceiling at `outMax` alone, WITHOUT the gamut fix: for SDR targets wider
+    /// than the P3 working space (Adobe RGB, ProPhoto), where channels that are negative in linear P3
+    /// are colours inside the target gamut and are left for the encoder's colour conversion.
+    static func applyOutputCeiling(_ image: CIImage, outMax: Float) -> CIImage {
+        guard let kernel = outputCeiling else { return image }
+        return kernel.apply(extent: image.extent, arguments: [image, outMax]) ?? image
     }
 }

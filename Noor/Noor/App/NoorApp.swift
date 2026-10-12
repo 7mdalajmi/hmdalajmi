@@ -71,6 +71,8 @@ struct RootView: View {
     }
 
     private func handleOpenedFile(_ url: URL) {
+        // Noor declares no URL schemes; only files are meaningful here.
+        guard url.isFileURL else { return }
         switch RootView.kind(of: url) {
         case .preset:
             importPresets(url)
@@ -121,11 +123,25 @@ struct RootView: View {
     /// Files sent by AirDrop or Mail are copied into `Documents/Inbox`; Noor owns those copies.
     /// Files opened in place elsewhere are never touched.
     private static func discardInboxCopy(_ url: URL) {
+        guard url.isFileURL else { return }
         let inbox = URL.documentsDirectory.appending(path: "Inbox", directoryHint: .isDirectory)
-        let inboxPath = inbox.standardizedFileURL.path(percentEncoded: false)
-        let filePath = url.standardizedFileURL.path(percentEncoded: false)
-        guard url.isFileURL, filePath.hasPrefix(inboxPath) else { return }
+        let inboxPath = canonicalPath(inbox)
+        guard !inboxPath.isEmpty, canonicalPath(url).hasPrefix(inboxPath + "/") else { return }
         try? FileManager.default.removeItem(at: url)
+    }
+
+    /// One spelling for a container path. Opened URLs usually arrive as `/private/var/mobile/…` while
+    /// `URL.documentsDirectory` is `/var/mobile/…` (a symlink to the same folder), so compare without
+    /// the `/private` prefix and without a trailing slash.
+    private static func canonicalPath(_ url: URL) -> String {
+        var path = url.standardizedFileURL.path(percentEncoded: false)
+        if path.hasPrefix("/private/") {
+            path = String(path.dropFirst("/private".count))
+        }
+        while path.count > 1, path.hasSuffix("/") {
+            path.removeLast()
+        }
+        return path
     }
 
     // MARK: Presentation state

@@ -6,6 +6,7 @@ import SwiftUI
 /// on iPad (both mirror normally in Arabic). Tapping a tool selects it and opens its panel;
 /// tapping the selected tool again hides the panel for a full-size canvas. A small dot under a
 /// tool means it has edits. Leaving Presets commits the previewed preset.
+@MainActor
 struct ToolRail: View {
     let model: EditorModel
     let axis: Axis

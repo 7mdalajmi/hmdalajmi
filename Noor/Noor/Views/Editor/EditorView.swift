@@ -12,6 +12,7 @@ import SwiftUI
 /// (`Theme.surround`), the chrome on `surface1`, and no material or blur ever touches the photo.
 /// Focus mode: while a control is dragged the top bar fades out, the rail dims and the other
 /// slider rows fade; the histogram stays visible.
+@MainActor
 struct EditorView: View {
     @Bindable var model: EditorModel
 
@@ -45,13 +46,17 @@ struct EditorView: View {
         .environment(\.noorPanelPrefersTall, $panelPrefersTall)
         .toolbar(.hidden, for: .navigationBar)
         .persistentSystemOverlays(model.isInteracting ? .hidden : .automatic)
+        // Sheet content is not inside the `.environment` modifiers above, so each sheet gets the
+        // app model and the haptics setting explicitly.
         .sheet(isPresented: $model.isExportPresented) {
             ExportSheet(model: model)
                 .environment(app)
+                .environment(\.noorHapticsEnabled, app.settings.haptics)
         }
         .sheet(isPresented: $model.isSavePresetPresented) {
             SavePresetSheet(model: model)
                 .environment(app)
+                .environment(\.noorHapticsEnabled, app.settings.haptics)
         }
     }
 
@@ -104,6 +109,7 @@ struct EditorView: View {
 /// The photo area: the neutral surround, then the live canvas with its overlays, or the crop
 /// workspace while the Crop tool is selected. Kept as its own view so that histogram updates
 /// (about 10 Hz) re-render only the overlay, not the whole editor.
+@MainActor
 private struct EditorWorkspace: View {
     let model: EditorModel
 
@@ -126,6 +132,7 @@ private struct EditorWorkspace: View {
 
 /// Badges drawn over the live photo: the histogram (top-left, always LTR) and the "Before"
 /// capsule while the original is shown. Never intercepts touches meant for the canvas.
+@MainActor
 private struct EditorCanvasOverlay: View {
     let model: EditorModel
 
@@ -173,6 +180,7 @@ private struct EditorCanvasOverlay: View {
 // MARK: - Panel host
 
 /// The selected tool's panel on `surface1`. Each panel brings its own header and scrolling.
+@MainActor
 private struct EditorPanelHost: View {
     let model: EditorModel
 

@@ -157,7 +157,13 @@ enum Exporter {
         let target = targetSize(for: fullSize, size: options.size)
         let scaled = resized(rendered, to: target)
         let canvas = CGRect(origin: .zero, size: target)
-        var sdr = opaque(RecipeRenderer.fitToSDR(scaled), in: canvas)
+        // The output space decides how the SDR fit treats colours outside Display P3: an Adobe RGB
+        // or ProPhoto file can hold them, so they are kept instead of being mapped into P3.
+        let color = colorTarget(options.colorSpace, bits: nominalBits(format), info: info, source: source)
+        let fitted = color.isWiderThanP3
+            ? RecipeRenderer.fitToSDR(scaled, preservingWideGamut: true)
+            : RecipeRenderer.fitToSDR(scaled)
+        var sdr = opaque(fitted, in: canvas)
         var hdr: CIImage? = (wantsHDR && base.isHDR) ? opaque(scaled, in: canvas) : nil
 
         let context = RenderEngine.shared.makeExportContext()
@@ -167,8 +173,7 @@ enum Exporter {
             throw ExportError.tooLarge(width: Int(target.width), height: Int(target.height))
         }
 
-        // 3. Colour space and sanitized metadata (written by the encoder from CIImage.properties).
-        let color = colorTarget(options.colorSpace, bits: nominalBits(format), info: info, source: source)
+        // 3. Sanitized metadata (written by the encoder from CIImage.properties).
         let pixelGridChanged = !recipe.geometry.clamped().isIdentity || target != fullSize
         func properties(for size: CGSize) -> [String: Any] {
             MetadataWriter.properties(from: source, outputSize: size, isSRGB: color.isSRGB,
@@ -203,6 +208,8 @@ enum Exporter {
             outcome = try encode(sdr, hdr: hdr, format: format, colorSpace: color.space, quality: quality,
                                  sourceBits: info.bitsPerComponent, context: context, to: url)
         }
+        // Encoding is the long stage: honour a Cancel that arrived meanwhile (the caller deletes the folder).
+        try checkCancelled()
 
         // 5. Lossless XMP merge, then read the file back and verify it.
         progress(.finishing)
@@ -593,7 +600,7 @@ enum Exporter {
                                          format: ExportFormat, source: ExportSourceMetadata) -> PassthroughRoute {
         let info = document.info
         guard recipe.isIdentity,
-              options.colorSpace == .matchSource,
+              keepsSourceColorSpace(options.colorSpace, info: info, source: source),
               options.keepMetadata,
               targetSize(for: document.uprightSize, size: options.size) == targetSize(for: document.uprightSize, size: .original),
               !info.isRAW,
@@ -615,6 +622,23 @@ enum Exporter {
         if options.format != .original && isLossy(format) && options.quality < 0.999 { return .render }
         if options.keepLocation || !source.hasLocation { return .copy }
         return .stripLocation
+    }
+
+    /// The chosen output space is the original's own: "Same as Original", or an explicit choice
+    /// naming the space the original is already tagged with (e.g. a remembered "Display P3" for an
+    /// iPhone photo), so the original's bytes already are that file.
+    private static func keepsSourceColorSpace(_ choice: ExportColorSpace, info: SourceInfo,
+                                              source: ExportSourceMetadata) -> Bool {
+        guard choice != .matchSource else { return true }
+        guard let space = source.colorSpace, space.model == .rgb, !space.isHDR(),
+              let name = space.name as String? else { return false }
+        switch choice {
+        case .matchSource: return true
+        case .displayP3: return name == (CGColorSpace.displayP3 as String)
+        case .sRGB: return name == (CGColorSpace.sRGB as String)
+        case .adobeRGB: return name == (CGColorSpace.adobeRGB1998 as String)
+        case .proPhoto: return name == (CGColorSpace.rommrgb as String) && info.bitsPerComponent >= 16
+        }
     }
 
     /// The format that names the original's own container, for describing a byte copy
@@ -680,6 +704,9 @@ enum Exporter {
         let space: CGColorSpace
         let name: String
         let isSRGB: Bool
+        /// Adobe RGB / ProPhoto (/ BT.2020): reaches beyond the Display P3 working space, so the
+        /// SDR fit must not pull colours into P3.
+        var isWiderThanP3 = false
     }
 
     private static func colorTarget(_ choice: ExportColorSpace, bits: Int, info: SourceInfo,
@@ -692,11 +719,13 @@ enum Exporter {
         case .sRGB:
             return sRGB
         case .adobeRGB:
-            return ColorTarget(space: CGColorSpace(name: CGColorSpace.adobeRGB1998)!, name: "Adobe RGB (1998)", isSRGB: false)
+            return ColorTarget(space: CGColorSpace(name: CGColorSpace.adobeRGB1998)!, name: "Adobe RGB (1998)",
+                               isSRGB: false, isWiderThanP3: true)
         case .proPhoto:
             // ProPhoto in 8 or 10 bits posterizes; it is only offered for 16-bit files.
             guard bits >= 16 else { return displayP3 }
-            return ColorTarget(space: CGColorSpace(name: CGColorSpace.rommrgb)!, name: "ProPhoto RGB", isSRGB: false)
+            return ColorTarget(space: CGColorSpace(name: CGColorSpace.rommrgb)!, name: "ProPhoto RGB",
+                               isSRGB: false, isWiderThanP3: true)
         case .matchSource:
             guard !info.isRAW, let space = source.colorSpace, space.model == .rgb, !space.isHDR() else {
                 return displayP3
@@ -710,8 +739,13 @@ enum Exporter {
             let isProPhoto = spaceName == (CGColorSpace.rommrgb as String)
                 || profile.localizedCaseInsensitiveContains("ProPhoto") || profile.localizedCaseInsensitiveContains("ROMM")
             if isProPhoto && bits < 16 { return displayP3 }
+            let isAdobeRGB = spaceName == (CGColorSpace.adobeRGB1998 as String)
+                || profile.localizedCaseInsensitiveContains("Adobe RGB") || profile.localizedCaseInsensitiveContains("AdobeRGB")
+            let isBT2020 = spaceName == (CGColorSpace.itur_2020 as String)
+                || ["BT.2020", "BT2020", "Rec. 2020", "Rec.2020", "Rec2020"].contains { profile.localizedCaseInsensitiveContains($0) }
             let isSRGB = profile.lowercased().hasPrefix("srgb")
-            return ColorTarget(space: space, name: profile, isSRGB: isSRGB)
+            return ColorTarget(space: space, name: profile, isSRGB: isSRGB,
+                               isWiderThanP3: isProPhoto || isAdobeRGB || isBT2020)
         }
     }
 

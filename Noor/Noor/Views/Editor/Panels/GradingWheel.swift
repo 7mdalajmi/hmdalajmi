@@ -10,9 +10,11 @@ import Foundation
 /// order, so it is always laid out left-to-right.
 ///
 /// Interaction:
-///   * drag the puck to move it (relative, so it never jumps under the finger);
+///   * drag the puck to move it (relative, so it never jumps under the finger), in any direction;
 ///   * press and hold the puck for 0.3 s before dragging for quarter-speed fine control;
-///   * drag anywhere else on the wheel to place the puck under the finger;
+///   * drag anywhere else on the wheel to place the puck under the finger. While the panel can
+///     scroll, a mostly vertical swipe that starts off the puck is left to the panel, so the
+///     wheels never trap the scroll (`PanelDragSurface`);
 ///   * double-tap to neutralise hue and saturation.
 /// `onEditingChanged(true/false)` brackets every change, so each gesture is one undo step.
 @MainActor
@@ -22,12 +24,10 @@ struct GradingWheel: View {
     private let onEditingChanged: (Bool) -> Void
 
     @State private var session: WheelDragSession?
-    @State private var sessionCounter = 0
-    @State private var lastTapTime: Date?
     @State private var fineTick = 0
     @State private var resetTick = 0
-    @GestureState private var isTouching = false
     @Environment(\.noorHapticsEnabled) private var hapticsEnabled
+    @Environment(\.isEnabled) private var isEnabled
 
     init(_ title: LocalizedStringKey, wheel: Binding<GradeWheel>,
          onEditingChanged: @escaping (Bool) -> Void = { _ in }) {
@@ -50,20 +50,17 @@ struct GradingWheel: View {
                     .position(puck)
             }
             .frame(width: geo.size.width, height: geo.size.height)
-            .contentShape(Rectangle())
-            .gesture(dragGesture(center: center, radius: radius, puck: puck))
+            .overlay {
+                PanelDragSurface(isEnabled: isEnabled,
+                                 shouldBegin: { start in GradingWheel.acceptsDrag(start, puck: puck) },
+                                 onDrag: { drag in handleDrag(drag, center: center, radius: radius, puck: puck) },
+                                 onDoubleTap: { neutralise() })
+            }
         }
         .aspectRatio(1, contentMode: .fit)
         .environment(\.layoutDirection, .leftToRight)
         .sensoryFeedback(.selection, trigger: fineTick) { _, _ in hapticsEnabled }
         .sensoryFeedback(.impact(weight: .light), trigger: resetTick) { _, _ in hapticsEnabled }
-        .onChange(of: isTouching) { _, touching in
-            guard !touching, let id = session?.id else { return }
-            // The gesture was cancelled by the system (onEnded never ran): close the edit.
-            Task { @MainActor in
-                if session?.id == id { finishSession() }
-            }
-        }
         .onDisappear { finishSession() }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text(title))
@@ -105,7 +102,7 @@ struct GradingWheel: View {
     }
 
     private var puckView: some View {
-        let isDragging = session?.began == true
+        let isDragging = session != nil
         return Circle()
             .fill(ColorToolPalette.hue(wheel.hue, saturation: wheel.saturation / 100, brightness: 1))
             .frame(width: 16, height: 16)
@@ -117,39 +114,41 @@ struct GradingWheel: View {
 
     // MARK: Gesture
 
-    private func dragGesture(center: CGPoint, radius: CGFloat, puck: CGPoint) -> some Gesture {
-        DragGesture(minimumDistance: 0)
-            .updating($isTouching) { _, state, _ in state = true }
-            .onChanged { value in dragChanged(value, center: center, radius: radius, puck: puck) }
-            .onEnded { value in dragEnded(value) }
+    /// The puck can be dragged in any direction. Elsewhere a drag places the puck under the
+    /// finger, except a mostly vertical swipe while the panel can scroll: that one scrolls.
+    private static func acceptsDrag(_ start: PanelDragStart, puck: CGPoint) -> Bool {
+        WheelMath.isOnPuck(start.location, puck: puck) || !start.panelCanScroll || start.isMostlyHorizontal
     }
 
-    private func dragChanged(_ value: DragGesture.Value, center: CGPoint, radius: CGFloat, puck: CGPoint) {
-        guard radius > 1 else { return }
-        guard var current = session else {
-            // Touch down: remember where the puck was and whether the finger is on it.
-            sessionCounter += 1
-            let onPuck = hypot(value.startLocation.x - puck.x, value.startLocation.y - puck.y) <= WheelMath.puckReach
-            session = WheelDragSession(id: sessionCounter, startTime: value.time, startPuck: puck, onPuck: onPuck)
-            return
-        }
-        let dx = value.location.x - value.startLocation.x
-        let dy = value.location.y - value.startLocation.y
-        if !current.began {
-            guard hypot(dx, dy) >= 3 else { return }
-            current.began = true
+    private func handleDrag(_ drag: PanelDrag, center: CGPoint, radius: CGFloat, puck: CGPoint) {
+        switch drag.phase {
+        case .began:
+            guard session == nil, radius > 1 else { return }
+            let onPuck = WheelMath.isOnPuck(drag.startLocation, puck: puck)
             // Holding the puck still for 0.3 s before moving switches to fine (¼ speed) mode.
-            current.fine = current.onPuck && value.time.timeIntervalSince(current.startTime) >= 0.3
-            session = current
-            if current.fine { fineTick += 1 }
+            let started = WheelDragSession(startPuck: puck, onPuck: onPuck,
+                                           fine: onPuck && drag.heldFor >= WheelMath.fineHold)
+            session = started
+            if started.fine { fineTick += 1 }
             onEditingChanged(true)
+            move(drag, session: started, center: center, radius: radius)
+        case .changed:
+            guard let current = session else { return }
+            move(drag, session: current, center: center, radius: radius)
+        case .ended:
+            finishSession()
         }
+    }
+
+    private func move(_ drag: PanelDrag, session current: WheelDragSession, center: CGPoint, radius: CGFloat) {
+        guard radius > 1 else { return }
         let target: CGPoint
         if current.onPuck {
             let speed: CGFloat = current.fine ? 0.25 : 1
-            target = CGPoint(x: current.startPuck.x + dx * speed, y: current.startPuck.y + dy * speed)
+            target = CGPoint(x: current.startPuck.x + drag.translation.width * speed,
+                             y: current.startPuck.y + drag.translation.height * speed)
         } else {
-            target = value.location
+            target = drag.location
         }
         let picked = WheelMath.value(at: target, center: center, radius: radius)
         var updated = wheel
@@ -159,27 +158,11 @@ struct GradingWheel: View {
         if updated != wheel { wheel = updated }
     }
 
-    private func dragEnded(_ value: DragGesture.Value) {
-        guard let ended = session else { return }
-        session = nil
-        if ended.began {
-            onEditingChanged(false)
-            return
-        }
-        // A tap: two taps within 0.35 s neutralise the wheel.
-        if let last = lastTapTime, value.time.timeIntervalSince(last) < 0.35 {
-            lastTapTime = nil
-            neutralise()
-        } else {
-            lastTapTime = value.time
-        }
-    }
-
-    /// Closes a drag that ended without `onEnded` (system cancellation, view removed).
+    /// Ends the drag (lift-off, system cancellation or the view going away).
     private func finishSession() {
-        guard let ended = session else { return }
+        guard session != nil else { return }
         session = nil
-        if ended.began { onEditingChanged(false) }
+        onEditingChanged(false)
     }
 
     // MARK: Discrete changes
@@ -214,14 +197,14 @@ struct GradingWheel: View {
 
 // MARK: - Drag state
 
-/// One touch on the wheel, from touch-down to lift-off.
+/// One drag on the wheel, from the start of the movement to lift-off.
 private struct WheelDragSession {
-    let id: Int
-    let startTime: Date
+    /// Puck position when the drag began.
     let startPuck: CGPoint
+    /// The drag began on the puck (relative move) rather than elsewhere (puck follows the finger).
     let onPuck: Bool
-    var began = false
-    var fine = false
+    /// Quarter-speed fine control (the puck was held before moving).
+    let fine: Bool
 }
 
 // MARK: - Maths
@@ -230,6 +213,12 @@ private struct WheelDragSession {
 private enum WheelMath {
     /// Touch radius around the puck (44-pt target).
     static let puckReach: CGFloat = 22
+    /// Press-and-hold time on the puck that switches to fine control.
+    static let fineHold: TimeInterval = 0.3
+
+    static func isOnPuck(_ location: CGPoint, puck: CGPoint) -> Bool {
+        hypot(location.x - puck.x, location.y - puck.y) <= puckReach
+    }
 
     /// Rounded whole number for VoiceOver; `Int(_:)` would trap on NaN / infinity.
     static func whole(_ v: Double) -> Int {

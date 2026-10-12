@@ -52,7 +52,8 @@ private struct ExportSheetContent: View {
     @State private var options: ExportOptions
     @State private var fileNameText = ""
     @State private var plan: ExportPlan?
-    @State private var resolvedOriginalFormat: ExportFormat?
+    /// The plan for "Same as Original" (names what that choice resolves to in the menu).
+    @State private var originalPlan: ExportPlan?
     @State private var session = ExportSheetSession()
 
     /// Long-edge sizes offered besides the original size (only those smaller than the photo).
@@ -74,6 +75,10 @@ private struct ExportSheetContent: View {
             }
         }
         options.quality = options.quality.isFinite ? min(max(options.quality, 0.5), 1) : 1
+        // ProPhoto is only offered for 16-bit files ("Same as Original" is checked once it resolves).
+        if options.colorSpace == .proPhoto, options.format != .original, !isSixteenBit(options.format) {
+            options.colorSpace = .displayP3
+        }
         return options
     }
 
@@ -120,6 +125,13 @@ private struct ExportSheetContent: View {
         }
         .onChange(of: fileNameText) {
             session.invalidateShare()
+        }
+        .onChange(of: offersProPhoto) {
+            // The format moved away from 16 bits: ProPhoto would posterize (the exporter would fall
+            // back to Display P3 anyway), so show that choice instead of an unlisted selection.
+            if !offersProPhoto && options.colorSpace == .proPhoto {
+                options.colorSpace = .displayP3
+            }
         }
         .onDisappear {
             session.tearDown()
@@ -196,7 +208,7 @@ private struct ExportSheetContent: View {
             }
 
             Picker("Color Space", selection: $options.colorSpace) {
-                ForEach(ExportColorSpace.allCases) { space in
+                ForEach(offeredColorSpaces) { space in
                     Text(verbatim: Self.colorSpaceTitle(space)).tag(space)
                 }
             }
@@ -204,12 +216,7 @@ private struct ExportSheetContent: View {
         } header: {
             Text("File")
         } footer: {
-            VStack(alignment: .leading, spacing: Theme.Space.xs) {
-                Text(verbatim: Self.formatExplanation(options.format))
-                if options.colorSpace == .proPhoto, let plan, plan.bitsPerComponent < 16 {
-                    Text("ProPhoto RGB needs a 16-bit format, so Display P3 is used.")
-                }
-            }
+            Text(verbatim: Self.formatExplanation(options.format))
         }
         .listRowBackground(Theme.surface2)
     }
@@ -223,6 +230,8 @@ private struct ExportSheetContent: View {
                 Text("The photo is exported in standard dynamic range.")
             } else if plan?.writesHDR == true {
                 Text("HDR screens show the photo's full brightness; other screens show a standard version.")
+            } else if hdrNeedsNewerSystem {
+                Text("Keeping HDR in an edited photo needs iOS 18, so it is exported in standard dynamic range.")
             } else {
                 Text("This format can't keep HDR here, so the photo is exported in standard dynamic range.")
             }
@@ -414,10 +423,38 @@ private struct ExportSheetContent: View {
         ExportSheetPlanInput(recipe: model.recipe, options: options)
     }
 
+    /// What "Same as Original" resolves to for this photo (nil until the first plan arrives).
+    private var resolvedOriginalFormat: ExportFormat? {
+        originalPlan?.format
+    }
+
     /// The resolved output format (the plan's, else the user's choice).
     private var effectiveFormat: ExportFormat? {
         if let plan { return plan.format }
-        return options.format == .original ? resolvedOriginalFormat : options.format
+        return outputFormat
+    }
+
+    /// The format of the current choice, straight from the options (no wait for a new plan).
+    private var outputFormat: ExportFormat? {
+        options.format == .original ? resolvedOriginalFormat : options.format
+    }
+
+    /// ProPhoto RGB is only offered for 16-bit files: in 8 or 10 bits it posterizes.
+    /// While "Same as Original" is still resolving, a saved ProPhoto choice stays listed.
+    private var offersProPhoto: Bool {
+        guard let format = outputFormat else { return options.colorSpace == .proPhoto }
+        return Self.isSixteenBit(format)
+    }
+
+    private var offeredColorSpaces: [ExportColorSpace] {
+        ExportColorSpace.allCases.filter { $0 != .proPhoto || offersProPhoto }
+    }
+
+    /// HDR is lost only because this system is older than iOS 18: before it, only an unedited
+    /// original is copied with its HDR; an edit can't get a new gain map.
+    private var hdrNeedsNewerSystem: Bool {
+        guard !Self.canWriteGainMaps, let format = outputFormat else { return false }
+        return Self.supportsGainMap(format)
     }
 
     /// Quality matters only for lossy formats, and not when the original is simply copied.
@@ -458,10 +495,11 @@ private struct ExportSheetContent: View {
     }
 
     private func formatMenuTitle(_ format: ExportFormat) -> String {
-        guard format == .original, let resolved = resolvedOriginalFormat else {
+        guard format == .original, let resolved = originalPlan else {
             return Self.formatTitle(format)
         }
-        let resolvedTitle = Self.formatTitle(resolved)
+        // The depth actually written: an unedited 8-bit HEIC is copied as it is, not as 10-bit.
+        let resolvedTitle = Self.familyAndDepth(resolved.format, bits: resolved.bitsPerComponent)
         return String(localized: "Same as Original (\(resolvedTitle))")
     }
 
@@ -510,7 +548,7 @@ private struct ExportSheetContent: View {
         }.value
         guard !Task.isCancelled else { return }
         plan = plans.0
-        resolvedOriginalFormat = plans.1.format
+        originalPlan = plans.1
     }
 
     private func startExport() {
@@ -548,6 +586,24 @@ private struct ExportSheetContent: View {
         }
     }
 
+    private static func isSixteenBit(_ format: ExportFormat) -> Bool {
+        format == .tiff16 || format == .png16
+    }
+
+    /// Formats that can carry an HDR gain map (JPEG and HEIF).
+    private static func supportsGainMap(_ format: ExportFormat) -> Bool {
+        switch format {
+        case .jpeg, .heif8, .heif10: return true
+        case .tiff16, .png16, .original: return false
+        }
+    }
+
+    /// Core Image writes an edited photo's HDR gain map (Adaptive HDR) only on iOS 18 and later.
+    private static var canWriteGainMaps: Bool {
+        if #available(iOS 18.0, *) { return true }
+        return false
+    }
+
     private static func formatTitle(_ format: ExportFormat) -> String {
         switch format {
         case .original: return String(localized: "Same as Original")
@@ -564,7 +620,11 @@ private struct ExportSheetContent: View {
         case .original:
             return String(localized: "The original's format at its best quality. An unedited photo is copied byte for byte.")
         case .heif10:
-            return String(localized: "10-bit and efficient: the best lossy format. Keeps HDR.")
+            // Gain-map (HDR) export of an edit needs iOS 18; don't promise it on iOS 17.
+            if canWriteGainMaps {
+                return String(localized: "10-bit and efficient: the best lossy format. Keeps HDR.")
+            }
+            return String(localized: "10-bit and efficient: the best lossy format.")
         case .tiff16:
             return String(localized: "16-bit, uncompressed: a lossless master for further editing.")
         case .png16:
@@ -690,6 +750,10 @@ final class ExportSheetSession {
         // Same request as the file already written: deliver it again instead of re-rendering.
         if let lastRequest, lastRequest == request, let lastResult,
            FileManager.default.fileExists(atPath: lastResult.url.path(percentEncoded: false)) {
+            // Busy right away, so a second tap before the delivery task runs can't save twice.
+            if destination == .photos {
+                phase = .savingToPhotos
+            }
             beginBackgroundWork()
             flow = Task { [weak self] in
                 await self?.deliver(lastResult, to: destination)
@@ -716,7 +780,13 @@ final class ExportSheetSession {
             let outcome: Result<ExportResult, Error>
             do {
                 let result = try await work.value
-                outcome = .success(result)
+                if work.isCancelled {
+                    // Cancelled after the exporter's last checkpoint: don't deliver what the user stopped.
+                    ExportSheetSession.removeExportFolder(of: result)
+                    outcome = .failure(ExportError.cancelled)
+                } else {
+                    outcome = .success(result)
+                }
             } catch {
                 outcome = .failure(error)
             }

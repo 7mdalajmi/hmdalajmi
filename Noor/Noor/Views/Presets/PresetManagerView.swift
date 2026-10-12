@@ -61,7 +61,7 @@ struct PresetManagerView: View {
             }
         }
         .fileImporter(isPresented: $isImporterPresented,
-                      allowedContentTypes: Self.importTypes,
+                      allowedContentTypes: UTType.noorPresetImportTypes,
                       allowsMultipleSelection: true) { result in
             switch result {
             case .success(let urls):
@@ -293,17 +293,6 @@ struct PresetManagerView: View {
     }
 
     // MARK: Helpers
-
-    /// Everything the importer accepts: Noor presets, Lightroom XMP presets, DNG presets and folders.
-    private static let importTypes: [UTType] = {
-        var types: [UTType] = [.noorPreset, .lightroomXMP, .xml, .json, .folder, .rawImage]
-        for fileExtension in ["xmp", "dng", "noorpreset"] {
-            if let type = UTType(filenameExtension: fileExtension), !types.contains(type) {
-                types.append(type)
-            }
-        }
-        return types
-    }()
 
     /// Built-in groups first (pack order), then user / imported groups by first appearance.
     /// Built-in and user groups never merge, even when their names match.

@@ -18,10 +18,11 @@ final class EditorModel {
 
     // MARK: Collaborators
 
-    @ObservationIgnored let document: PhotoDocument
-    @ObservationIgnored private let library: LibraryStore
-    @ObservationIgnored private let presetLibrary: PresetLibrary
-    @ObservationIgnored private let renderer: PreviewRenderer
+    // `let`s are never tracked by `@Observable`.
+    let document: PhotoDocument
+    private let library: LibraryStore
+    private let presetLibrary: PresetLibrary
+    private let renderer: PreviewRenderer
     @ObservationIgnored private weak var canvas: CanvasView?
 
     // MARK: Observable state
@@ -71,7 +72,7 @@ final class EditorModel {
     private(set) var cropFrameImage: CGImage?
     var frameSize: CGSize { recipe.geometry.frameSize(for: document.uprightSize) }
 
-    private(set) var canPaste: Bool = EditorModel.settingsClipboard != nil
+    private(set) var canPaste = false
 
     // MARK: Private bookkeeping
 
@@ -87,6 +88,8 @@ final class EditorModel {
     @ObservationIgnored private var cropFrameTask: Task<Void, Never>?
     @ObservationIgnored private var cropFrameKey: EditRecipe?
     @ObservationIgnored private var lastHistogramRequest = Date.distantPast
+    /// Recipe of the last histogram request: a moving viewport alone never asks for a new one.
+    @ObservationIgnored private var lastHistogramRecipe: EditRecipe?
     @ObservationIgnored private var lastSavedRecipe: EditRecipe
     @ObservationIgnored private var backgroundObserver: NSObjectProtocol?
     @ObservationIgnored private var isClosed = false
@@ -106,10 +109,11 @@ final class EditorModel {
         let initial = project.recipe.clamped()
         self.recipe = initial
         self.lastSavedRecipe = initial
+        self.canPaste = EditorModel.settingsClipboard != nil
 
         renderer.onHistogram = { [weak self] histogram in
             Task { @MainActor [weak self] in
-                guard let self, self.isHistogramVisible else { return }
+                guard let self, !self.isClosed, self.needsHistogram else { return }
                 self.histogram = histogram
             }
         }
@@ -124,18 +128,20 @@ final class EditorModel {
 
     /// A binding for a slider. Changes made between `beginInteraction()` and `endInteraction(_:)`
     /// become one undo step; a change made outside a gesture (e.g. VoiceOver) is its own step.
+    /// Weak: a binding (or a gesture callback holding one) may outlive the closed editor; it then
+    /// reads the default value and ignores writes instead of crashing.
     func binding(_ keyPath: WritableKeyPath<EditRecipe, Double>) -> Binding<Double> {
         Binding(
-            get: { @MainActor [unowned self] in self.recipe[keyPath: keyPath] },
-            set: { @MainActor [unowned self] newValue in self.setValue(newValue, at: keyPath) }
+            get: { @MainActor [weak self] in self?.recipe[keyPath: keyPath] ?? EditRecipe()[keyPath: keyPath] },
+            set: { @MainActor [weak self] newValue in self?.setValue(newValue, at: keyPath) }
         )
     }
 
     /// A binding for any recipe value (Bool, Geometry, ToneCurves, ColorGrading, …).
     func binding<Value>(_ keyPath: WritableKeyPath<EditRecipe, Value>) -> Binding<Value> {
         Binding(
-            get: { @MainActor [unowned self] in self.recipe[keyPath: keyPath] },
-            set: { @MainActor [unowned self] newValue in self.setValue(newValue, at: keyPath) }
+            get: { @MainActor [weak self] in self?.recipe[keyPath: keyPath] ?? EditRecipe()[keyPath: keyPath] },
+            set: { @MainActor [weak self] newValue in self?.setValue(newValue, at: keyPath) }
         )
     }
 
@@ -299,16 +305,25 @@ final class EditorModel {
         if selectedTool == .crop {
             refreshCropFrameIfNeeded(force: cropFrameImage == nil)
         } else if old == .crop {
+            // The canvas comes back as a new view; `attach(canvas:)` renders it once it exists.
             cropFrameTask?.cancel()
             cropFrameImage = nil
             cropFrameKey = nil
             requestRender(settled: true)
+        } else if selectedTool == .light {
+            // The tone curve draws the histogram even when the overlay is hidden: refresh it.
+            requestRender(settled: true)
         }
+    }
+
+    /// Histograms are computed while the overlay is shown or the Light tool (tone curve) is open.
+    private var needsHistogram: Bool {
+        isHistogramVisible || selectedTool == .light
     }
 
     /// Re-renders the crop tool's picture when something other than crop/straighten changed.
     private func refreshCropFrameIfNeeded(force: Bool = false) {
-        guard selectedTool == .crop else { return }
+        guard selectedTool == .crop, !isClosed else { return }
         var key = recipe
         key.geometry.straighten = 0
         key.geometry.crop = .full
@@ -344,7 +359,9 @@ final class EditorModel {
 
     /// Called by `PhotoCanvas` whenever a canvas view is created (also after leaving the crop tool).
     func attach(canvas: CanvasView) {
+        guard !isClosed else { return }
         self.canvas = canvas
+        // Before the first frame: the renderer draws the size the canvas expects.
         canvas.setImageSize(recipe.geometry.outputSize(for: document.uprightSize), refit: true)
         canvas.onViewportChange = { [weak self] _, settled in
             self?.requestRender(settled: settled)
@@ -373,9 +390,15 @@ final class EditorModel {
         let current = Float(screen?.currentEDRHeadroom ?? 1)
         let edr = recipe.keepsHDR && document.info.isHDR && potential > 1
 
+        // Every settled frame refreshes the histogram; while something moves, only a changed recipe
+        // does (at most 10 per second). A pan or pinch alone never recomputes it.
         let now = Date()
-        let wantsHistogram = isHistogramVisible && (settled || now.timeIntervalSince(lastHistogramRequest) > 0.1)
-        if wantsHistogram { lastHistogramRequest = now }
+        let wantsHistogram = needsHistogram
+            && (settled || (recipe != lastHistogramRecipe && now.timeIntervalSince(lastHistogramRequest) > 0.1))
+        if wantsHistogram {
+            lastHistogramRequest = now
+            lastHistogramRecipe = recipe
+        }
 
         let request = PreviewRequest(
             recipe: recipe,
@@ -403,6 +426,7 @@ final class EditorModel {
     // MARK: Persistence & lifecycle
 
     private func scheduleSave() {
+        guard !isClosed else { return }
         saveTask?.cancel()
         saveTask = Task { [weak self] in
             try? await Task.sleep(for: .seconds(1))
@@ -429,11 +453,15 @@ final class EditorModel {
         save()
         isClosed = true
         detailTask?.cancel()
+        detailTask = nil
         cropFrameTask?.cancel()
+        cropFrameTask = nil
         canvas = nil
         if let backgroundObserver { NotificationCenter.default.removeObserver(backgroundObserver) }
         backgroundObserver = nil
-        document.purgeFullResolution()
-        RenderEngine.shared.clearCaches()
+        // No further frames; the full-resolution purge and cache clearing run on the render queue
+        // after a frame that may still be in flight (so it cannot re-decode afterwards, and the main
+        // thread never waits on the document's decode lock).
+        renderer.stop()
     }
 }

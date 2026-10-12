@@ -8,6 +8,7 @@ import SwiftUI
 /// curve or wheel is being dragged it fades out without changing the layout (focus mode).
 ///
 /// iPad keyboard: ⌘Z undo, ⇧⌘Z redo, `\` compare, ⌘E export.
+@MainActor
 struct EditorTopBar: View {
     @Bindable var model: EditorModel
 

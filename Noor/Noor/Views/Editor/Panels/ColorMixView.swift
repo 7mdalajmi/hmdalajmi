@@ -113,7 +113,9 @@ struct ColorMixView: View {
     // MARK: Black & white
 
     private var blackAndWhiteMix: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        // The band names are `LocalizedStringKey`s, so the sliders name their undo step explicitly.
+        let undoLabel = String(localized: "B&W Mix")
+        return VStack(alignment: .leading, spacing: 2) {
             Text("B&W Mix")
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(Theme.textSecondary)
@@ -123,6 +125,7 @@ struct ColorMixView: View {
                 RecipeSlider(ColorToolPalette.bandName(candidate), \EditRecipe.[band: candidate].luminance,
                              range: EditRecipe.Limits.bipolar,
                              track: .gradient(ColorToolPalette.luminanceTrack(candidate)),
+                             undoLabel: undoLabel,
                              model: model)
             }
         }

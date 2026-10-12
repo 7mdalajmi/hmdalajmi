@@ -20,11 +20,12 @@
 //    noorResample                         straighten rotation, Catmull-Rom with anti-ringing
 //    noorVignette, noorGrain              post-crop effects
 //    noorOutputFit                        the only bounding step (SDR / headroom targets)
+//    noorOutputCeiling                    its wide-gamut SDR variant (Adobe RGB / ProPhoto exports)
 //
 //  Conventions (every kernel):
 //    * Input/output: premultiplied RGBA, LINEAR, EXTENDED range (values may be > 1 or < 0),
 //      expressed in the CIContext working space (default below: extendedLinearDisplayP3).
-//    * Nothing is clamped. The only bounding step is noorOutputFit (final output stage).
+//    * Nothing is clamped. The only bounding step is noorOutputFit / noorOutputCeiling (final output stage).
 //    * Fast-math safe: no division by a value that can be 0, no log2/pow of values <= 0,
 //      no mix()/smoothstep() outside their defined domains.
 //    * Size-based effects receive sizes in RENDER pixels or normalized units from Swift,
@@ -631,6 +632,33 @@ float4 noorOutputFit(sample_t s, float knee, float inMax, float outMax)
         float3 scaled = rgb * r;                                   // hue kept, max channel = outMax
         float w = 1.0f - sqrt(r);                                  // 0 at the ceiling -> 1 when very bright
         rgb = scaled + (float3(outMax) - scaled) * w;              // every channel stays in [0, outMax]
+    }
+    return premultiply(float4(rgb, c.a));
+}
+
+// =============================================================================================
+// 10b. OUTPUT CEILING  (CIColorKernel) - SDR bound for targets WIDER than the P3 working space
+//    (Adobe RGB / ProPhoto exports: RecipeRenderer.fitToSDR(_:preservingWideGamut: true)).
+//    Step 3 of noorOutputFit only (hue-preserving roll toward white above outMax), WITHOUT its
+//    gamut fix: a channel that is negative in linear P3 is a colour outside P3 but inside the
+//    wider target gamut, so it is kept for the encoder's colour conversion. Only a pixel whose
+//    luminance is not positive (not a real colour in any RGB gamut) becomes black, as in
+//    noorOutputFit. Pixels whose largest channel is at or below outMax are untouched.
+// =============================================================================================
+float4 noorOutputCeiling(sample_t s, float outMax)
+{
+    float4 c = unpremultiply(s);
+    float3 rgb = c.rgb;
+    float mn = min(rgb.x, min(rgb.y, rgb.z));
+    if (mn < 0.0f && noor::luma(rgb) <= 0.0f) {
+        rgb = float3(0.0f);
+    }
+    float top = max(rgb.x, max(rgb.y, rgb.z));
+    if (outMax > 0.0f && top > outMax) {
+        float r = outMax / top;                                    // in (0, 1)
+        float3 scaled = rgb * r;                                   // hue kept, max channel = outMax
+        float w = 1.0f - sqrt(r);                                  // 0 at the ceiling -> 1 when very bright
+        rgb = scaled + (float3(outMax) - scaled) * w;              // every channel stays <= outMax
     }
     return premultiply(float4(rgb, c.a));
 }

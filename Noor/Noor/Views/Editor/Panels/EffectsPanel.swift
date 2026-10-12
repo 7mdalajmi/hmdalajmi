@@ -7,6 +7,7 @@ import SwiftUI
 /// * Grain with Size and Roughness, disabled while its amount is 0.
 ///
 /// Every value is relative to the picture, so the preview matches the full-resolution export.
+@MainActor
 struct EffectsPanel: View {
     let model: EditorModel
 

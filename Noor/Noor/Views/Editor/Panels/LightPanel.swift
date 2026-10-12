@@ -8,6 +8,7 @@ import SwiftUI
 ///
 /// Ranges follow Lightroom (Process 2012): Exposure −5…+5 EV with two decimals, the rest
 /// −100…+100. Resetting the panel resets Light; resetting inside the curve resets the curve.
+@MainActor
 struct LightPanel: View {
     let model: EditorModel
 

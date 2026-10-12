@@ -15,8 +15,10 @@ import Observation
 /// * One render at a time (a single serial worker task), off the main actor (`Task.detached`), and
 ///   only for cells that are on screen: a cell that scrolls off is removed from the queue.
 /// * One shared instance, because the Presets panel is rebuilt on every tool switch and the pictures
-///   should survive that. Opening another photo clears it, and a memory warning purges it. The photo
-///   document is held weakly, so a closed editor's caches are never kept alive by this object.
+///   should survive that. Opening another photo clears it, a memory warning purges it, and once the
+///   editor has closed (no cell on screen and its photo document gone) the pictures are freed: they
+///   could never be reused, since reopening a photo makes a new document. The photo document is held
+///   weakly, so a closed editor's caches are never kept alive by this object.
 ///
 /// Main-actor confined; the only work that leaves the main actor is the render itself, which gets a
 /// value-type job (`Sendable`) and returns a `CGImage`.
@@ -47,6 +49,13 @@ final class PresetThumbnailCache {
     /// Thumbnail long-edge bounds in pixels (the cell is filled, so the short edge must cover it).
     private static let minimumLongEdge: CGFloat = 200
     private static let maximumLongEdge: CGFloat = 480
+    /// Most pictures kept at once; beyond it the oldest off-screen ones are dropped (they re-render
+    /// when their cells come back), so a large imported library can't pile up memory.
+    private static let maximumStoredPictures = 64
+    /// After the last cell leaves the screen: how often (and how many times) to check whether the
+    /// editor closed, i.e. its photo document was released.
+    private static let releaseCheckInterval: Duration = .seconds(2)
+    private static let releaseCheckAttempts = 3
 
     // MARK: Observable state
 
@@ -67,6 +76,8 @@ final class PresetThumbnailCache {
     @ObservationIgnored private var queue: [UUID] = []
     @ObservationIgnored private var inFlight: ThumbnailKey?
     @ObservationIgnored private var worker: Task<Void, Never>?
+    /// Waits for the closed editor's photo to go away, then frees the pictures.
+    @ObservationIgnored private var releaseTask: Task<Void, Never>?
     /// Bumped whenever queued / in-flight work becomes stale.
     @ObservationIgnored private var generation = 0
     @ObservationIgnored private var revisionCounter = 0
@@ -116,6 +127,8 @@ final class PresetThumbnailCache {
     /// shown by two cells at once while the strip switches groups (Favorites ↔ its own group); the
     /// preset stays "visible" until every cell showing it has left. Repeated calls are idempotent.
     func request(_ preset: Preset, cell: String = "") {
+        releaseTask?.cancel()
+        releaseTask = nil
         if var existing = visible[preset.id] {
             existing.preset = preset
             existing.cells.insert(cell)
@@ -136,6 +149,7 @@ final class PresetThumbnailCache {
         if entry.cells.isEmpty {
             visible[presetID] = nil
             queue.removeAll { $0 == presetID }
+            if visible.isEmpty { scheduleReleaseCheck() }
         } else {
             visible[presetID] = entry
         }
@@ -144,6 +158,34 @@ final class PresetThumbnailCache {
     /// Frees every picture (memory warning). Cells still on screen re-render after a pause.
     func purge() {
         restart(clearingPictures: true, delay: Self.purgeDelay)
+    }
+
+    // MARK: Release after the editor closes
+
+    /// No cell is on screen: the panel may have closed with its editor. Checks a few times (the
+    /// editor releases its photo shortly after closing) and frees the pictures once the photo is gone.
+    /// A tool switch or a group change brings cells back, which cancels the check.
+    private func scheduleReleaseCheck() {
+        releaseTask?.cancel()
+        releaseTask = Task { [weak self] in
+            for _ in 0..<PresetThumbnailCache.releaseCheckAttempts {
+                try? await Task.sleep(for: PresetThumbnailCache.releaseCheckInterval)
+                guard !Task.isCancelled, let self, self.visible.isEmpty else { return }
+                if self.document == nil {
+                    self.releaseTask = nil
+                    self.releasePictures()
+                    return
+                }
+            }
+        }
+    }
+
+    /// Drops every picture, key and queued render and forgets the photo, so the next
+    /// `prepare(for:displayScale:)` starts from scratch.
+    private func releasePictures() {
+        guard context != nil || !thumbnails.isEmpty else { return }
+        context = nil
+        restart(clearingPictures: true, delay: .zero)
     }
 
     // MARK: Scheduling
@@ -202,15 +244,30 @@ final class PresetThumbnailCache {
             if let rendered {
                 revisionCounter &+= 1
                 renderedKeys[job.presetID] = job.key
-                thumbnails[job.presetID] = Thumbnail(image: Image(decorative: rendered, scale: job.scale),
-                                                     revision: revisionCounter,
-                                                     projectID: job.key.projectID)
+                var pictures = thumbnails
+                pictures[job.presetID] = Thumbnail(image: Image(decorative: rendered, scale: job.scale),
+                                                   revision: revisionCounter,
+                                                   projectID: job.key.projectID)
+                trimOffscreenPictures(&pictures)
+                thumbnails = pictures
             } else {
                 failedKeys.insert(job.key)
             }
         }
         if generation == self.generation {
             worker = nil
+        }
+    }
+
+    /// Keeps at most `maximumStoredPictures`, dropping the oldest off-screen pictures first.
+    private func trimOffscreenPictures(_ pictures: inout [UUID: Thumbnail]) {
+        let excess = pictures.count - Self.maximumStoredPictures
+        guard excess > 0 else { return }
+        let offscreen = pictures.filter { visible[$0.key] == nil }
+            .sorted { $0.value.revision < $1.value.revision }
+        for (id, _) in offscreen.prefix(excess) {
+            pictures[id] = nil
+            renderedKeys[id] = nil
         }
     }
 

@@ -35,8 +35,6 @@ struct SavePresetSheet: View {
     @State private var isSaveErrorPresented = false
     @State private var saveErrorMessage = ""
 
-    /// Longest name / group kept (matches the preset library's limit).
-    private static let maxTextLength = 80
     /// Height of the preview picture in points.
     private static let previewHeight: CGFloat = 170
 
@@ -259,15 +257,9 @@ struct SavePresetSheet: View {
         return values
     }
 
+    /// A user preset with the current switches (trims and limits the texts, defaults the group).
     private func makePreset(name: String, group: String) -> Preset {
-        Preset(id: UUID(),
-               name: name,
-               group: group,
-               createdAt: Date(timeIntervalSince1970: Date().timeIntervalSince1970.rounded(.down)),
-               source: .user,
-               supportsAmount: true,
-               includes: includes,
-               values: presetValues)
+        Preset.makeUserPreset(name: name, group: group, values: presetValues, includes: includes)
     }
 
     // MARK: Preview
@@ -310,12 +302,8 @@ struct SavePresetSheet: View {
     // MARK: Save
 
     private func save() {
-        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmedName.isEmpty, !includes.isEmpty else { return }
-        let trimmedGroup = group.trimmingCharacters(in: .whitespacesAndNewlines)
-        let finalGroup = trimmedGroup.isEmpty ? String(localized: "My Presets") : trimmedGroup
-        let preset = makePreset(name: String(trimmedName.prefix(Self.maxTextLength)),
-                                group: String(finalGroup.prefix(Self.maxTextLength)))
+        guard canSave else { return }
+        let preset = makePreset(name: name, group: group)
         do {
             try app.presets.add(preset)
             presetsPanelChipID = PresetsPanelStorage.mineChipID

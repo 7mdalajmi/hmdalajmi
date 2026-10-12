@@ -117,7 +117,19 @@ enum RecipeRenderer {
     /// luminance, values above 1 rolled toward white with their hue kept. In-gamut values in
     /// [0, 1] pass through unchanged, so an unedited SDR photo is not altered.
     static func fitToSDR(_ image: CIImage) -> CIImage {
-        NoorKernels.applyOutputFit(image, knee: 1, inMax: 1, outMax: 1)
+        fitToSDR(image, preservingWideGamut: false)
+    }
+
+    /// `fitToSDR` for a chosen SDR target. `preservingWideGamut: true` is for exports to a gamut
+    /// wider than the P3 working space (Adobe RGB, ProPhoto): channels that are negative in linear
+    /// P3 are colours inside that gamut, so they are NOT desaturated (the encoder's colour
+    /// conversion maps them); values above 1 are still rolled toward white with the same
+    /// hue-preserving ceiling. `false` is exactly `fitToSDR(_:)` (displays, sRGB / P3 files).
+    static func fitToSDR(_ image: CIImage, preservingWideGamut: Bool) -> CIImage {
+        if preservingWideGamut {
+            return NoorKernels.applyOutputCeiling(image, outMax: 1)
+        }
+        return NoorKernels.applyOutputFit(image, knee: 1, inMax: 1, outMax: 1)
     }
 
     // MARK: Parameters
