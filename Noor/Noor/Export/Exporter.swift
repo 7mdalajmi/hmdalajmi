@@ -149,7 +149,9 @@ enum Exporter {
                                           renderScale: base.renderScale,
                                           fullSize: document.uprightSize,
                                           rawStageApplied: base.rawStageApplied,
-                                          airlight: document.airlight())
+                                          // The airlight only feeds Dehaze; skip the estimate otherwise.
+                                          airlight: recipe.clamped().dehaze != 0
+                                              ? document.airlight() : SIMD3<Float>(repeating: 1))
         guard let rendered = normalized(RecipeRenderer.render(recipe, base: base.image, options: renderOptions)) else {
             throw ExportError.renderFailed
         }
