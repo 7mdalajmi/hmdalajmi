@@ -163,7 +163,7 @@ struct PresetsPanel: View {
         ScrollView(.horizontal) {
             LazyHStack(alignment: .top, spacing: Theme.Space.s) {
                 ForEach(presets) { preset in
-                    cell(preset, library: library)
+                    cell(preset, chip: chip, library: library)
                 }
                 saveCell
                 if presets.isEmpty && chip == .mine {
@@ -182,14 +182,18 @@ struct PresetsPanel: View {
         .id(chip)      // each group starts at its first preset
     }
 
-    private func cell(_ preset: Preset, library: PresetLibrary) -> some View {
+    private func cell(_ preset: Preset, chip: PresetStripChip, library: PresetLibrary) -> some View {
         let isSelected = preset.id == model.activePresetID
         let isApproximate = !(preset.notes ?? []).isEmpty
         let name = preset.displayName(locale)
+        // Identifies this on-screen cell to the thumbnail cache: while the strip switches groups the
+        // same preset can briefly be shown by the outgoing and the incoming strip.
+        let cellID = chip.id
         return Button {
             tap(preset)
         } label: {
             PresetStripCell(preset: preset,
+                            projectID: model.project.id,
                             name: name,
                             isSelected: isSelected,
                             isApproximate: isApproximate,
@@ -200,13 +204,13 @@ struct PresetsPanel: View {
             menu(for: preset, library: library)
         }
         .onAppear {
-            thumbnails.request(preset)
+            thumbnails.request(preset, cell: cellID)
         }
         .onDisappear {
-            thumbnails.cancel(preset.id)
+            thumbnails.cancel(preset.id, cell: cellID)
         }
         .onChange(of: preset) { _, updated in
-            thumbnails.request(updated)
+            thumbnails.request(updated, cell: cellID)
         }
         .accessibilityLabel(Text(verbatim: name))
         .accessibilityValue(isApproximate ? Text("Approximate") : Text(verbatim: ""))
@@ -457,6 +461,8 @@ private struct PresetStripThumbnailContext: Equatable {
 @MainActor
 private struct PresetStripCell: View {
     let preset: Preset
+    /// The photo being edited; a cached picture of another photo is never shown.
+    let projectID: UUID
     let name: String
     let isSelected: Bool
     let isApproximate: Bool
@@ -468,6 +474,9 @@ private struct PresetStripCell: View {
         let side = PresetThumbnailCache.cellSide
         let shape = RoundedRectangle(cornerRadius: Theme.Radius.thumb, style: .continuous)
         let thumbnail = PresetThumbnailCache.shared.thumbnail(for: preset)
+            .flatMap { cached -> PresetThumbnailCache.Thumbnail? in
+                cached.projectID == projectID ? cached : nil
+            }
 
         VStack(spacing: Theme.Space.xs) {
             ZStack {

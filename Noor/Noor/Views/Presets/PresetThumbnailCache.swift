@@ -31,6 +31,9 @@ final class PresetThumbnailCache {
         let image: Image
         /// Changes every time the picture is replaced (drives the cell's fade-in).
         let revision: Int
+        /// The photo it shows. Cells compare it with their own photo, so a newly opened photo never
+        /// flashes the previous photo's pictures before `prepare(for:displayScale:)` clears them.
+        let projectID: UUID
     }
 
     // MARK: Configuration
@@ -109,22 +112,33 @@ final class PresetThumbnailCache {
     }
 
     /// A cell for `preset` is on screen (or its preset changed): render it if its picture is missing
-    /// or stale.
-    func request(_ preset: Preset) {
-        if let existing = visible[preset.id] {
-            visible[preset.id] = VisiblePreset(preset: preset, order: existing.order)
+    /// or stale. `cell` names the on-screen cell (the strip's group), because the same preset can be
+    /// shown by two cells at once while the strip switches groups (Favorites ↔ its own group); the
+    /// preset stays "visible" until every cell showing it has left. Repeated calls are idempotent.
+    func request(_ preset: Preset, cell: String = "") {
+        if var existing = visible[preset.id] {
+            existing.preset = preset
+            existing.cells.insert(cell)
+            visible[preset.id] = existing
         } else {
             appearanceCounter &+= 1
-            visible[preset.id] = VisiblePreset(preset: preset, order: appearanceCounter)
+            visible[preset.id] = VisiblePreset(preset: preset, order: appearanceCounter, cells: [cell])
         }
         enqueue(preset)
         startWorkerIfNeeded()
     }
 
-    /// The cell for `presetID` left the screen: drop its queued render (an in-flight one finishes).
-    func cancel(_ presetID: UUID) {
-        visible[presetID] = nil
-        queue.removeAll { $0 == presetID }
+    /// The cell `cell` showing `presetID` left the screen. When no cell shows the preset any more, its
+    /// queued render is dropped (an in-flight one finishes).
+    func cancel(_ presetID: UUID, cell: String = "") {
+        guard var entry = visible[presetID] else { return }
+        entry.cells.remove(cell)
+        if entry.cells.isEmpty {
+            visible[presetID] = nil
+            queue.removeAll { $0 == presetID }
+        } else {
+            visible[presetID] = entry
+        }
     }
 
     /// Frees every picture (memory warning). Cells still on screen re-render after a pause.
@@ -189,7 +203,8 @@ final class PresetThumbnailCache {
                 revisionCounter &+= 1
                 renderedKeys[job.presetID] = job.key
                 thumbnails[job.presetID] = Thumbnail(image: Image(decorative: rendered, scale: job.scale),
-                                                     revision: revisionCounter)
+                                                     revision: revisionCounter,
+                                                     projectID: job.key.projectID)
             } else {
                 failedKeys.insert(job.key)
             }
@@ -292,6 +307,8 @@ private struct ThumbnailKey: Hashable {
 private struct VisiblePreset {
     var preset: Preset
     var order: Int
+    /// The on-screen cells showing it (see `request(_:cell:)`).
+    var cells: Set<String>
 }
 
 /// Everything one render needs, as values (safe to hand to a detached task).

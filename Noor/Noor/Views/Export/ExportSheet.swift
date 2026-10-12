@@ -452,10 +452,9 @@ private struct ExportSheetContent: View {
         )
     }
 
-    /// The exporter's default name: "<original>-noor".
+    /// The exporter's default name: "<original>-noor" (exactly what `Exporter.export` will use).
     private var defaultBaseName: String {
-        let base = model.project.displayName
-        return base.lowercased().hasSuffix("-noor") ? base : "\(base)-noor"
+        Exporter.exportFileBaseName(requested: nil, fallback: model.project.displayName)
     }
 
     private func formatMenuTitle(_ format: ExportFormat) -> String {
@@ -716,7 +715,8 @@ final class ExportSheetSession {
         flow = Task { [weak self] in
             let outcome: Result<ExportResult, Error>
             do {
-                outcome = .success(try await work.value)
+                let result = try await work.value
+                outcome = .success(result)
             } catch {
                 outcome = .failure(error)
             }
@@ -869,16 +869,11 @@ final class ExportSheetSession {
         fileForExporter = nil
     }
 
-    /// Deletes the export's own temporary folder (`tmp/…/<uuid>/`). Never touches anything else.
+    /// Deletes the export's own temporary folder (`tmp/Exports/<uuid>/`) off the main actor.
+    /// `Exporter.discard` only ever touches folders that `Exporter.export` created.
     nonisolated private static func removeExportFolder(of result: ExportResult) {
-        let folder = result.url.deletingLastPathComponent()
-        let temporaryRoot = FileManager.default.temporaryDirectory.resolvingSymlinksInPath().standardizedFileURL
-            .path(percentEncoded: false)
-        let folderPath = folder.resolvingSymlinksInPath().standardizedFileURL.path(percentEncoded: false)
-        let root = temporaryRoot.hasSuffix("/") ? temporaryRoot : temporaryRoot + "/"
-        guard folderPath.hasPrefix(root), UUID(uuidString: folder.lastPathComponent) != nil else { return }
         Task.detached(priority: .utility) {
-            try? FileManager.default.removeItem(at: folder)
+            Exporter.discard(result)
         }
     }
 
