@@ -92,6 +92,7 @@ final class EditorModel {
     @ObservationIgnored private var lastHistogramRecipe: EditRecipe?
     @ObservationIgnored private var lastSavedRecipe: EditRecipe
     @ObservationIgnored private var backgroundObserver: NSObjectProtocol?
+    @ObservationIgnored private var memoryWarningObserver: NSObjectProtocol?
     @ObservationIgnored private var isClosed = false
 
     private static let historyLimit = 200
@@ -113,14 +114,26 @@ final class EditorModel {
 
         renderer.onHistogram = { [weak self] histogram in
             Task { @MainActor [weak self] in
-                guard let self, !self.isClosed, self.needsHistogram else { return }
+                // An unchanged histogram (a settled pan or zoom) does not redraw its views.
+                guard let self, !self.isClosed, self.needsHistogram, self.histogram != histogram else { return }
                 self.histogram = histogram
             }
         }
         backgroundObserver = NotificationCenter.default.addObserver(
             forName: UIApplication.didEnterBackgroundNotification, object: nil, queue: .main
         ) { [weak self] _ in
-            Task { @MainActor [weak self] in self?.save() }
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                self.save()
+                // A full-resolution decode can be hundreds of MB: drop it so the suspended app is
+                // less likely to be terminated (it is decoded again when next needed).
+                self.renderer.purgeCaches()
+            }
+        }
+        memoryWarningObserver = NotificationCenter.default.addObserver(
+            forName: UIApplication.didReceiveMemoryWarningNotification, object: nil, queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor [weak self] in self?.renderer.purgeCaches() }
         }
     }
 
@@ -303,6 +316,9 @@ final class EditorModel {
         guard old != selectedTool else { return }
         if old == .presets { commitPreset() }
         if selectedTool == .crop {
+            // The canvas is going away: a pending full-resolution frame would be wasted on it.
+            detailTask?.cancel()
+            detailTask = nil
             refreshCropFrameIfNeeded(force: cropFrameImage == nil)
         } else if old == .crop {
             // The canvas comes back as a new view; `attach(canvas:)` renders it once it exists.
@@ -381,7 +397,9 @@ final class EditorModel {
     /// Asks for a new preview frame. While dragging (`settled == false`) only the fast proxy is
     /// rendered; once settled, a full-resolution "detail" frame follows when zoomed in past the proxy.
     func requestRender(settled: Bool) {
-        guard let canvas, !isClosed else { return }
+        // The crop tool shows its own picture; a canvas still alive during its removal transition
+        // must not be drawn (least of all at full resolution) for every crop drag step.
+        guard let canvas, !isClosed, selectedTool != .crop else { return }
         generation &+= 1
         let gen = generation
 
@@ -459,6 +477,8 @@ final class EditorModel {
         canvas = nil
         if let backgroundObserver { NotificationCenter.default.removeObserver(backgroundObserver) }
         backgroundObserver = nil
+        if let memoryWarningObserver { NotificationCenter.default.removeObserver(memoryWarningObserver) }
+        memoryWarningObserver = nil
         // No further frames; the full-resolution purge and cache clearing run on the render queue
         // after a frame that may still be in flight (so it cannot re-decode afterwards, and the main
         // thread never waits on the document's decode lock).

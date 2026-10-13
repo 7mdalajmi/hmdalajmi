@@ -12,7 +12,9 @@ import Foundation
 /// Interaction:
 ///   * drag a point (44-pt reach); its x stays between its neighbours ± 0.01, the end points move
 ///     freely (black / white point);
-///   * tap the graph to add a point on the curve (the picture does not change until it is moved);
+///   * tap the graph to add a point on the curve (a straight curve stays straight; on a bent one
+///     the monotone fit through the new point can reshape its neighbouring segments slightly, so
+///     the tap is its own undo step);
 ///   * drag from empty space to add a point there and keep dragging it;
 ///   * drag a middle point more than 32 pt outside the graph to arm its removal (red ring,
 ///     "Release to delete", haptic); releasing there deletes it.

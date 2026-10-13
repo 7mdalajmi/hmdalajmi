@@ -45,7 +45,7 @@ struct PreviewRequest: Sendable {
 /// the detail tier (`fullBase`, render scale 1) is the exact export look, cropped to the visible region
 /// so its cost follows the visible pixels, not the photo size.
 ///
-/// Thread safety: `submit`, `stop`, `onHistogram` and `proxyScale` may be used from any thread (one lock guards
+/// Thread safety: `submit`, `stop`, `purgeCaches`, `onHistogram` and `proxyScale` may be used from any thread (one lock guards
 /// the shared fields); `attach(canvas:)` runs on the main thread. Everything else, including the
 /// histogram computer and every `CIFilter`, is confined to the render queue. The canvas view (main
 /// actor) is never touched from the render queue: its viewport and surround are read from the
@@ -131,6 +131,14 @@ final class PreviewRenderer: @unchecked Sendable {
         target = nil
         histogramHandler = nil
         lock.unlock()
+        purgeCaches()
+    }
+
+    /// Frees the document's full-resolution decode and the preview caches (memory warnings, the app
+    /// going to the background, closing). Any thread: the work runs on the render queue, after a
+    /// frame that may be rendering, so it never waits for the decode lock on the caller's thread.
+    /// Drawing goes on; the next detail frame decodes again.
+    func purgeCaches() {
         let document = self.document
         let engine = self.engine
         queue.async {

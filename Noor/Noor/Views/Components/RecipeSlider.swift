@@ -9,8 +9,8 @@ import SwiftUI
 /// The title is normally a string literal (`RecipeSlider("Exposure", \.exposure, …)`), which
 /// becomes a `LocalizedStringResource`: it is shown as the label and also resolved with
 /// `String(localized:)` for the undo-history label, so both always read the same. A title that is
-/// already a `LocalizedStringKey` value (e.g. a colour band name) uses the second initializer and
-/// can name its undo step with `undoLabel:`.
+/// already a `LocalizedStringKey` value (e.g. a colour band name) uses the second initializer.
+/// Both accept an explicit, already localized `undoLabel:` (e.g. "B&W Mix" for the band sliders).
 @MainActor
 struct RecipeSlider: View {
     private let label: Text
@@ -41,7 +41,8 @@ struct RecipeSlider: View {
         }
     }
 
-    /// Title from a string literal (the usual case): label and undo step share the same text.
+    /// Title from a string literal (the usual case): label and undo step share the same text,
+    /// unless `undoLabel` (already localized) names the step explicitly.
     init(_ title: LocalizedStringResource,
          _ keyPath: WritableKeyPath<EditRecipe, Double>,
          range: ParamRange,
@@ -49,9 +50,14 @@ struct RecipeSlider: View {
          fractionDigits: Int = 0,
          track: SliderTrackStyle = .standard,
          isEnabled: Bool = true,
+         undoLabel: String? = nil,
          model: EditorModel) {
         self.label = Text(title)
-        self.undoLabel = .resource(title)
+        if let undoLabel {
+            self.undoLabel = .explicit(undoLabel)
+        } else {
+            self.undoLabel = .resource(title)
+        }
         self.keyPath = keyPath
         self.range = range
         self.defaultValue = defaultValue

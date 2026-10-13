@@ -24,20 +24,20 @@ struct EditorTopBar: View {
             Spacer(minLength: Theme.Space.s)
 
             EditorTopBarButton("Undo", systemImage: "arrow.uturn.backward",
-                               shortcut: KeyboardShortcut("z", modifiers: .command)) {
+                               shortcut: shortcut("z", modifiers: .command)) {
                 model.undo()
             }
             .disabled(!model.canUndo)
 
             EditorTopBarButton("Redo", systemImage: "arrow.uturn.forward",
-                               shortcut: KeyboardShortcut("z", modifiers: [.command, .shift])) {
+                               shortcut: shortcut("z", modifiers: [.command, .shift])) {
                 model.redo()
             }
             .disabled(!model.canRedo)
 
             EditorTopBarButton("Compare", systemImage: "square.split.2x1",
                                isOn: model.showOriginal,
-                               shortcut: KeyboardShortcut("\\", modifiers: [])) {
+                               shortcut: shortcut("\\", modifiers: [])) {
                 model.showOriginal.toggle()
             }
 
@@ -45,7 +45,7 @@ struct EditorTopBar: View {
 
             EditorTopBarButton("Export", systemImage: "square.and.arrow.up",
                                tint: Theme.accent,
-                               shortcut: KeyboardShortcut("e", modifiers: .command)) {
+                               shortcut: shortcut("e", modifiers: .command)) {
                 model.isExportPresented = true
             }
         }
@@ -65,6 +65,17 @@ struct EditorTopBar: View {
             }
             Button("Cancel", role: .cancel) {}
         }
+    }
+
+    // MARK: Keyboard shortcuts
+
+    /// Keyboard shortcuts act on the whole scene, including a sheet presented over the editor.
+    /// They are switched off while the export or save-preset sheet is up (⌘Z or `\` typed in its
+    /// text field must not undo or compare the photo underneath) and during a drag (the bar is
+    /// hidden then, and an undo would land in the middle of the gesture's undo step).
+    private func shortcut(_ key: KeyEquivalent, modifiers: EventModifiers) -> KeyboardShortcut? {
+        let isAvailable = !model.isInteracting && !model.isExportPresented && !model.isSavePresetPresented
+        return isAvailable ? KeyboardShortcut(key, modifiers: modifiers) : nil
     }
 
     // MARK: More menu
@@ -146,14 +157,6 @@ private struct EditorTopBarButton: View {
     }
 
     var body: some View {
-        if let shortcut {
-            button.keyboardShortcut(shortcut)
-        } else {
-            button
-        }
-    }
-
-    private var button: some View {
         Button(action: action) {
             Label(title, systemImage: systemImage)
                 .labelStyle(.iconOnly)
@@ -164,6 +167,7 @@ private struct EditorTopBarButton: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
+        .keyboardShortcut(shortcut)        // nil: no shortcut, same view identity
         .accessibilityAddTraits(isOn ? .isSelected : [])
         .accessibilityShowsLargeContentViewer()
     }

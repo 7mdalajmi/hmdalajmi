@@ -71,7 +71,11 @@ struct EditorScreen: View {
             // Read-only metadata inspection (file IO); never modifies the original. `document(for:)`
             // is nonisolated and synchronous, so it runs entirely on this background task.
             let document = try await Task.detached(priority: .userInitiated) {
-                try library.document(for: project)
+                // The first editor after launch may be the first user of the render engine (the
+                // library can show cached thumbnails without it): create its Metal device and
+                // Core Image contexts here rather than on the main actor in `EditorModel.init`.
+                _ = RenderEngine.shared
+                return try library.document(for: project)
             }.value
             guard !Task.isCancelled else { return }
             model = EditorModel(project: project, document: document, library: library, presets: app.presets)

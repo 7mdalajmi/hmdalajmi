@@ -24,6 +24,9 @@ struct ChipPicker<Item: Identifiable & Hashable>: View {
 
     @Environment(\.noorHapticsEnabled) private var hapticsEnabled
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    /// Counts taps that changed the selection. The haptic follows this, not `selection`, so a
+    /// selection that changes programmatically (undo, a value derived from the recipe) is silent.
+    @State private var selectionTaps = 0
 
     init(_ items: [Item],
          selection: Binding<Item>,
@@ -51,7 +54,7 @@ struct ChipPicker<Item: Identifiable & Hashable>: View {
                 .scrollIndicators(.hidden)
             }
         }
-        .sensoryFeedback(.selection, trigger: selection) { _, _ in hapticsEnabled }
+        .sensoryFeedback(.selection, trigger: selectionTaps) { _, _ in hapticsEnabled }
     }
 
     private var chips: some View {
@@ -68,6 +71,7 @@ struct ChipPicker<Item: Identifiable & Hashable>: View {
             withAnimation(reduceMotion ? nil : .snappy(duration: 0.2)) {
                 selection = item
             }
+            selectionTaps += 1
         } label: {
             chipLabel(item)
                 .font(.footnote.weight(isSelected ? .semibold : .medium))

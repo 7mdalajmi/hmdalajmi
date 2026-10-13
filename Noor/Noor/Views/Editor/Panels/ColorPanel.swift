@@ -132,10 +132,16 @@ private struct MonochromeChip: View {
     let action: () -> Void
 
     @Environment(\.noorHapticsEnabled) private var hapticsEnabled
+    /// Counts taps: the haptic follows these, not `isOn`, so undo / redo / Reset stay silent
+    /// (as in `ChipPicker`).
+    @State private var tapCount = 0
 
     var body: some View {
         let shape = RoundedRectangle(cornerRadius: 8, style: .continuous)
-        Button(action: action) {
+        Button {
+            action()
+            tapCount += 1
+        } label: {
             Label("B&W", systemImage: "circle.lefthalf.filled")
                 .font(.footnote.weight(isOn ? .semibold : .medium))
                 .lineLimit(1)
@@ -148,7 +154,7 @@ private struct MonochromeChip: View {
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .sensoryFeedback(.selection, trigger: isOn) { _, _ in hapticsEnabled }
+        .sensoryFeedback(.selection, trigger: tapCount) { _, _ in hapticsEnabled }
         .accessibilityAddTraits(isOn ? [.isToggle, .isSelected] : .isToggle)
     }
 }

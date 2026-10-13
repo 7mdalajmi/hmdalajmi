@@ -17,6 +17,10 @@ import Foundation
 /// `model.binding(\EditRecipe.geometry.crop)` between `beginInteraction()` and
 /// `endInteraction("Crop")`. The workspace is a physical surface, so it is always left-to-right.
 /// Nothing here touches pixels: the preview image is display-only and export re-renders the original.
+///
+/// After Rotate / Flip (or an undo of one) the model re-renders the frame image in the background;
+/// until it arrives, the previous image is shown turned / mirrored exactly to the new orientation,
+/// so the picture never disagrees with the crop and the straighten angle.
 @MainActor
 struct CropWorkspace: View {
     let model: EditorModel
@@ -25,6 +29,8 @@ struct CropWorkspace: View {
     @Environment(\.locale) private var locale
     @State private var session: CropDragSession?
     @State private var sessionCounter = 0
+    /// The frame image last seen and the turns / flips that were current when it arrived.
+    @State private var imageRecord: FrameImageRecord?
     @GestureState private var isTouching = false
 
     var body: some View {
@@ -46,6 +52,12 @@ struct CropWorkspace: View {
             .gesture(cropGesture(layout))
         }
         .environment(\.layoutDirection, .leftToRight)
+        .onChange(of: model.cropFrameImage.map { ObjectIdentifier($0) }, initial: true) { _, imageID in
+            // A new image is rendered for the turns and flips current when it arrives.
+            imageRecord = imageID.map {
+                FrameImageRecord(imageID: $0, orientation: FrameOrientation(model.recipe.geometry))
+            }
+        }
         .onChange(of: isTouching) { _, touching in
             guard !touching, let id = session?.id else { return }
             // The gesture was cancelled by the system (onEnded never ran): close the edit.
@@ -76,18 +88,46 @@ struct CropWorkspace: View {
 
     @ViewBuilder
     private func pictureContent(_ layout: CropWorkspaceLayout) -> some View {
-        if let image = model.cropFrameImage, CropEditMath.aspectMatches(image, frameSize: layout.frameSize) {
-            Image(decorative: image, scale: 1)
-                .resizable()
-                .interpolation(.high)
-        } else {
-            // Not rendered yet (or still showing the previous orientation).
-            ZStack {
-                Theme.surface2
-                ProgressView()
-                    .tint(Theme.textSecondary)
+        let frame = layout.frameRect
+        if let image = model.cropFrameImage {
+            // Identity once the image for the current turns / flips has arrived.
+            let fix = imageCorrection(for: image)
+            let turn = fix.decomposed
+            let box = fix.swapsAxes ? CGSize(width: frame.height, height: frame.width) : frame.size
+            let imageFrame = fix.swapsAxes
+                ? CGSize(width: layout.frameSize.height, height: layout.frameSize.width)
+                : layout.frameSize
+            if CropEditMath.aspectMatches(image, frameSize: imageFrame) {
+                Image(decorative: image, scale: 1)
+                    .resizable()
+                    .interpolation(.high)
+                    .frame(width: box.width, height: box.height)
+                    .scaleEffect(x: turn.mirrored ? -1 : 1, y: 1)
+                    .rotationEffect(.degrees(Double(turn.clockwiseTurns) * 90))
+            } else {
+                picturePlaceholder
             }
+        } else {
+            picturePlaceholder
         }
+    }
+
+    /// Not rendered yet.
+    private var picturePlaceholder: some View {
+        ZStack {
+            Theme.surface2
+            ProgressView()
+                .tint(Theme.textSecondary)
+        }
+    }
+
+    /// The exact turn / mirror that takes `image` (rendered for the orientation recorded when it
+    /// arrived) to the recipe's current turns and flips. An image that has not been recorded yet
+    /// is new, so it was rendered for the current orientation.
+    private func imageCorrection(for image: CGImage) -> FrameOrientation {
+        let current = FrameOrientation(model.recipe.geometry)
+        guard let record = imageRecord, record.imageID == ObjectIdentifier(image) else { return .identity }
+        return current.after(record.orientation.inverse)
     }
 
     // MARK: Overlay
@@ -121,11 +161,15 @@ struct CropWorkspace: View {
             .allowsHitTesting(false)
     }
 
-    /// "4032 × 3024": the output size of the crop in full-resolution pixels.
+    /// "4032 × 3024": the output size of the crop in full-resolution pixels, with the export's own
+    /// pixel snapping (`Geometry.ciCropRect(frameSize:integral:)`), so it matches the file exactly.
     private func pixelSizeText(_ crop: NormalizedRect, frameSize: CGSize) -> String {
         let style = IntegerFormatStyle<Int>(locale: locale).grouping(.never)
-        let w = (crop.width * Double(frameSize.width)).rounded()
-        let h = (crop.height * Double(frameSize.height)).rounded()
+        var cropOnly = Geometry()
+        cropOnly.crop = crop
+        let size = cropOnly.ciCropRect(frameSize: frameSize, integral: true).size
+        let w = Double(size.width).rounded()
+        let h = Double(size.height).rounded()
         // `Int(_:)` traps on NaN / infinity; this text is built in `body`, so never risk it.
         guard w.isFinite, h.isFinite, abs(w) < 1e9, abs(h) < 1e9 else { return "" }
         return "\(Int(w).formatted(style)) × \(Int(h).formatted(style))"
@@ -249,6 +293,73 @@ private struct CropDragSession {
 
 private enum CropGridStyle {
     case none, thirds, fine
+}
+
+// MARK: - Frame image orientation
+
+/// A frame image and the orientation it was rendered for.
+private struct FrameImageRecord {
+    let imageID: ObjectIdentifier
+    let orientation: FrameOrientation
+}
+
+/// An exact quarter-turn / mirror map: the integer matrix [[a, b], [c, d]] acting on frame-centred,
+/// y-down coordinates (the symmetries of a rectangle up to swapping its sides).
+private struct FrameOrientation: Equatable {
+    var a: Int
+    var b: Int
+    var c: Int
+    var d: Int
+
+    static let identity = FrameOrientation(a: 1, b: 0, c: 0, d: 1)
+    /// One clockwise quarter turn on screen: (x, y) -> (-y, x).
+    static let clockwise = FrameOrientation(a: 0, b: -1, c: 1, d: 0)
+    static let mirrorHorizontal = FrameOrientation(a: -1, b: 0, c: 0, d: 1)
+    static let mirrorVertical = FrameOrientation(a: 1, b: 0, c: 0, d: -1)
+
+    init(a: Int, b: Int, c: Int, d: Int) {
+        self.a = a
+        self.b = b
+        self.c = c
+        self.d = d
+    }
+
+    /// The source -> frame map of `g`: its clockwise quarter turns, then its flips (the engine's
+    /// order, see `Geometry.orientationTransform(for:)`).
+    init(_ g: Geometry) {
+        var m = FrameOrientation.identity
+        for _ in 0..<g.normalizedTurns { m = FrameOrientation.clockwise.after(m) }
+        if g.flipHorizontal { m = FrameOrientation.mirrorHorizontal.after(m) }
+        if g.flipVertical { m = FrameOrientation.mirrorVertical.after(m) }
+        self = m
+    }
+
+    /// `self` applied after `first`.
+    func after(_ first: FrameOrientation) -> FrameOrientation {
+        FrameOrientation(a: a * first.a + b * first.c, b: a * first.b + b * first.d,
+                         c: c * first.a + d * first.c, d: c * first.b + d * first.d)
+    }
+
+    /// Orthogonal, so the inverse is the transpose.
+    var inverse: FrameOrientation {
+        FrameOrientation(a: a, b: c, c: b, d: d)
+    }
+
+    /// Width and height trade places.
+    var swapsAxes: Bool { a == 0 }
+
+    /// The same map as "mirror horizontally (when `mirrored`), then turn clockwise
+    /// `clockwiseTurns` × 90°" — what `.scaleEffect` then `.rotationEffect` draw.
+    var decomposed: (mirrored: Bool, clockwiseTurns: Int) {
+        let mirrored = a * d - b * c < 0
+        let rotation = mirrored ? after(.mirrorHorizontal) : self
+        var turn = FrameOrientation.identity
+        for k in 0..<4 {
+            if turn == rotation { return (mirrored, k) }
+            turn = FrameOrientation.clockwise.after(turn)
+        }
+        return (mirrored, 0)
+    }
 }
 
 // MARK: - Drawing

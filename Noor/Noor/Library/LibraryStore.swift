@@ -243,6 +243,8 @@ final class LibraryStore {
     private func handleMemoryWarning() {
         slots = slots.filter { $0.value.pendingDigest != nil }
         pipeline.purgeDocuments()
+        // Also drop Core Image's cached intermediates (thread-safe; done off the main actor).
+        Task.detached(priority: .utility) { RenderEngine.shared.clearCaches() }
     }
 
     // MARK: Import
