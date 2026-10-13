@@ -1,0 +1,5790 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%@ %lld-bit": {
+      "comment": "Format family and bit depth, e.g. “HEIF 10-bit”",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ %2$lld-bit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %lld-bit"
+          }
+        }
+      }
+    },
+    "%@: %@": {
+      "comment": "Import failure line: file or preset name, then the reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "‏%1$@: %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: %@"
+          }
+        }
+      }
+    },
+    "%@: No presets found.": {
+      "comment": "Import failure; %@ is the folder name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "‏%@: لم يُعثر على إعدادات مسبقة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: No presets found."
+          }
+        }
+      }
+    },
+    "%@: The folder can't be read.": {
+      "comment": "Import failure; %@ is the folder name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "‏%@: تعذّرت قراءة المجلد."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: The folder can't be read."
+          }
+        }
+      }
+    },
+    "%lld presets added.": {
+      "comment": "Alert message line; %lld is the number of presets added",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "variations": {
+            "plural": {
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تمت إضافة %lld إعدادات مسبقة."
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تمت إضافة %lld إعدادًا مسبقًا."
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تمت إضافة إعداد مسبق واحد."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تمت إضافة %lld إعداد مسبق."
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تمت إضافة إعدادين مسبقين."
+                }
+              },
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "لم يُضَف أي إعداد مسبق."
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld preset added."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld presets added."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld presets imported": {
+      "comment": "VoiceOver announcement after a preset import; %lld is the number imported",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "variations": {
+            "plural": {
+              "few": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تم استيراد %lld إعدادات مسبقة"
+                }
+              },
+              "many": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تم استيراد %lld إعدادًا مسبقًا"
+                }
+              },
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تم استيراد إعداد مسبق واحد"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تم استيراد %lld إعداد مسبق"
+                }
+              },
+              "two": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "تم استيراد إعدادين مسبقين"
+                }
+              },
+              "zero": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "لم يُستورد أي إعداد مسبق"
+                }
+              }
+            }
+          }
+        },
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld preset imported"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld presets imported"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "%lld-bit": {
+      "comment": "Bit-depth badge on a library thumbnail, e.g. “16-bit”",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld-bit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld-bit"
+          }
+        }
+      }
+    },
+    "10-bit and efficient: the best lossy format.": {
+      "comment": "Export format explanation for HEIF 10-bit on iOS 17 (no HDR for edits)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدقة 10-bit وفعّال: أفضل تنسيق مع فقدان."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10-bit and efficient: the best lossy format."
+          }
+        }
+      }
+    },
+    "10-bit and efficient: the best lossy format. Keeps HDR.": {
+      "comment": "Export format explanation",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدقة 10-bit وفعّال: أفضل تنسيق مع فقدان. يحافظ على HDR."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "10-bit and efficient: the best lossy format. Keeps HDR."
+          }
+        }
+      }
+    },
+    "100 is the highest quality. JPEG and HEIF are still lossy formats.": {
+      "comment": "Caption under the Quality slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "القيمة 100 هي أعلى جودة، لكن JPEG وHEIF يبقيان تنسيقين بضغط مع فقدان."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "100 is the highest quality. JPEG and HEIF are still lossy formats."
+          }
+        }
+      }
+    },
+    "16-bit and lossless. Large files.": {
+      "comment": "Export format explanation",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدقة 16-bit وبلا فقدان. ملفات كبيرة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "16-bit and lossless. Large files."
+          }
+        }
+      }
+    },
+    "16-bit, uncompressed: a lossless master for further editing.": {
+      "comment": "Export format explanation",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدقة 16-bit وغير مضغوط: نسخة رئيسية بلا فقدان لمزيد من التعديل."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "16-bit, uncompressed: a lossless master for further editing."
+          }
+        }
+      }
+    },
+    "3-Way": {
+      "comment": "Colour-grading chip that shows the three tonal wheels together",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العجلات الثلاث"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3-Way"
+          }
+        }
+      }
+    },
+    "8-bit and lossy, but opens everywhere.": {
+      "comment": "Settings footer for JPEG",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدقة 8-bit ومع فقدان، لكنه يُفتح في كل مكان."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8-bit and lossy, but opens everywhere."
+          }
+        }
+      }
+    },
+    "8-bit and lossy, like a classic iPhone photo.": {
+      "comment": "Export format explanation",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدقة 8-bit ومع فقدان، مثل صورة iPhone التقليدية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8-bit and lossy, like a classic iPhone photo."
+          }
+        }
+      }
+    },
+    "8-bit and lossy, like the iPhone camera.": {
+      "comment": "Settings footer for HEIF 8-bit",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدقة 8-bit ومع فقدان، مثل كاميرا iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8-bit and lossy, like the iPhone camera."
+          }
+        }
+      }
+    },
+    "8-bit and lossy. Opens everywhere.": {
+      "comment": "Export format explanation",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بدقة 8-bit ومع فقدان. يُفتح في كل مكان."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "8-bit and lossy. Opens everywhere."
+          }
+        }
+      }
+    },
+    "A lossless 16-bit master. Large files.": {
+      "comment": "Settings footer for TIFF 16-bit",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نسخة رئيسية بلا فقدان بدقة 16-bit. ملفات كبيرة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A lossless 16-bit master. Large files."
+          }
+        }
+      }
+    },
+    "A photo couldn't be imported. %@": {
+      "comment": "Import error; %@ is the reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر استيراد صورة. %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A photo couldn't be imported. %@"
+          }
+        }
+      }
+    },
+    "About": {
+      "comment": "Settings section header",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حول"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "About"
+          }
+        }
+      }
+    },
+    "Actual Size": {
+      "comment": "VoiceOver custom action on the canvas (100 % zoom)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحجم الفعلي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Actual Size"
+          }
+        }
+      }
+    },
+    "Add to Favorites": {
+      "comment": "Preset context menu / swipe action",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إضافة إلى المفضلة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add to Favorites"
+          }
+        }
+      }
+    },
+    "Adjust": {
+      "comment": "Color panel mode chip: white balance, vibrance, saturation",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الضبط"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adjust"
+          }
+        }
+      }
+    },
+    "All edits are removed. The original is unchanged.": {
+      "comment": "Reset-edits confirmation message",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ستُزال كل التعديلات، ويبقى الأصل كما هو."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "All edits are removed. The original is unchanged."
+          }
+        }
+      }
+    },
+    "Amount": {
+      "comment": "Preset strength slider (0–200 %)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المقدار"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amount"
+          }
+        }
+      }
+    },
+    "Apply": {
+      "comment": "Keep the previewed preset (VoiceOver label of ✓)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تطبيق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apply"
+          }
+        }
+      }
+    },
+    "Approximate": {
+      "comment": "VoiceOver value of the ≈ badge: an imported preset could only be approximated",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تقريبي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Approximate"
+          }
+        }
+      }
+    },
+    "Aqua": {
+      "comment": "Colour-mix band",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السماوي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aqua"
+          }
+        }
+      }
+    },
+    "Aspect Ratio": {
+      "comment": "Undo-history label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نسبة العرض إلى الارتفاع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aspect Ratio"
+          }
+        }
+      }
+    },
+    "At defaults": {
+      "comment": "Caption: this setting group has no edits",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بالقيم الافتراضية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "At defaults"
+          }
+        }
+      }
+    },
+    "Auto settings were skipped.": {
+      "comment": "Import note",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم تخطي الإعدادات التلقائية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto settings were skipped."
+          }
+        }
+      }
+    },
+    "B&W": {
+      "comment": "Chip that turns the photo black & white",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أبيض وأسود"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "B&W"
+          }
+        }
+      }
+    },
+    "B&W Mix": {
+      "comment": "Colour mix header when the photo is black & white",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مزج الأبيض والأسود"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "B&W Mix"
+          }
+        }
+      }
+    },
+    "Back": {
+      "comment": "Editor back button (VoiceOver label)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رجوع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back"
+          }
+        }
+      }
+    },
+    "Back to Library": {
+      "comment": "Editor failure button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العودة إلى المكتبة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Back to Library"
+          }
+        }
+      }
+    },
+    "Balance": {
+      "comment": "Colour-grading slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التوازن"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Balance"
+          }
+        }
+      }
+    },
+    "Before": {
+      "comment": "Badge on the photo while comparing with the original",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قبل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Before"
+          }
+        }
+      }
+    },
+    "Black": {
+      "comment": "Canvas surround option",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أسود"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Black"
+          }
+        }
+      }
+    },
+    "Black & White": {
+      "comment": "Undo-history label for the B&W toggle",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأبيض والأسود"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Black & White"
+          }
+        }
+      }
+    },
+    "Blacks": {
+      "comment": "Light slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأسود"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blacks"
+          }
+        }
+      }
+    },
+    "Blending": {
+      "comment": "Colour-grading slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الدمج"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blending"
+          }
+        }
+      }
+    },
+    "Blue": {
+      "comment": "Tone-curve channel / colour-mix band",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأزرق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blue"
+          }
+        }
+      }
+    },
+    "Blue Primary": {
+      "comment": "Calibration section",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأزرق الأساسي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Blue Primary"
+          }
+        }
+      }
+    },
+    "Built-in": {
+      "comment": "Preset source label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مدمج"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Built-in"
+          }
+        }
+      }
+    },
+    "Built-in presets can't be changed.": {
+      "comment": "Preset error",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يمكن تغيير الإعدادات المسبقة المدمجة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Built-in presets can't be changed."
+          }
+        }
+      }
+    },
+    "Calibration": {
+      "comment": "Color panel mode chip and preset setting group",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المعايرة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calibration"
+          }
+        }
+      }
+    },
+    "Camera, lens, date and copyright details.": {
+      "comment": "Export footer under Metadata",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تفاصيل الكاميرا والعدسة والتاريخ وحقوق النشر."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Camera, lens, date and copyright details."
+          }
+        }
+      }
+    },
+    "Can't Open Photo": {
+      "comment": "Editor failure title",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر فتح الصورة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Can't Open Photo"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "comment": "Cancel button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إلغاء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cancel"
+          }
+        }
+      }
+    },
+    "Canvas Surround": {
+      "comment": "Settings section and picker: the colour around the photo in the editor",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "خلفية لوحة العمل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canvas Surround"
+          }
+        }
+      }
+    },
+    "Checking the file…": {
+      "comment": "Export progress (read-back verification)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ فحص الملف…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Checking the file…"
+          }
+        }
+      }
+    },
+    "Clarity": {
+      "comment": "Effects slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الوضوح"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clarity"
+          }
+        }
+      }
+    },
+    "Clear Thumbnail Cache": {
+      "comment": "Settings button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مسح ذاكرة الصور المصغّرة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Clear Thumbnail Cache"
+          }
+        }
+      }
+    },
+    "Color": {
+      "comment": "Tool rail label, panel header and preset setting group",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الألوان"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color"
+          }
+        }
+      }
+    },
+    "Color Grading": {
+      "comment": "Undo-history label and preset setting group",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تدرّج الألوان"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color Grading"
+          }
+        }
+      }
+    },
+    "Color Mix": {
+      "comment": "Undo-history label and preset setting group (HSL)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مزج الألوان"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color Mix"
+          }
+        }
+      }
+    },
+    "Color Noise Reduction": {
+      "comment": "Detail slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تقليل تشويش الألوان"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color Noise Reduction"
+          }
+        }
+      }
+    },
+    "Color Space": {
+      "comment": "Export colour space picker",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مساحة الألوان"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Color Space"
+          }
+        }
+      }
+    },
+    "Compare": {
+      "comment": "Editor top-bar button: show the original (before/after)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مقارنة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Compare"
+          }
+        }
+      }
+    },
+    "Contrast": {
+      "comment": "Light slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التباين"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Contrast"
+          }
+        }
+      }
+    },
+    "Copy Settings": {
+      "comment": "More-menu item: copy the edit to paste on another photo",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نسخ الإعدادات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy Settings"
+          }
+        }
+      }
+    },
+    "Couldn't Import Presets": {
+      "comment": "Alert title after opening a preset file",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر استيراد الإعدادات المسبقة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't Import Presets"
+          }
+        }
+      }
+    },
+    "Couldn't Save Preset": {
+      "comment": "Alert title",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر حفظ الإعداد المسبق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Couldn't Save Preset"
+          }
+        }
+      }
+    },
+    "Crop": {
+      "comment": "Tool rail label, panel header, crop workspace VoiceOver label and undo label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "القص"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crop"
+          }
+        }
+      }
+    },
+    "Curve": {
+      "comment": "Tone-curve row, sub-panel header, preset setting group and undo label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المنحنى"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curve"
+          }
+        }
+      }
+    },
+    "Dark": {
+      "comment": "Canvas surround option",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "داكن"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dark"
+          }
+        }
+      }
+    },
+    "Decrease Hue": {
+      "comment": "VoiceOver action on a colour-grading wheel",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تقليل درجة اللون"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Decrease Hue"
+          }
+        }
+      }
+    },
+    "Deepest contrast on OLED screens": {
+      "comment": "Detail line of the Black surround option",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أعلى تباين على شاشات OLED"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deepest contrast on OLED screens"
+          }
+        }
+      }
+    },
+    "Default Format": {
+      "comment": "Settings picker: default export format",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التنسيق الافتراضي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default Format"
+          }
+        }
+      }
+    },
+    "Default, easy on the eyes": {
+      "comment": "Detail line of the Dark surround option",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الافتراضي، مريح للعين"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default, easy on the eyes"
+          }
+        }
+      }
+    },
+    "Dehaze": {
+      "comment": "Effects slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة الضباب"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dehaze"
+          }
+        }
+      }
+    },
+    "Delete": {
+      "comment": "Delete button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حذف"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete"
+          }
+        }
+      }
+    },
+    "Delete Point": {
+      "comment": "VoiceOver action on a curve point",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حذف النقطة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Point"
+          }
+        }
+      }
+    },
+    "Delete Preset?": {
+      "comment": "Confirmation title",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حذف الإعداد المسبق؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Delete Preset?"
+          }
+        }
+      }
+    },
+    "Destination": {
+      "comment": "Export destination picker",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الوجهة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Destination"
+          }
+        }
+      }
+    },
+    "Detail": {
+      "comment": "Tool rail label, panel header and preset setting group",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التفاصيل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Detail"
+          }
+        }
+      }
+    },
+    "Done": {
+      "comment": "Sheet dismiss button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Done"
+          }
+        }
+      }
+    },
+    "Duplicate": {
+      "comment": "Library context-menu item",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تكرار"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Duplicate"
+          }
+        }
+      }
+    },
+    "Edit": {
+      "comment": "Library context-menu item that opens the editor; also the generic undo-history label for an edit",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعديل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edit"
+          }
+        }
+      }
+    },
+    "Edited": {
+      "comment": "Status: the photo / tool / channel / setting group has edits (VoiceOver value or caption)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم التعديل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Edited"
+          }
+        }
+      }
+    },
+    "Effects": {
+      "comment": "Tool rail label, panel header and preset setting group",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التأثيرات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Effects"
+          }
+        }
+      }
+    },
+    "Embedded profile": {
+      "comment": "Colour space name when the original has an unnamed ICC profile",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ملف تعريف مضمّن"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Embedded profile"
+          }
+        }
+      }
+    },
+    "Encoding %@…": {
+      "comment": "Export progress; %@ is the format, e.g. “HEIF 10-bit”",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ ترميز %@…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Encoding %@…"
+          }
+        }
+      }
+    },
+    "Export": {
+      "comment": "Export: settings section header, editor top-bar button, export sheet title and its main button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تصدير"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export"
+          }
+        }
+      }
+    },
+    "Export Failed": {
+      "comment": "Alert title",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر التصدير"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export Failed"
+          }
+        }
+      }
+    },
+    "Exposure": {
+      "comment": "Light slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التعريض"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Exposure"
+          }
+        }
+      }
+    },
+    "Favorite": {
+      "comment": "VoiceOver label of the star on a favourite preset",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مفضّل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favorite"
+          }
+        }
+      }
+    },
+    "Favorites": {
+      "comment": "Preset group chip",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المفضلة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Favorites"
+          }
+        }
+      }
+    },
+    "Feather": {
+      "comment": "Vignette slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التنعيم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Feather"
+          }
+        }
+      }
+    },
+    "File": {
+      "comment": "Export section header",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الملف"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File"
+          }
+        }
+      }
+    },
+    "File Name": {
+      "comment": "Export file-name field and section header",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اسم الملف"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "File Name"
+          }
+        }
+      }
+    },
+    "Files": {
+      "comment": "Export destination: the Files app",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الملفات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Files"
+          }
+        }
+      }
+    },
+    "Flip Horizontal": {
+      "comment": "Crop action button and undo label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قلب أفقي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flip Horizontal"
+          }
+        }
+      }
+    },
+    "Flip Vertical": {
+      "comment": "Crop action button and undo label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "قلب عمودي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Flip Vertical"
+          }
+        }
+      }
+    },
+    "Folders can't be imported. Choose photos instead.": {
+      "comment": "Import error reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يمكن استيراد المجلدات. اختر صورًا بدلًا منها."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Folders can't be imported. Choose photos instead."
+          }
+        }
+      }
+    },
+    "Format": {
+      "comment": "Export format picker",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التنسيق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Format"
+          }
+        }
+      }
+    },
+    "Free": {
+      "comment": "Crop aspect chip: unconstrained",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Free"
+          }
+        }
+      }
+    },
+    "Global": {
+      "comment": "Colour-grading range that affects the whole photo",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عام"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Global"
+          }
+        }
+      }
+    },
+    "Grading": {
+      "comment": "Color panel mode chip: colour grading wheels",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التدرّج"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grading"
+          }
+        }
+      }
+    },
+    "Grain": {
+      "comment": "Effects slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحبيبات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grain"
+          }
+        }
+      }
+    },
+    "Green": {
+      "comment": "Tone-curve channel / colour-mix band",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأخضر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Green"
+          }
+        }
+      }
+    },
+    "Green Primary": {
+      "comment": "Calibration section",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأخضر الأساسي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Green Primary"
+          }
+        }
+      }
+    },
+    "Grey": {
+      "comment": "Canvas surround option",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رمادي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Grey"
+          }
+        }
+      }
+    },
+    "Group": {
+      "comment": "Preset group field",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المجموعة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Group"
+          }
+        }
+      }
+    },
+    "HDR": {
+      "comment": "Badge on a library thumbnail / VoiceOver detail (keep Latin)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HDR"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HDR"
+          }
+        }
+      }
+    },
+    "HDR screens show the photo's full brightness; other screens show a standard version.": {
+      "comment": "Export footer",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعرض شاشات HDR سطوع الصورة كاملًا، وتعرض الشاشات الأخرى نسخة قياسية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HDR screens show the photo's full brightness; other screens show a standard version."
+          }
+        }
+      }
+    },
+    "HEIF 10-bit": {
+      "comment": "Export format name (keep Latin)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HEIF 10-bit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HEIF 10-bit"
+          }
+        }
+      }
+    },
+    "HEIF 8-bit": {
+      "comment": "Export format name (keep Latin)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HEIF 8-bit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "HEIF 8-bit"
+          }
+        }
+      }
+    },
+    "Haptics": {
+      "comment": "Settings toggle",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحس اللمسي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haptics"
+          }
+        }
+      }
+    },
+    "Highlights": {
+      "comment": "Slider (Light, vignette) and colour-grading range",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإضاءات العالية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Highlights"
+          }
+        }
+      }
+    },
+    "Histogram": {
+      "comment": "More-menu toggle and the histogram's VoiceOver label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المدرج التكراري"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Histogram"
+          }
+        }
+      }
+    },
+    "Hue": {
+      "comment": "Slider (mix, grading, calibration)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "درجة اللون"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hue"
+          }
+        }
+      }
+    },
+    "Hue %lld, saturation %lld": {
+      "comment": "VoiceOver value of a colour-grading wheel",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "درجة اللون %1$lld، التشبع %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hue %lld, saturation %lld"
+          }
+        }
+      }
+    },
+    "Import": {
+      "comment": "Toolbar menu / button that imports photos or presets",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استيراد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import"
+          }
+        }
+      }
+    },
+    "Import Failed": {
+      "comment": "Alert title when the file picker fails",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر الاستيراد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import Failed"
+          }
+        }
+      }
+    },
+    "Import Lightroom or Noor presets to see them here.": {
+      "comment": "Preset manager empty-state description",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استورد إعدادات مسبقة من Lightroom أو نور لتظهر هنا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import Lightroom or Noor presets to see them here."
+          }
+        }
+      }
+    },
+    "Import Notes": {
+      "comment": "Alert title / menu item: what the importer had to approximate",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ملاحظات الاستيراد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import Notes"
+          }
+        }
+      }
+    },
+    "Import Results": {
+      "comment": "Import summary sheet title",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نتائج الاستيراد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import Results"
+          }
+        }
+      }
+    },
+    "Import as Photo": {
+      "comment": "DNG dialog button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استيراد كصورة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import as Photo"
+          }
+        }
+      }
+    },
+    "Import as Preset": {
+      "comment": "DNG dialog button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استيراد كإعداد مسبق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import as Preset"
+          }
+        }
+      }
+    },
+    "Import from Files": {
+      "comment": "Menu item / empty-state button: pick photos from the Files app",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استيراد من الملفات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import from Files"
+          }
+        }
+      }
+    },
+    "Import from Photos": {
+      "comment": "Menu item / empty-state button: pick photos from the Photos library",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استيراد من الصور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import from Photos"
+          }
+        }
+      }
+    },
+    "Import photos to start editing. Noor edits a copy and never changes your originals.": {
+      "comment": "Library empty-state description",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "استورد صورًا لتبدأ التعديل. يعدّل نور نسخة منها ولا يغيّر صورك الأصلية أبدًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Import photos to start editing. Noor edits a copy and never changes your originals."
+          }
+        }
+      }
+    },
+    "Imported": {
+      "comment": "Preset group chip / section header / default group of imported presets",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المستوردة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imported"
+          }
+        }
+      }
+    },
+    "Imported Preset": {
+      "comment": "Default name of an imported preset without a name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعداد مسبق مستورد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imported Preset"
+          }
+        }
+      }
+    },
+    "Imported from DNG": {
+      "comment": "Preset source label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مستورد من DNG"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imported from DNG"
+          }
+        }
+      }
+    },
+    "Imported from Lightroom": {
+      "comment": "Preset source label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مستورد من Lightroom"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Imported from Lightroom"
+          }
+        }
+      }
+    },
+    "Importing %lld of %lld…": {
+      "comment": "Library import progress capsule, e.g. “Importing 3 of 10…”",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ استيراد %1$lld من %2$lld…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importing %lld of %lld…"
+          }
+        }
+      }
+    },
+    "Importing…": {
+      "comment": "Preset manager progress overlay",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ الاستيراد…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Importing…"
+          }
+        }
+      }
+    },
+    "Include": {
+      "comment": "Section header: setting groups the preset stores",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تضمين"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Include"
+          }
+        }
+      }
+    },
+    "Included settings replace the photo's own, even when they're at their defaults.": {
+      "comment": "Footer of the Include section",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تحل الإعدادات المضمّنة محل إعدادات الصورة، حتى لو كانت بقيمها الافتراضية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Included settings replace the photo's own, even when they're at their defaults."
+          }
+        }
+      }
+    },
+    "Increase Hue": {
+      "comment": "VoiceOver action on a colour-grading wheel",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "زيادة درجة اللون"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Increase Hue"
+          }
+        }
+      }
+    },
+    "Input %lld → Output %lld": {
+      "comment": "Curve readout on a 0–255 scale, e.g. “Input 64 → Output 80”",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإدخال %1$lld ← الإخراج %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input %lld → Output %lld"
+          }
+        }
+      }
+    },
+    "Input %lld, output %lld": {
+      "comment": "VoiceOver value of a curve point (0–255)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإدخال %1$lld، الإخراج %2$lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Input %lld, output %lld"
+          }
+        }
+      }
+    },
+    "JPEG": {
+      "comment": "Export format name in the export sheet (keep Latin)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JPEG"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JPEG"
+          }
+        }
+      }
+    },
+    "JPEG 8-bit": {
+      "comment": "Export format name in Settings (keep Latin)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JPEG 8-bit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "JPEG 8-bit"
+          }
+        }
+      }
+    },
+    "Keep HDR": {
+      "comment": "Export toggle",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإبقاء على HDR"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep HDR"
+          }
+        }
+      }
+    },
+    "Keep Location": {
+      "comment": "Export toggle",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإبقاء على الموقع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep Location"
+          }
+        }
+      }
+    },
+    "Keep Metadata": {
+      "comment": "Export toggle",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإبقاء على البيانات الوصفية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep Metadata"
+          }
+        }
+      }
+    },
+    "Keep each photo's exposure & white balance": {
+      "comment": "Toggle under Light",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإبقاء على تعريض كل صورة وتوازن الأبيض فيها"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keep each photo's exposure & white balance"
+          }
+        }
+      }
+    },
+    "Keeping HDR in an edited photo needs iOS 18, so it is exported in standard dynamic range.": {
+      "comment": "Export footer under Keep HDR on iOS 17",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يتطلب الإبقاء على HDR في صورة معدّلة نظام iOS 18، لذا تُصدَّر الصورة بالنطاق الديناميكي القياسي."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keeping HDR in an edited photo needs iOS 18, so it is exported in standard dynamic range."
+          }
+        }
+      }
+    },
+    "Keeps the preset.": {
+      "comment": "VoiceOver hint of the ✓ button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُبقي الإعداد المسبق."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keeps the preset."
+          }
+        }
+      }
+    },
+    "Lens, crop and geometry settings were skipped.": {
+      "comment": "Import note",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم تخطي إعدادات العدسة والقص والهندسة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lens, crop and geometry settings were skipped."
+          }
+        }
+      }
+    },
+    "Library": {
+      "comment": "Library screen title",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المكتبة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Library"
+          }
+        }
+      }
+    },
+    "Light": {
+      "comment": "Tool rail label, panel header and preset setting group",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإضاءة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Light"
+          }
+        }
+      }
+    },
+    "Long Edge %lld px": {
+      "comment": "Export size option, e.g. “Long Edge 2048 px”",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحافة الطويلة %lld بكسل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Long Edge %lld px"
+          }
+        }
+      }
+    },
+    "Lossless 16-bit, widely supported.": {
+      "comment": "Settings footer for PNG 16-bit",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بلا فقدان بدقة 16-bit، ومدعوم على نطاق واسع."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lossless 16-bit, widely supported."
+          }
+        }
+      }
+    },
+    "Lossless — identical to the original": {
+      "comment": "Export badge when the original's bytes are copied",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "بلا فقدان — مطابق للأصل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lossless — identical to the original"
+          }
+        }
+      }
+    },
+    "Luminance": {
+      "comment": "Slider (mix, grading)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإنارة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Luminance"
+          }
+        }
+      }
+    },
+    "Made for an older Lightroom version, so the result is approximate.": {
+      "comment": "Import note",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صُمّم لإصدار أقدم من Lightroom، لذا فالنتيجة تقريبية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Made for an older Lightroom version, so the result is approximate."
+          }
+        }
+      }
+    },
+    "Made with the “%@” profile. Its colors aren't reproduced.": {
+      "comment": "Import note; %@ is a Lightroom profile name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صُنع باستخدام ملف التعريف «%@»، ولا يحاكي نور ألوانه."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Made with the “%@” profile. Its colors aren't reproduced."
+          }
+        }
+      }
+    },
+    "Magenta": {
+      "comment": "Colour-mix band",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأرجواني"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Magenta"
+          }
+        }
+      }
+    },
+    "Manage…": {
+      "comment": "Preset chip that opens the preset manager",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إدارة…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Manage…"
+          }
+        }
+      }
+    },
+    "Masking": {
+      "comment": "Sharpening masking slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "القناع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masking"
+          }
+        }
+      }
+    },
+    "Masks and local adjustments were skipped.": {
+      "comment": "Import note",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم تخطي الأقنعة والتعديلات المحلية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Masks and local adjustments were skipped."
+          }
+        }
+      }
+    },
+    "Metadata": {
+      "comment": "Export section header",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البيانات الوصفية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Metadata"
+          }
+        }
+      }
+    },
+    "Midpoint": {
+      "comment": "Vignette slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نقطة المنتصف"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Midpoint"
+          }
+        }
+      }
+    },
+    "Midtones": {
+      "comment": "Colour-grading range",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الدرجات المتوسطة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Midtones"
+          }
+        }
+      }
+    },
+    "Mine": {
+      "comment": "Preset group chip and source label: the user's own presets",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعداداتي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mine"
+          }
+        }
+      }
+    },
+    "Mix": {
+      "comment": "Color panel mode chip: the colour mixer (HSL)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المزج"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mix"
+          }
+        }
+      }
+    },
+    "More": {
+      "comment": "Editor top-bar ••• menu (VoiceOver label)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المزيد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "More"
+          }
+        }
+      }
+    },
+    "My Preset": {
+      "comment": "Default name of a new user preset",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعدادي المسبق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Preset"
+          }
+        }
+      }
+    },
+    "My Presets": {
+      "comment": "Default group of the user's presets",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعداداتي المسبقة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Presets"
+          }
+        }
+      }
+    },
+    "Name": {
+      "comment": "Preset name field",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الاسم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Name"
+          }
+        }
+      }
+    },
+    "Neutral mid-grey for judging tones": {
+      "comment": "Detail line of the Grey surround option",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رمادي متوسط محايد لتقييم الدرجات اللونية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Neutral mid-grey for judging tones"
+          }
+        }
+      }
+    },
+    "No Lightroom settings were found in this file.": {
+      "comment": "Import failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم يُعثر على إعدادات Lightroom في هذا الملف."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Lightroom settings were found in this file."
+          }
+        }
+      }
+    },
+    "No Photos Yet": {
+      "comment": "Library empty-state title",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد صور بعد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Photos Yet"
+          }
+        }
+      }
+    },
+    "No Presets": {
+      "comment": "Preset manager empty-state title",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد إعدادات مسبقة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No Presets"
+          }
+        }
+      }
+    },
+    "No presets were found in this file.": {
+      "comment": "Alert message",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم يُعثر على إعدادات مسبقة في هذا الملف."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No presets were found in this file."
+          }
+        }
+      }
+    },
+    "Noise Reduction": {
+      "comment": "Detail slider (luminance noise)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تقليل التشويش"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noise Reduction"
+          }
+        }
+      }
+    },
+    "Noor can't read this file format.": {
+      "comment": "Editor / import failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يستطيع نور قراءة تنسيق هذا الملف."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noor can't read this file format."
+          }
+        }
+      }
+    },
+    "Noor isn’t allowed to add photos. Allow access in Settings › Privacy & Security › Photos.": {
+      "comment": "Export error; names the iOS Settings path",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غير مسموح لنور بإضافة الصور. اسمح بالوصول من الإعدادات › الخصوصية والأمن › الصور."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noor isn’t allowed to add photos. Allow access in Settings › Privacy & Security › Photos."
+          }
+        }
+      }
+    },
+    "Noor never changes your originals: every edit is kept as a recipe, and every export is rendered fresh from the original at full quality.": {
+      "comment": "Settings About text",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يغيّر نور صورك الأصلية أبدًا: يُحفظ كل تعديل كوصفة، ويُعالَج كل تصدير من جديد من الأصل بكامل الجودة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noor never changes your originals: every edit is kept as a recipe, and every export is rendered fresh from the original at full quality."
+          }
+        }
+      }
+    },
+    "Noor's copy and its edits are deleted. The photo in Photos or Files is not affected.": {
+      "comment": "Remove-photo confirmation message",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ستُحذف نسخة نور وتعديلاتها. لن تتأثر الصورة في تطبيق الصور أو الملفات."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Noor's copy and its edits are deleted. The photo in Photos or Files is not affected."
+          }
+        }
+      }
+    },
+    "Not Imported": {
+      "comment": "Import summary section header for failed files",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر استيرادها"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not Imported"
+          }
+        }
+      }
+    },
+    "Not available": {
+      "comment": "Histogram VoiceOver value when there is no data yet",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "غير متاح"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not available"
+          }
+        }
+      }
+    },
+    "OK": {
+      "comment": "Alert dismiss button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حسنًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "Old Lightroom presets (.lrtemplate) aren't supported. Open it in Lightroom and export it as .xmp.": {
+      "comment": "Import failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعدادات Lightroom المسبقة القديمة (‎.lrtemplate) غير مدعومة. افتح الملف في Lightroom وصدّره بتنسيق ‎.xmp."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Old Lightroom presets (.lrtemplate) aren't supported. Open it in Lightroom and export it as .xmp."
+          }
+        }
+      }
+    },
+    "Open DNG File": {
+      "comment": "Dialog title when a DNG is opened from another app",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فتح ملف DNG"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Open DNG File"
+          }
+        }
+      }
+    },
+    "Opens the photo in the editor.": {
+      "comment": "VoiceOver hint on a library grid cell",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يفتح الصورة في المحرر."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens the photo in the editor."
+          }
+        }
+      }
+    },
+    "Opens the tone curve": {
+      "comment": "VoiceOver hint on the Curve row",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يفتح منحنى الدرجات اللونية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens the tone curve"
+          }
+        }
+      }
+    },
+    "Orange": {
+      "comment": "Colour-mix band",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البرتقالي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orange"
+          }
+        }
+      }
+    },
+    "Original": {
+      "comment": "Crop aspect chip: the photo's own ratio",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأصلي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original"
+          }
+        }
+      }
+    },
+    "Original (%lld × %lld)": {
+      "comment": "Export size option; width × height in pixels",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأصلي (%1$lld × %2$lld)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Original (%lld × %lld)"
+          }
+        }
+      }
+    },
+    "PNG 16-bit": {
+      "comment": "Export format name (keep Latin)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PNG 16-bit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PNG 16-bit"
+          }
+        }
+      }
+    },
+    "Paste Settings": {
+      "comment": "More-menu item; also its undo-history label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لصق الإعدادات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Paste Settings"
+          }
+        }
+      }
+    },
+    "Photo": {
+      "comment": "VoiceOver label of the editor canvas",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصورة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo"
+          }
+        }
+      }
+    },
+    "Photos": {
+      "comment": "Export destination: the Photos app",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos"
+          }
+        }
+      }
+    },
+    "Photos and Edits": {
+      "comment": "Settings storage row: space used by originals and recipes",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصور والتعديلات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos and Edits"
+          }
+        }
+      }
+    },
+    "Photos doesn’t accept this file type. Save it to Files instead.": {
+      "comment": "Export error",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يقبل تطبيق الصور نوع الملف هذا. احفظه في الملفات بدلًا من ذلك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photos doesn’t accept this file type. Save it to Files instead."
+          }
+        }
+      }
+    },
+    "Point %lld": {
+      "comment": "VoiceOver label of a curve point",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "النقطة %lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Point %lld"
+          }
+        }
+      }
+    },
+    "Preparing…": {
+      "comment": "Export progress",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ التحضير…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preparing…"
+          }
+        }
+      }
+    },
+    "Preset": {
+      "comment": "Save Preset section header",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإعداد المسبق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset"
+          }
+        }
+      }
+    },
+    "Preset %@ applied": {
+      "comment": "VoiceOver announcement; %@ is the preset name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم تطبيق الإعداد المسبق %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset %@ applied"
+          }
+        }
+      }
+    },
+    "Preset %@ saved": {
+      "comment": "VoiceOver announcement; %@ is the preset name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم حفظ الإعداد المسبق %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset %@ saved"
+          }
+        }
+      }
+    },
+    "Preset: %@": {
+      "comment": "Undo-history label after applying a preset; %@ is the preset name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعداد مسبق: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preset: %@"
+          }
+        }
+      }
+    },
+    "Presets": {
+      "comment": "Presets: editor tool-rail label (must fit ~60 pt), panel header, preset manager title and library toolbar button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعدادات مسبقة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presets"
+          }
+        }
+      }
+    },
+    "Presets Imported": {
+      "comment": "Alert title after opening a preset file",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم استيراد الإعدادات المسبقة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Presets Imported"
+          }
+        }
+      }
+    },
+    "Preview of the preset on this photo": {
+      "comment": "VoiceOver label of the preview picture",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "معاينة الإعداد المسبق على هذه الصورة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview of the preset on this photo"
+          }
+        }
+      }
+    },
+    "Preview unavailable": {
+      "comment": "VoiceOver detail when a library thumbnail failed to render",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المعاينة غير متاحة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview unavailable"
+          }
+        }
+      }
+    },
+    "Previewing %@": {
+      "comment": "VoiceOver announcement; %@ is the preset name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "معاينة %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previewing %@"
+          }
+        }
+      }
+    },
+    "Previews the preset on the photo.": {
+      "comment": "VoiceOver hint on a preset",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يعاين الإعداد المسبق على الصورة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Previews the preset on the photo."
+          }
+        }
+      }
+    },
+    "Purple": {
+      "comment": "Colour-mix band",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "البنفسجي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Purple"
+          }
+        }
+      }
+    },
+    "Quality": {
+      "comment": "Export quality slider (lossy formats)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الجودة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quality"
+          }
+        }
+      }
+    },
+    "RAW": {
+      "comment": "Badge on a library thumbnail / VoiceOver detail (keep Latin)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RAW"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RAW"
+          }
+        }
+      }
+    },
+    "RAW sharpening defaults were skipped.": {
+      "comment": "Import note",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم تخطي إعدادات الحدّة الافتراضية لملفات RAW."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RAW sharpening defaults were skipped."
+          }
+        }
+      }
+    },
+    "RGB": {
+      "comment": "Tone-curve channel (VoiceOver label, keep Latin)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RGB"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "RGB"
+          }
+        }
+      }
+    },
+    "Radius": {
+      "comment": "Sharpening radius slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نصف القطر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Radius"
+          }
+        }
+      }
+    },
+    "Ready to share": {
+      "comment": "VoiceOver announcement when the exported file can be shared",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جاهز للمشاركة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ready to share"
+          }
+        }
+      }
+    },
+    "Red": {
+      "comment": "Tone-curve channel / colour-mix band",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأحمر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Red"
+          }
+        }
+      }
+    },
+    "Red Primary": {
+      "comment": "Calibration section",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأحمر الأساسي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Red Primary"
+          }
+        }
+      }
+    },
+    "Redo": {
+      "comment": "Editor top-bar button (VoiceOver label)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Redo"
+          }
+        }
+      }
+    },
+    "Release to delete": {
+      "comment": "Curve readout while a point is dragged off the graph",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أفلت للحذف"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Release to delete"
+          }
+        }
+      }
+    },
+    "Remove from Favorites": {
+      "comment": "Preset context menu / swipe action",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة من المفضلة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove from Favorites"
+          }
+        }
+      }
+    },
+    "Remove from Noor": {
+      "comment": "Library context-menu item / destructive confirmation button (deletes Noor's copy only)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة من نور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove from Noor"
+          }
+        }
+      }
+    },
+    "Remove “%@” from Noor?": {
+      "comment": "Confirmation title; %@ is the photo's file name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إزالة «%@» من نور؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remove “%@” from Noor?"
+          }
+        }
+      }
+    },
+    "Removes the preset and restores your edit.": {
+      "comment": "VoiceOver hint of the ✕ button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يزيل الإعداد المسبق ويستعيد تعديلك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Removes the preset and restores your edit."
+          }
+        }
+      }
+    },
+    "Rename": {
+      "comment": "Button / swipe action",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة تسمية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename"
+          }
+        }
+      }
+    },
+    "Rename Preset": {
+      "comment": "Alert title",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة تسمية الإعداد المسبق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename Preset"
+          }
+        }
+      }
+    },
+    "Rendering %lld MP…": {
+      "comment": "Export progress; %lld is megapixels",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ معالجة %lld ميغابكسل…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rendering %lld MP…"
+          }
+        }
+      }
+    },
+    "Required": {
+      "comment": "Placeholder of the Name field",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مطلوب"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Required"
+          }
+        }
+      }
+    },
+    "Reset": {
+      "comment": "Reset button / VoiceOver action; also the undo-history label for a panel reset",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة تعيين"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset"
+          }
+        }
+      }
+    },
+    "Reset All": {
+      "comment": "More-menu item / confirmation button; also its undo-history label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة تعيين الكل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset All"
+          }
+        }
+      }
+    },
+    "Reset Channel": {
+      "comment": "VoiceOver label of the curve channel reset button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة تعيين القناة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset Channel"
+          }
+        }
+      }
+    },
+    "Reset Color": {
+      "comment": "VoiceOver label of the colour-band reset button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة تعيين اللون"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset Color"
+          }
+        }
+      }
+    },
+    "Reset Crop": {
+      "comment": "VoiceOver action and undo label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة تعيين القص"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset Crop"
+          }
+        }
+      }
+    },
+    "Reset Curve": {
+      "comment": "Undo-history label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة تعيين المنحنى"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset Curve"
+          }
+        }
+      }
+    },
+    "Reset Edits": {
+      "comment": "Library context-menu item / destructive confirmation button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة تعيين التعديلات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset Edits"
+          }
+        }
+      }
+    },
+    "Reset all edits?": {
+      "comment": "Confirmation title before Reset All",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة تعيين كل التعديلات؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset all edits?"
+          }
+        }
+      }
+    },
+    "Reset edits to “%@”?": {
+      "comment": "Confirmation title; %@ is the photo's file name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "إعادة تعيين تعديلات «%@»؟"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reset edits to “%@”?"
+          }
+        }
+      }
+    },
+    "Rotate": {
+      "comment": "Undo-history label for a 90° turn",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تدوير"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotate"
+          }
+        }
+      }
+    },
+    "Rotate Left": {
+      "comment": "Crop action button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تدوير لليسار"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotate Left"
+          }
+        }
+      }
+    },
+    "Rotate Right": {
+      "comment": "Crop action button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تدوير لليمين"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rotate Right"
+          }
+        }
+      }
+    },
+    "Roughness": {
+      "comment": "Grain slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الخشونة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roughness"
+          }
+        }
+      }
+    },
+    "Roundness": {
+      "comment": "Vignette slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الاستدارة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Roundness"
+          }
+        }
+      }
+    },
+    "Same as Original": {
+      "comment": "Export format / colour space option that keeps the original's format",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مثل الأصل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Same as Original"
+          }
+        }
+      }
+    },
+    "Same as Original (%@)": {
+      "comment": "Export format option; %@ is what it resolves to, e.g. “HEIF 10-bit”",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مثل الأصل (%@)"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Same as Original (%@)"
+          }
+        }
+      }
+    },
+    "Saturation": {
+      "comment": "Slider (Color, mix, grading, calibration)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التشبع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saturation"
+          }
+        }
+      }
+    },
+    "Save": {
+      "comment": "Save button",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حفظ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save"
+          }
+        }
+      }
+    },
+    "Save Preset": {
+      "comment": "“+” cell in the preset strip; Save Preset sheet title",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حفظ إعداد مسبق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save Preset"
+          }
+        }
+      }
+    },
+    "Save as Preset…": {
+      "comment": "More-menu item",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حفظ كإعداد مسبق…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save as Preset…"
+          }
+        }
+      }
+    },
+    "Save your edits as a preset to use them on other photos.": {
+      "comment": "Hint shown when the user has no presets of their own",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "احفظ تعديلاتك كإعداد مسبق لاستخدامها على صور أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Save your edits as a preset to use them on other photos."
+          }
+        }
+      }
+    },
+    "Saved to Files": {
+      "comment": "Export success toast / announcement",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم الحفظ في الملفات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved to Files"
+          }
+        }
+      }
+    },
+    "Saved to Photos": {
+      "comment": "Export success toast / announcement",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم الحفظ في الصور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saved to Photos"
+          }
+        }
+      }
+    },
+    "Saves the current edit as a new preset.": {
+      "comment": "VoiceOver hint of the “+” cell",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يحفظ التعديل الحالي كإعداد مسبق جديد."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saves the current edit as a new preset."
+          }
+        }
+      }
+    },
+    "Saving to Photos…": {
+      "comment": "Export progress",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "جارٍ الحفظ في الصور…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Saving to Photos…"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "comment": "Settings sheet title and the library toolbar button that opens it",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإعدادات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Settings"
+          }
+        }
+      }
+    },
+    "Shadows": {
+      "comment": "Light slider, colour-grading range and calibration section",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الظلال"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shadows"
+          }
+        }
+      }
+    },
+    "Shadows clipped %@, highlights clipped %@": {
+      "comment": "Histogram VoiceOver value; each %@ is a percentage of clipped pixels",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الظلال المقتطعة %1$@، والإضاءات العالية المقتطعة %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shadows clipped %@, highlights clipped %@"
+          }
+        }
+      }
+    },
+    "Share": {
+      "comment": "Share button / export destination",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مشاركة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share"
+          }
+        }
+      }
+    },
+    "Sharpening": {
+      "comment": "Detail slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحدّة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sharpening"
+          }
+        }
+      }
+    },
+    "Shows or hides the Amount slider.": {
+      "comment": "VoiceOver hint on the selected preset",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُظهر شريط «المقدار» أو يخفيه."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shows or hides the Amount slider."
+          }
+        }
+      }
+    },
+    "Size": {
+      "comment": "Grain size slider; export size picker",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحجم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Size"
+          }
+        }
+      }
+    },
+    "Some Photos Couldn't Be Added": {
+      "comment": "Alert title after an import with failures",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت إضافة بعض الصور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Some Photos Couldn't Be Added"
+          }
+        }
+      }
+    },
+    "Storage": {
+      "comment": "Settings section header",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التخزين"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Storage"
+          }
+        }
+      }
+    },
+    "Straighten": {
+      "comment": "Straighten ruler VoiceOver label and undo label",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الاستقامة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Straighten"
+          }
+        }
+      }
+    },
+    "Subtle taps when a slider reaches its default and when you switch tools.": {
+      "comment": "Settings footer under Haptics",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نقرات خفيفة عند وصول شريط التمرير إلى قيمته الافتراضية وعند التبديل بين الأدوات."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subtle taps when a slider reaches its default and when you switch tools."
+          }
+        }
+      }
+    },
+    "Swap Orientation": {
+      "comment": "VoiceOver label: portrait ↔ landscape crop",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تبديل الاتجاه"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swap Orientation"
+          }
+        }
+      }
+    },
+    "TIFF 16-bit": {
+      "comment": "Export format name (keep Latin)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TIFF 16-bit"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TIFF 16-bit"
+          }
+        }
+      }
+    },
+    "Tap the curve to add a point": {
+      "comment": "Curve readout hint",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اضغط على المنحنى لإضافة نقطة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap the curve to add a point"
+          }
+        }
+      }
+    },
+    "Temp": {
+      "comment": "White-balance temperature slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحرارة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temp"
+          }
+        }
+      }
+    },
+    "Temperature": {
+      "comment": "White-balance temperature slider (SwiftUI preview)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحرارة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Temperature"
+          }
+        }
+      }
+    },
+    "Texture": {
+      "comment": "Effects slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "النسيج"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Texture"
+          }
+        }
+      }
+    },
+    "The background around your photo while you edit. Grey is the most neutral for judging tones.": {
+      "comment": "Settings footer under Canvas Surround",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الخلفية المحيطة بصورتك أثناء التعديل. الرمادي هو الأكثر حيادية لتقييم الدرجات اللونية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The background around your photo while you edit. Grey is the most neutral for judging tones."
+          }
+        }
+      }
+    },
+    "The best lossy format. Keeps wide color and HDR.": {
+      "comment": "Settings footer for HEIF 10-bit",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أفضل تنسيق مع فقدان. يحافظ على نطاق الألوان الواسع وعلى HDR."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The best lossy format. Keeps wide color and HDR."
+          }
+        }
+      }
+    },
+    "The best lossy format. Keeps wide color.": {
+      "comment": "Settings footer for HEIF 10-bit on iOS 17 (no HDR export)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أفضل تنسيق مع فقدان. يحافظ على نطاق الألوان الواسع."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The best lossy format. Keeps wide color."
+          }
+        }
+      }
+    },
+    "The edited photo couldn’t be rendered.": {
+      "comment": "Export error",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت معالجة الصورة المعدّلة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The edited photo couldn’t be rendered."
+          }
+        }
+      }
+    },
+    "The export file couldn’t be created. %@": {
+      "comment": "Export error; %@ is the system reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر إنشاء ملف التصدير. %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The export file couldn’t be created. %@"
+          }
+        }
+      }
+    },
+    "The export was cancelled.": {
+      "comment": "Export error",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تم إلغاء التصدير."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The export was cancelled."
+          }
+        }
+      }
+    },
+    "The exported file didn’t pass verification, so it wasn’t kept.": {
+      "comment": "Export error",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم يجتز الملف المصدَّر التحقق، لذا لم يُحتفظ به."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The exported file didn’t pass verification, so it wasn’t kept."
+          }
+        }
+      }
+    },
+    "The exported file is no longer available. Export it again.": {
+      "comment": "Export error",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم يعد الملف المصدَّر متاحًا. صدّره مرة أخرى."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The exported file is no longer available. Export it again."
+          }
+        }
+      }
+    },
+    "The file couldn't be read. It may be damaged.": {
+      "comment": "Import error reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت قراءة الملف. ربما يكون تالفًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file couldn't be read. It may be damaged."
+          }
+        }
+      }
+    },
+    "The file couldn’t be written. %@": {
+      "comment": "Export error; %@ is the system reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت كتابة الملف. %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file couldn’t be written. %@"
+          }
+        }
+      }
+    },
+    "The file has no presets.": {
+      "comment": "Import failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يحتوي الملف على إعدادات مسبقة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file has no presets."
+          }
+        }
+      }
+    },
+    "The file is too large to be a preset.": {
+      "comment": "Import failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الملف أكبر من أن يكون إعدادًا مسبقًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The file is too large to be a preset."
+          }
+        }
+      }
+    },
+    "The original file couldn't be read. It may be damaged or still downloading.": {
+      "comment": "Editor failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت قراءة الملف الأصلي. ربما يكون تالفًا أو لا يزال قيد التنزيل."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The original file couldn't be read. It may be damaged or still downloading."
+          }
+        }
+      }
+    },
+    "The original photo couldn’t be read.": {
+      "comment": "Export error",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت قراءة الصورة الأصلية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The original photo couldn’t be read."
+          }
+        }
+      }
+    },
+    "The original's format at its best quality. An unedited photo is copied byte for byte.": {
+      "comment": "Export format explanation",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تنسيق الأصل بأفضل جودة. الصورة غير المعدّلة تُنسخ بايتًا ببايت."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The original's format at its best quality. An unedited photo is copied byte for byte."
+          }
+        }
+      }
+    },
+    "The photo couldn’t be saved to Photos. %@": {
+      "comment": "Export error; %@ is the system reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر حفظ الصورة في تطبيق الصور. %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The photo couldn’t be saved to Photos. %@"
+          }
+        }
+      }
+    },
+    "The photo is exported in standard dynamic range.": {
+      "comment": "Export footer",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تُصدَّر الصورة بالنطاق الديناميكي القياسي."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The photo is exported in standard dynamic range."
+          }
+        }
+      }
+    },
+    "The photo is too large to export at %lld × %lld. Choose a smaller size.": {
+      "comment": "Export error; width × height in pixels",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصورة أكبر من أن تُصدَّر بحجم %1$lld × %2$lld. اختر حجمًا أصغر."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The photo is too large to export at %lld × %lld. Choose a smaller size."
+          }
+        }
+      }
+    },
+    "The photo isn't available in a format Noor can open.": {
+      "comment": "Import error reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصورة غير متاحة بتنسيق يستطيع نور فتحه."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The photo isn't available in a format Noor can open."
+          }
+        }
+      }
+    },
+    "The region tone curve is approximated.": {
+      "comment": "Import note (Lightroom's parametric “region” curve)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "طُبّق منحنى الدرجات اللونية حسب المناطق بشكل تقريبي."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The region tone curve is approximated."
+          }
+        }
+      }
+    },
+    "The same kind of file as the original, at its best quality. Unedited photos are copied byte for byte.": {
+      "comment": "Settings footer for the Same as Original format",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ملف من نوع الأصل نفسه وبأفضل جودة. الصور غير المعدّلة تُنسخ بايتًا ببايت."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The same kind of file as the original, at its best quality. Unedited photos are copied byte for byte."
+          }
+        }
+      }
+    },
+    "The vignette style is approximated.": {
+      "comment": "Import note",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نمط التظليل الطرفي مُطبَّق بشكل تقريبي."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The vignette style is approximated."
+          }
+        }
+      }
+    },
+    "There isn't enough storage space.": {
+      "comment": "Import error reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد مساحة تخزين كافية."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There isn't enough storage space."
+          }
+        }
+      }
+    },
+    "There isn’t enough storage space to save the photo.": {
+      "comment": "Export error",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا توجد مساحة تخزين كافية لحفظ الصورة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There isn’t enough storage space to save the photo."
+          }
+        }
+      }
+    },
+    "This DNG can be edited as a photo, or its settings can be added as a preset.": {
+      "comment": "DNG dialog message",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يمكن تعديل ملف DNG هذا كصورة، أو إضافة إعداداته كإعداد مسبق."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This DNG can be edited as a photo, or its settings can be added as a preset."
+          }
+        }
+      }
+    },
+    "This format can't keep HDR here, so the photo is exported in standard dynamic range.": {
+      "comment": "Export footer",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يمكن لهذا التنسيق الإبقاء على HDR هنا، لذا تُصدَّر الصورة بالنطاق الديناميكي القياسي."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This format can't keep HDR here, so the photo is exported in standard dynamic range."
+          }
+        }
+      }
+    },
+    "This is a profile, not a preset.": {
+      "comment": "Import failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا ملف تعريف وليس إعدادًا مسبقًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This is a profile, not a preset."
+          }
+        }
+      }
+    },
+    "This isn't a valid Noor preset.": {
+      "comment": "Import failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا ليس إعدادًا مسبقًا صالحًا لنور."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This isn't a valid Noor preset."
+          }
+        }
+      }
+    },
+    "This isn't a valid XMP preset.": {
+      "comment": "Import failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا ليس إعدادًا مسبقًا صالحًا بتنسيق XMP."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This isn't a valid XMP preset."
+          }
+        }
+      }
+    },
+    "This photo is no longer in your library.": {
+      "comment": "Editor failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لم تعد هذه الصورة في مكتبتك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This photo is no longer in your library."
+          }
+        }
+      }
+    },
+    "This preset has no settings Noor can use.": {
+      "comment": "Import failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يحتوي هذا الإعداد المسبق على إعدادات يمكن لنور استخدامها."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This preset has no settings Noor can use."
+          }
+        }
+      }
+    },
+    "This preset needs a newer version of Noor.": {
+      "comment": "Import failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يحتاج هذا الإعداد المسبق إلى إصدار أحدث من نور."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This preset needs a newer version of Noor."
+          }
+        }
+      }
+    },
+    "This preset on the unedited photo.": {
+      "comment": "Footer under the preview picture",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "هذا الإعداد المسبق على الصورة غير المعدّلة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This preset on the unedited photo."
+          }
+        }
+      }
+    },
+    "Thumbnail Cache": {
+      "comment": "Settings storage row: space used by cached thumbnails",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ذاكرة الصور المصغّرة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thumbnail Cache"
+          }
+        }
+      }
+    },
+    "Thumbnails are small previews that Noor recreates when needed. Clearing them never touches your photos or edits.": {
+      "comment": "Settings footer under Storage",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصور المصغّرة معاينات صغيرة يعيد نور إنشاءها عند الحاجة. مسحها لا يمسّ صورك أو تعديلاتك أبدًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thumbnails are small previews that Noor recreates when needed. Clearing them never touches your photos or edits."
+          }
+        }
+      }
+    },
+    "Tint": {
+      "comment": "White-balance tint slider / calibration shadow tint",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الصبغة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tint"
+          }
+        }
+      }
+    },
+    "Tone Curve": {
+      "comment": "VoiceOver label of the curve graph",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "منحنى الدرجات اللونية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tone Curve"
+          }
+        }
+      }
+    },
+    "Undo": {
+      "comment": "Editor top-bar button (VoiceOver label)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تراجع"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Undo"
+          }
+        }
+      }
+    },
+    "Unzip the file in the Files app first, then import the presets.": {
+      "comment": "Import failure reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فك ضغط الملف في تطبيق الملفات أولًا، ثم استورد الإعدادات المسبقة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Unzip the file in the Files app first, then import the presets."
+          }
+        }
+      }
+    },
+    "Version": {
+      "comment": "Settings row showing the app version",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الإصدار"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Version"
+          }
+        }
+      }
+    },
+    "Vibrance": {
+      "comment": "Color slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الحيوية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vibrance"
+          }
+        }
+      }
+    },
+    "View at %@ to judge": {
+      "comment": "Detail panel hint; %@ is “100%” formatted for the locale",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "اعرض بتكبير %@ لتقييم النتيجة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View at %@ to judge"
+          }
+        }
+      }
+    },
+    "Vignette": {
+      "comment": "Effects slider (post-crop vignette amount)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التظليل الطرفي"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vignette"
+          }
+        }
+      }
+    },
+    "White balance is adapted to each photo.": {
+      "comment": "Import note",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُكيَّف توازن الأبيض مع كل صورة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "White balance is adapted to each photo."
+          }
+        }
+      }
+    },
+    "Whites": {
+      "comment": "Light slider",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأبيض"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Whites"
+          }
+        }
+      }
+    },
+    "Yellow": {
+      "comment": "Colour-mix band",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأصفر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yellow"
+          }
+        }
+      }
+    },
+    "Zoom to Fit": {
+      "comment": "VoiceOver custom action on the canvas",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ملاءمة الشاشة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zoom to Fit"
+          }
+        }
+      }
+    },
+    "“%@” couldn't be duplicated. %@": {
+      "comment": "Duplicate error; first %@ is the photo name, second the reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر تكرار «%1$@». %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” couldn't be duplicated. %@"
+          }
+        }
+      }
+    },
+    "“%@” couldn't be imported. %@": {
+      "comment": "Import error; first %@ is the file name, second the reason",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر استيراد «%1$@». %2$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” couldn't be imported. %@"
+          }
+        }
+      }
+    },
+    "“%@” is a profile, not a preset.": {
+      "comment": "Import failure; %@ is the profile name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "‏«%@» ملف تعريف وليس إعدادًا مسبقًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” is a profile, not a preset."
+          }
+        }
+      }
+    },
+    "“%@” is already in your presets.": {
+      "comment": "Import failure; %@ is the preset name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "‏«%@» موجود بالفعل في إعداداتك المسبقة."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” is already in your presets."
+          }
+        }
+      }
+    },
+    "“%@” will be removed from Noor. This can't be undone.": {
+      "comment": "Delete-preset confirmation; %@ is the preset name",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سيُزال الإعداد المسبق «%@» من نور. لا يمكن التراجع عن ذلك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "“%@” will be removed from Noor. This can't be undone."
+          }
+        }
+      }
+    },
+    "≈ Some settings have no exact match in Noor. They were approximated or left out.": {
+      "comment": "Import summary footer",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "≈ بعض الإعدادات لا مقابل دقيقًا لها في نور، لذا طُبّقت بشكل تقريبي أو أُهملت."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "≈ Some settings have no exact match in Noor. They were approximated or left out."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
