@@ -120,9 +120,21 @@
           }
         },
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld presets added."
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld preset added."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld presets added."
+                }
+              }
+            }
           }
         }
       }
@@ -174,9 +186,21 @@
           }
         },
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%lld presets imported"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld preset imported"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld presets imported"
+                }
+              }
+            }
           }
         }
       }
@@ -4839,6 +4863,24 @@
           "stringUnit": {
             "state": "translated",
             "value": "The best lossy format. Keeps wide color and HDR."
+          }
+        }
+      }
+    },
+    "The best lossy format. Keeps wide color.": {
+      "comment": "Settings footer for HEIF 10-bit on iOS 17 (no HDR export)",
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أفضل تنسيق مع فقدان. يحافظ على نطاق الألوان الواسع."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The best lossy format. Keeps wide color."
           }
         }
       }

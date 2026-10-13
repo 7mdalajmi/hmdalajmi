@@ -121,7 +121,9 @@ private struct EditorWorkspace: View {
             if model.selectedTool == .crop {
                 CropWorkspace(model: model)
             } else {
+                // The photo is never mirrored in right-to-left languages.
                 PhotoCanvas(model: model)
+                    .environment(\.layoutDirection, .leftToRight)
                 EditorCanvasOverlay(model: model)
             }
         }
