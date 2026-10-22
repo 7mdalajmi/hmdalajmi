@@ -132,7 +132,7 @@ final class BackupCenter {
         guard !isBusy, let context else { return }
         activity = .backingUp
         progress = 0
-        detail = "Preparing…"
+        detail = String(localized: "Preparing…")
         defer {
             activity = .idle
         }
@@ -211,7 +211,7 @@ final class BackupCenter {
         guard let context else { return nil }
         activity = .exporting
         progress = 0
-        detail = "Preparing…"
+        detail = String(localized: "Preparing…")
         defer { activity = .idle }
         let snapshot = LibrarySnapshotter.snapshot(context: context)
         do {

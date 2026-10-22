@@ -54,7 +54,7 @@ nonisolated enum VideoTranscriber {
     @concurrent
     static func transcribe(fileURL: URL, duration: Double, language: String, allowDownload: Bool) async -> TranscriptionOutcome {
         guard SpeechTranscriber.isAvailable else {
-            return .unavailable("Reading speech isn't available on this device.")
+            return .unavailable(String(localized: "Reading speech isn't available on this device."))
         }
         guard let locale = await SpeechTranscriber.supportedLocale(equivalentTo: Locale(identifier: language)) else {
             return .unavailable("\(displayName(for: language)) speech isn't supported on this device yet.")

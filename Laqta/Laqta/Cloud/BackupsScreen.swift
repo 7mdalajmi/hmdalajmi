@@ -248,13 +248,13 @@ struct BackupsScreen: View {
 
     private var statusTitle: String {
         switch backups.activity {
-        case .backingUp: return "Backing up…"
-        case .exporting: return "Making a backup file…"
-        case .restoring: return "Restoring…"
+        case .backingUp: return String(localized: "Backing up…")
+        case .exporting: return String(localized: "Making a backup file…")
+        case .restoring: return String(localized: "Restoring…")
         case .idle:
-            guard backups.isICloudAvailable else { return "iCloud isn't available" }
-            guard let last = backups.lastBackupAt else { return "Not backed up yet" }
-            return "Backed up \(LaqtaFormat.relative(last))"
+            guard backups.isICloudAvailable else { return String(localized: "iCloud isn't available") }
+            guard let last = backups.lastBackupAt else { return String(localized: "Not backed up yet") }
+            return String(localized: "Backed up \(LaqtaFormat.relative(last))")
         }
     }
 

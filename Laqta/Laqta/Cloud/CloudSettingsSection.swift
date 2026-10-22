@@ -139,7 +139,7 @@ struct CloudSettingsSection: View {
     }
 
     private var backupSubtitle: String {
-        if backups.activity == .backingUp { return backups.detail.isEmpty ? "Backing up…" : backups.detail }
+        if backups.activity == .backingUp { return backups.detail.isEmpty ? String(localized: "Backing up…") : backups.detail }
         if let error = backups.lastError, backups.frequency != .off { return error }
         guard backups.isICloudAvailable else { return "Sign in to iCloud to back up" }
         let schedule = backups.frequency == .off ? "Automatic backups off" : "\(backups.frequency.title) in iCloud"

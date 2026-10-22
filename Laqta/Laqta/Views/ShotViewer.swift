@@ -450,7 +450,7 @@ struct ShotViewer: View {
         let key = shot.id.uuidString
 
         if shot.isVideoFile, let transcript = analysis.transcript, !transcript.isEmpty, analysis.place == nil {
-            let title = analysis.title ?? (analysis.summary.first ?? "What's said")
+            let title = analysis.title ?? (analysis.summary.first ?? String(localized: "What's said"))
             let subtitle = "\(LaqtaFormat.count(transcript.count, "line", "lines")) of speech · \(analysis.summary.isEmpty ? "tap to read" : "summary ready")"
             return AIPillModel(systemImage: "text.bubble", title: title, subtitle: subtitle, action: .nothing, actionKey: key)
         }
@@ -753,11 +753,11 @@ private struct ShotDetailsCard: View {
 
     private var originalText: String {
         switch shot.libraryStatus {
-        case .untouched: "Still in Photos"
-        case .pendingDeletion: "Waiting to delete"
-        case .deleted: "Deleted from Photos"
-        case .notFound: "Not in Photos"
-        case .declined: "Kept in Photos"
+        case .untouched: String(localized: "Still in Photos")
+        case .pendingDeletion: String(localized: "Waiting to delete")
+        case .deleted: String(localized: "Deleted from Photos")
+        case .notFound: String(localized: "Not in Photos")
+        case .declined: String(localized: "Kept in Photos")
         }
     }
 }

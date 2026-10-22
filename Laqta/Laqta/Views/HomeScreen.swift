@@ -482,7 +482,7 @@ private struct HomeFolders: View {
         var line = "\(contents) · \(LaqtaFormat.count(folders.count, "folder", "folders"))"
         // Before the strip appears, the countdown lives here — a word, not a banner.
         if let days = purchases.access.daysLeft, !showsTrialStrip {
-            line += " · \(LaqtaFormat.count(days, "day", "days")) left"
+            line += " · " + String(localized: "\(LaqtaFormat.count(days, "day", "days")) left")
         }
         return line
     }

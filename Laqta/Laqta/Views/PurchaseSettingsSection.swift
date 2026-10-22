@@ -66,7 +66,7 @@ struct PurchaseSettingsSection: View {
         case .expired:
             return String(localized: "Saving paused")
         case let .trial(days):
-            return LaqtaFormat.count(days, "day", "days") + String(localized: " left")
+            return String(localized: "\(LaqtaFormat.count(days, "day", "days")) left")
         }
     }
 

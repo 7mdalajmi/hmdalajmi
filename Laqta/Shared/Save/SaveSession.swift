@@ -67,7 +67,7 @@ final class SaveSession {
     }
 
     private(set) var phase: Phase = .preparing
-    private(set) var statusText = "Getting ready…"
+    private(set) var statusText = String(localized: "Getting ready…")
     private(set) var media: [StagedMedia] = []
     private(set) var link: LinkDraft?
     private(set) var linkPreview: UIImage?
@@ -202,7 +202,7 @@ final class SaveSession {
             }
             // A page link shared together with a screenshot becomes its source.
             sharedPageURL = linkURL?.absoluteString
-            statusText = "Preparing…"
+            statusText = String(localized: "Preparing…")
             await stageMedia(
                 providers: Array(providerMedia.prefix(Self.itemLimit)),
                 files: Array(files.prefix(max(0, Self.itemLimit - providerMedia.count)))
@@ -217,10 +217,10 @@ final class SaveSession {
             // A folder picked while the items were still arriving: save now. Laqta reads
             // what's inside anything saved unread, so nothing is lost by not waiting.
             if await saveQueuedFolder(context: context) { return }
-            statusText = "Analyzing on this \(LaqtaDevice.name)…"
+            statusText = String(localized: "Analyzing on this \(LaqtaDevice.name)…")
             await analyzeMedia(context: context)
         } else if let linkURL {
-            statusText = "Opening the link…"
+            statusText = String(localized: "Opening the link…")
             let draft = await LinkReader.read(linkURL, deep: false)
             guard !didCancel, !Task.isCancelled else {
                 if let image = draft.image { MediaStore.discard(image) }
@@ -232,7 +232,7 @@ final class SaveSession {
             phase = .analyzing
             // The link is read; its picture is decoration and never holds a save back.
             if await saveQueuedFolder(context: context) { return }
-            statusText = "Finding what's inside…"
+            statusText = String(localized: "Finding what's inside…")
             suggest(context: context)
             // Once a folder is tapped the picture is moot: the save has moved its file,
             // and fetching it again from the web would be work for nothing.
@@ -244,7 +244,7 @@ final class SaveSession {
                 if !didSave { linkPreview = preview.image }
             }
         } else {
-            phase = .failed("There's nothing Laqta can save here. Share a photo, a video, a PDF or a link.")
+            phase = .failed(String(localized: "There's nothing Laqta can save here. Share a photo, a video, a PDF or a link."))
             return
         }
 
@@ -271,9 +271,9 @@ final class SaveSession {
     }
 
     private var noMediaMessage: String {
-        if incomingKinds == [.video] { return "Laqta couldn't read the shared video." }
-        if incomingKinds == [.document] { return "Laqta couldn't open the shared PDF." }
-        return "Laqta couldn't read the shared item."
+        if incomingKinds == [.video] { return String(localized: "Laqta couldn't read the shared video.") }
+        if incomingKinds == [.document] { return String(localized: "Laqta couldn't open the shared PDF.") }
+        return String(localized: "Laqta couldn't read the shared item.")
     }
 
     private func stageMedia(providers: [(box: ProviderBox, kind: MediaKind)], files: [(url: URL, name: String?, assetID: String?)]) async {
@@ -523,9 +523,12 @@ final class SaveSession {
     private func kindChip(for item: StagedMedia) -> FoundChip {
         switch item.kind {
         case .photo:
-            return FoundChip(text: item.info.isScreenCapture ? "Screenshot" : "Photo", systemImage: item.info.isScreenCapture ? "camera.viewfinder" : "photo")
+            return FoundChip(
+                text: String(localized: item.info.isScreenCapture ? "Screenshot" : "Photo"),
+                systemImage: item.info.isScreenCapture ? "camera.viewfinder" : "photo"
+            )
         case .video:
-            let label = item.info.isScreenCapture ? "Screen recording" : "Video"
+            let label = String(localized: item.info.isScreenCapture ? "Screen recording" : "Video")
             let length = item.info.duration.map { " · \(LaqtaFormat.duration($0))" } ?? ""
             return FoundChip(text: label + length, systemImage: item.info.isScreenCapture ? "record.circle" : "video")
         case .document:
@@ -554,7 +557,7 @@ final class SaveSession {
             chips.append(FoundChip(text: label, systemImage: "photo"))
         }
         if chips.isEmpty, let text = analysis.text, !text.isEmpty {
-            chips.append(FoundChip(text: "Text found", systemImage: "text.viewfinder"))
+            chips.append(FoundChip(text: String(localized: "Text found"), systemImage: "text.viewfinder"))
         }
         return chips
     }
@@ -573,7 +576,7 @@ final class SaveSession {
             chips.append(FoundChip(text: LaqtaFormat.count(draft.placeNames.count, "place", "places"), systemImage: "mappin.and.ellipse"))
         }
         if !draft.prices.isEmpty {
-            chips.append(FoundChip(text: draft.prices.count == 1 ? draft.prices[0].value : "Prices", systemImage: "tag"))
+            chips.append(FoundChip(text: draft.prices.count == 1 ? draft.prices[0].value : String(localized: "Prices"), systemImage: "tag"))
         }
         return chips
     }
@@ -610,13 +613,13 @@ final class SaveSession {
             } else if let category = first?.category {
                 kind = category
             } else {
-                kind = firstItem.map { kindChip(for: $0).text } ?? "Photo"
+                kind = firstItem.map { kindChip(for: $0).text } ?? String(localized: "Photo")
             }
             let noun: String
             switch firstItem?.kind {
-            case .video?: noun = "videos"
-            case .document?: noun = "documents"
-            default: noun = "shots"
+            case .video?: noun = SuggestionWords.plural("videos")
+            case .document?: noun = SuggestionWords.plural("documents")
+            default: noun = SuggestionWords.plural("shots")
             }
             suggestion = FolderSuggester.suggest(
                 text: text,
@@ -646,12 +649,15 @@ final class SaveSession {
             item.isYouTube && (item.folderID.map(open.contains) ?? false)
         }
         if let folderID = recent?.folderID {
-            return FolderSuggestion(target: .existing(folderID), reason: "Video · where you keep YouTube videos")
+            return FolderSuggestion(target: .existing(folderID), reason: String(localized: "Video · where you keep YouTube videos"))
         }
         if let lastUsed, open.contains(lastUsed) {
-            return FolderSuggestion(target: .existing(lastUsed), reason: "Video · your last folder")
+            return FolderSuggestion(target: .existing(lastUsed), reason: String(localized: "Video · your last folder"))
         }
-        return FolderSuggestion(target: .new(name: "Videos", symbol: "play.rectangle", tone: .dusk), reason: "Video · a folder for the videos you save")
+        return FolderSuggestion(
+            target: .new(name: String(localized: "Videos"), symbol: "play.rectangle", tone: .dusk),
+            reason: String(localized: "Video · a folder for the videos you save")
+        )
     }
 
     // MARK: Saving
@@ -795,20 +801,24 @@ final class SaveSession {
     private func note(for removal: RemovalOutcome, isLink: Bool, skipped: Int, alreadySaved: Bool) -> String? {
         var parts: [String] = []
         if skipped > 0, !alreadySaved {
-            parts.append(skipped == 1 ? "1 item was already in Laqta" : "\(skipped) items were already in Laqta")
+            parts.append(skipped == 1
+                ? String(localized: "1 item was already in Laqta")
+                : String(localized: "\(skipped) items were already in Laqta"))
         }
         switch removal {
         case .notRequested:
-            if !isLink, !alreadySaved, canDeleteOriginals { parts.append("The original stays in Photos") }
+            if !isLink, !alreadySaved, canDeleteOriginals { parts.append(String(localized: "The original stays in Photos")) }
         case .removed:
-            parts.append("The original was moved to Recently Deleted")
+            parts.append(String(localized: "The original was moved to Recently Deleted"))
         case .waitingForApp:
-            parts.append("Laqta will finish removing the original when you open it")
+            parts.append(String(localized: "Laqta will finish removing the original when you open it"))
         case .declined:
-            parts.append("The original stays in Photos")
+            parts.append(String(localized: "The original stays in Photos"))
         }
         if failedCount > 0 {
-            parts.append(failedCount == 1 ? "1 item couldn't be read" : "\(failedCount) items couldn't be read")
+            parts.append(failedCount == 1
+                ? String(localized: "1 item couldn't be read")
+                : String(localized: "\(failedCount) items couldn't be read"))
         }
         return parts.isEmpty ? nil : parts.joined(separator: " · ")
     }
@@ -817,7 +827,7 @@ final class SaveSession {
         if isLink {
             guard let link else { return nil }
             if link.isYouTube {
-                return link.isUnavailable ? "Saved the link only" : "Details from YouTube"
+                return String(localized: link.isUnavailable ? "Saved the link only" : "Details from YouTube")
             }
             if extractEverything {
                 return found.count > 1 ? "Reading everything inside" : "Summary coming up in Laqta"

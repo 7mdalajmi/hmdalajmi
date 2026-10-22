@@ -1155,7 +1155,9 @@ private struct SaveStatusOverlay: View {
 
     private func doneTitle(_ info: SaveSession.DoneInfo) -> String {
         if info.alreadySaved { return "Already in" }
-        return info.count > 1 ? "\(info.count) saved to" : "Saved to"
+        return info.count > 1
+            ? String(localized: "\(info.count) saved to")
+            : String(localized: "Saved to")
     }
 
     private func card<Content: View>(@ViewBuilder _ content: () -> Content) -> some View {

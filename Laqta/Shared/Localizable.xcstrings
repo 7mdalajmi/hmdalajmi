@@ -83,6 +83,17 @@
         }
       }
     },
+    "%@ left": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "باقي %@"
+          }
+        }
+      }
+    },
     "%@ min": {
       "extractionState": "manual",
       "localizations": {
@@ -173,6 +184,40 @@
         }
       }
     },
+    "%lld items couldn't be read": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت قراءة %lld عنصر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items couldn't be read"
+          }
+        }
+      }
+    },
+    "%lld items were already in Laqta": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld عنصر كان في لقطة أصلًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld items were already in Laqta"
+          }
+        }
+      }
+    },
     "%lld originals moved to Recently Deleted in Photos.": {
       "extractionState": "manual",
       "localizations": {
@@ -180,6 +225,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "انتقلت %lld صورة أصلية إلى «المحذوفات مؤخرًا» في الصور."
+          }
+        }
+      }
+    },
+    "%lld saved to": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حُفظ %lld في"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld saved to"
           }
         }
       }
@@ -203,6 +265,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "يوم"
+          }
+        }
+      }
+    },
+    "1 item couldn't be read": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّرت قراءة عنصر واحد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 item couldn't be read"
+          }
+        }
+      }
+    },
+    "1 item was already in Laqta": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "عنصر واحد كان في لقطة أصلًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 item was already in Laqta"
           }
         }
       }
@@ -656,6 +752,23 @@
         }
       }
     },
+    "Backed up %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "نُسخ %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Backed up %@"
+          }
+        }
+      }
+    },
     "Backing up %@ of %@": {
       "extractionState": "manual",
       "localizations": {
@@ -825,6 +938,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "إلغاء"
+          }
+        }
+      }
+    },
+    "Cars": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "سيارات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cars"
           }
         }
       }
@@ -1300,6 +1430,23 @@
         }
       }
     },
+    "Deleted from Photos": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حُذف من الصور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deleted from Photos"
+          }
+        }
+      }
+    },
     "Deleted tomorrow": {
       "extractionState": "manual",
       "localizations": {
@@ -1365,6 +1512,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "تجاهل"
+          }
+        }
+      }
+    },
+    "Documents": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مستندات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Documents"
           }
         }
       }
@@ -1519,6 +1683,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "فارغ"
+          }
+        }
+      }
+    },
+    "Events": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مناسبات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Events"
           }
         }
       }
@@ -1689,6 +1870,23 @@
         }
       }
     },
+    "Fashion": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أزياء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fashion"
+          }
+        }
+      }
+    },
     "Fastest route via %@": {
       "extractionState": "manual",
       "localizations": {
@@ -1796,6 +1994,40 @@
         }
       }
     },
+    "Finding what's inside…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُبحث في الداخل…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Finding what's inside…"
+          }
+        }
+      }
+    },
+    "Fitness": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "رياضة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fitness"
+          }
+        }
+      }
+    },
     "Flights, prices, codes, the text in the picture — all of it pulled out on your phone, never sent anywhere.": {
       "comment": "Text describing the benefits of using the app.",
       "isCommentAutoGenerated": true,
@@ -1863,6 +2095,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "المجلدات واللقطات والملاحظات والنسخ الاحتياطية لا تُمَس، اشتريت أو لم تشترِ."
+          }
+        }
+      }
+    },
+    "Food": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "طعام"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Food"
           }
         }
       }
@@ -1961,6 +2210,23 @@
         }
       }
     },
+    "Getting ready…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُستعد…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Getting ready…"
+          }
+        }
+      }
+    },
     "Goes": {
       "comment": "A label for a button that lets a user keep a copy of a",
       "isCommentAutoGenerated": true,
@@ -2004,6 +2270,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "إخفاء في مبدّل التطبيقات"
+          }
+        }
+      }
+    },
+    "Home": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المنزل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home"
           }
         }
       }
@@ -2421,6 +2704,23 @@
         }
       }
     },
+    "Kept in Photos": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أُبقي في الصور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kept in Photos"
+          }
+        }
+      }
+    },
     "Kept. The originals stay in Photos.": {
       "extractionState": "manual",
       "localizations": {
@@ -2605,6 +2905,23 @@
         }
       }
     },
+    "Laqta couldn't open the shared PDF.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر على لقطة فتح ملف PDF المُشارك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laqta couldn't open the shared PDF."
+          }
+        }
+      }
+    },
     "Laqta couldn't open this link. It may need a sign-in, or the site may be unavailable.": {
       "comment": "A message displayed when Laqta fails to open a link.",
       "isCommentAutoGenerated": true,
@@ -2637,6 +2954,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "تعذّر على لقطة الوصول إلى YouTube. تظهر تفاصيل الفيديو عند توفر الإنترنت."
+          }
+        }
+      }
+    },
+    "Laqta couldn't read the shared item.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر على لقطة قراءة العنصر المُشارك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laqta couldn't read the shared item."
+          }
+        }
+      }
+    },
+    "Laqta couldn't read the shared video.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعذّر على لقطة قراءة الفيديو المُشارك."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laqta couldn't read the shared video."
           }
         }
       }
@@ -2799,6 +3150,23 @@
         }
       }
     },
+    "Laqta will finish removing the original when you open it": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تُكمل لقطة حذف الأصل عند فتحها"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Laqta will finish removing the original when you open it"
+          }
+        }
+      }
+    },
     "Laqta, version %@, build %@": {
       "extractionState": "manual",
       "localizations": {
@@ -2854,6 +3222,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "الأحدث"
+          }
+        }
+      }
+    },
+    "Learning": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تعلّم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Learning"
           }
         }
       }
@@ -2998,6 +3383,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "يبحث عن الرحلة"
+          }
+        }
+      }
+    },
+    "Making a backup file…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُنشأ ملف النسخة…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Making a backup file…"
           }
         }
       }
@@ -3153,6 +3555,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "النقل إلى «المحذوفات مؤخرًا»"
+          }
+        }
+      }
+    },
+    "Music": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "موسيقى"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Music"
           }
         }
       }
@@ -3320,6 +3739,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "لم يُنسخ بعد"
+          }
+        }
+      }
+    },
+    "Not in Photos": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ليس في الصور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not in Photos"
           }
         }
       }
@@ -3688,6 +4124,23 @@
         }
       }
     },
+    "Opening the link…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يُفتح الرابط…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opening the link…"
+          }
+        }
+      }
+    },
     "Opening your library": {
       "comment": "The accessibility label for the view that shows while the library is opening.",
       "isCommentAutoGenerated": true,
@@ -3849,6 +4302,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "عطور"
+          }
+        }
+      }
+    },
+    "Photo": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "صورة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Photo"
           }
         }
       }
@@ -4666,6 +5136,23 @@
         }
       }
     },
+    "Restoring…": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تُستعاد…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Restoring…"
+          }
+        }
+      }
+    },
     "Review": {
       "comment": "Button label for the action to review photos that were not backed up by Laqta.",
       "isCommentAutoGenerated": true,
@@ -5151,6 +5638,23 @@
         }
       }
     },
+    "Shopping": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تسوّق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Shopping"
+          }
+        }
+      }
+    },
     "Show travel time": {
       "comment": "A button that shows the travel time to a location.",
       "isCommentAutoGenerated": true,
@@ -5473,6 +5977,23 @@
         }
       }
     },
+    "Still in Photos": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يزال في الصور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Still in Photos"
+          }
+        }
+      }
+    },
     "Still in your clipboard": {
       "comment": "A label that says a link is still in the user's clipboard.",
       "isCommentAutoGenerated": true,
@@ -5636,6 +6157,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "المس «مشاركة» ثم اختر لقطة."
+          }
+        }
+      }
+    },
+    "Tech": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "تقنية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tech"
           }
         }
       }
@@ -5876,6 +6414,40 @@
         }
       }
     },
+    "The original stays in Photos": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأصل يبقى في الصور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The original stays in Photos"
+          }
+        }
+      }
+    },
+    "The original was moved to Recently Deleted": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "انتقل الأصل إلى «المحذوفات مؤخرًا»"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The original was moved to Recently Deleted"
+          }
+        }
+      }
+    },
     "The originals are no longer in Photos.": {
       "extractionState": "manual",
       "localizations": {
@@ -6035,6 +6607,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "لا توجد مساحة كافية على هذا الجهاز."
+          }
+        }
+      }
+    },
+    "There's nothing Laqta can save here. Share a photo, a video, a PDF or a link.": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا شيء تحفظه لقطة هنا. شارك صورة أو فيديو أو ملف PDF أو رابطًا."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There's nothing Laqta can save here. Share a photo, a video, a PDF or a link."
           }
         }
       }
@@ -6303,6 +6892,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "العنوان والقناة والوصف والفصول، محدَّثة"
+          }
+        }
+      }
+    },
+    "To Watch": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "للمشاهدة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To Watch"
           }
         }
       }
@@ -6648,6 +7254,57 @@
         }
       }
     },
+    "Video · a folder for the videos you save": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فيديو · مجلد للفيديو الذي تحفظه"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Video · a folder for the videos you save"
+          }
+        }
+      }
+    },
+    "Video · where you keep YouTube videos": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فيديو · حيث تحفظ فيديوهات YouTube"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Video · where you keep YouTube videos"
+          }
+        }
+      }
+    },
+    "Video · your last folder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "فيديو · آخر مجلد استخدمته"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Video · your last folder"
+          }
+        }
+      }
+    },
     "Videos": {
       "comment": "Display name for the \"Videos\" smart filter.",
       "isCommentAutoGenerated": true,
@@ -6823,6 +7480,23 @@
         }
       }
     },
+    "Where you saved last time": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "حيث حفظت آخر مرة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Where you saved last time"
+          }
+        }
+      }
+    },
     "Which app or site a shot came from": {
       "comment": "Text displayed in a row that lets the user toggle whether the app should try to find out which app or website a photo came from.",
       "isCommentAutoGenerated": true,
@@ -6912,6 +7586,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "مكتبتك كما هي. أُعيد التغيير، فما تراه على الشاشة هو ما حفظته لقطة — ولم يُحفظ شيء إلى نصفه."
+          }
+        }
+      }
+    },
+    "Your most recently updated folder": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "أحدث مجلداتك تحديثًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your most recently updated folder"
           }
         }
       }
@@ -7055,6 +7746,23 @@
         }
       }
     },
+    "car": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السيارات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "car"
+          }
+        }
+      }
+    },
     "chapter": {
       "extractionState": "manual",
       "localizations": {
@@ -7085,6 +7793,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "chapters"
+          }
+        }
+      }
+    },
+    "city": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المدن"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "city"
           }
         }
       }
@@ -7191,6 +7916,40 @@
         }
       }
     },
+    "document": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المستندات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "document"
+          }
+        }
+      }
+    },
+    "documents": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مستند"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "documents"
+          }
+        }
+      }
+    },
     "empty Recently Deleted": {
       "extractionState": "manual",
       "localizations": {
@@ -7198,6 +7957,57 @@
           "stringUnit": {
             "state": "translated",
             "value": "إفراغ «المحذوفات مؤخرًا»"
+          }
+        }
+      }
+    },
+    "event": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المناسبات"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "event"
+          }
+        }
+      }
+    },
+    "fashion": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الأزياء"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fashion"
+          }
+        }
+      }
+    },
+    "fitness": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الرياضة"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "fitness"
           }
         }
       }
@@ -7266,6 +8076,40 @@
           "stringUnit": {
             "state": "translated",
             "value": "folders"
+          }
+        }
+      }
+    },
+    "food": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الطعام"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "food"
+          }
+        }
+      }
+    },
+    "home": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المنزل"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "home"
           }
         }
       }
@@ -7453,6 +8297,40 @@
         }
       }
     },
+    "learning": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التعلّم"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "learning"
+          }
+        }
+      }
+    },
+    "like your other %@ %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "مثل بقية %2$@ %1$@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "like your other %@ %@"
+          }
+        }
+      }
+    },
     "line": {
       "extractionState": "manual",
       "localizations": {
@@ -7528,6 +8406,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "إنشاء هذا المجلد"
+          }
+        }
+      }
+    },
+    "mentions %@": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "يذكر %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "mentions %@"
           }
         }
       }
@@ -7627,6 +8522,40 @@
         }
       }
     },
+    "music": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "الموسيقى"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "music"
+          }
+        }
+      }
+    },
+    "no %@ folder yet": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "لا يوجد مجلد %@ بعد"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "no %@ folder yet"
+          }
+        }
+      }
+    },
     "other shot": {
       "extractionState": "manual",
       "localizations": {
@@ -7702,6 +8631,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "مضى"
+          }
+        }
+      }
+    },
+    "perfume": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "العطور"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "perfume"
           }
         }
       }
@@ -7951,6 +8897,23 @@
         }
       }
     },
+    "shopping": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التسوّق"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "shopping"
+          }
+        }
+      }
+    },
     "shot": {
       "extractionState": "manual",
       "localizations": {
@@ -7985,6 +8948,23 @@
         }
       }
     },
+    "tech": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "التقنية"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tech"
+          }
+        }
+      }
+    },
     "tidy up the copies iCloud sent": {
       "extractionState": "manual",
       "localizations": {
@@ -8014,6 +8994,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "غدًا"
+          }
+        }
+      }
+    },
+    "travel": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "السفر"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "travel"
           }
         }
       }
@@ -8060,6 +9057,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "videos"
+          }
+        }
+      }
+    },
+    "watch-later": {
+      "extractionState": "manual",
+      "localizations": {
+        "ar": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "المشاهدة لاحقًا"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "watch-later"
           }
         }
       }
