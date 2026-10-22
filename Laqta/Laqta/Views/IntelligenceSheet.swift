@@ -245,7 +245,7 @@ private struct IntelligenceContent: View {
                 }
             } else {
                 HStack(spacing: 14) {
-                    Text(verbatim: "Get the key points of this \(kindWord) in a few lines.")
+                    Text("Get the key points of this \(kindWord) in a few lines.")
                         .laqtaFont(14)
                         .foregroundStyle(palette.ink2)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -404,7 +404,7 @@ struct PlaceCard: View {
                             .laqtaFont(15, weight: .semibold)
                             .foregroundStyle(palette.ink)
                         if !route.name.isEmpty {
-                            Text(verbatim: "Fastest route via \(route.name)")
+                            Text("Fastest route via \(route.name)")
                                 .laqtaFont(12)
                                 .foregroundStyle(palette.ink2)
                         }
@@ -952,7 +952,7 @@ private struct TranscriptCard: View {
         let downloadLanguage = note?.hasPrefix("download:") == true ? String(note!.dropFirst("download:".count)) : nil
         VStack(alignment: .leading, spacing: 12) {
             if let downloadLanguage {
-                Text(verbatim: "To read what's said, Laqta needs Apple's \(VideoTranscriber.displayName(for: downloadLanguage)) speech model. It downloads once and works offline.")
+                Text("To read what's said, Laqta needs Apple's \(VideoTranscriber.displayName(for: downloadLanguage)) speech model. It downloads once and works offline.")
                     .laqtaFont(14)
                     .foregroundStyle(palette.ink2)
             } else if let note, !note.isEmpty {
@@ -1111,7 +1111,7 @@ private struct MentionedPlacesCard: View {
                                     .background(palette.hit, in: Capsule())
                             }
                             .buttonStyle(.pressable)
-                            .accessibilityLabel(Text(verbatim: "Play from \(LaqtaFormat.spokenDuration(seconds))"))
+                            .accessibilityLabel(Text("Play from \(LaqtaFormat.spokenDuration(seconds))"))
                         }
                         Button {
                             Directions.openDirections(to: place)

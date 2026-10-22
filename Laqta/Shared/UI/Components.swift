@@ -36,6 +36,7 @@ struct CircleIcon: View {
     var glass: Bool = false
 
     @Environment(\.laqta) private var palette
+    @Environment(\.layoutDirection) private var layoutDirection
 
     var body: some View {
         Image(systemName: systemImage)
@@ -56,7 +57,7 @@ struct CircleIcon: View {
                         .fill(palette.goldHi)
                         .frame(width: 8, height: 8)
                         .overlay(Circle().stroke(palette.bg, lineWidth: 2))
-                        .offset(x: -9, y: 9)
+                        .offset(x: -9 * layoutDirection.sign, y: 9)
                 }
             }
             .contentShape(Circle())

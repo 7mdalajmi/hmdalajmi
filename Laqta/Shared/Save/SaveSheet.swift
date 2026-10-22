@@ -376,7 +376,7 @@ private struct SaveFolderBrowser: View {
             step(to: parent?.id, deeper: false, cameFrom: folder.id)
         } label: {
             HStack(spacing: 6) {
-                Image(systemName: "chevron.left")
+                Image(systemName: "chevron.backward")
                     .laqtaIconFont(14, weight: .semibold)
                 if let parent {
                     FolderNameText(name: parent.name, size: 19, color: palette.goldHi, maxScale: 1.3)
@@ -391,7 +391,7 @@ private struct SaveFolderBrowser: View {
         }
         .buttonStyle(.pressable)
         .disabled(session.isBusy)
-        .accessibilityLabel(Text(verbatim: "Back to \(parent?.name ?? "All Folders")"))
+        .accessibilityLabel(Text("Back to \(parent?.name ?? String(localized: "All Folders"))"))
     }
 
     private func newFolderButton(inside parentID: UUID?) -> some View {
@@ -564,7 +564,7 @@ private struct SaveHereCard: View {
         }
         .buttonStyle(.pressable)
         .disabled(isBusy)
-        .accessibilityLabel(Text(verbatim: "Save here, in \(folder.name). \(meta)"))
+        .accessibilityLabel(Text("Save here, in \(folder.name). \(meta)"))
     }
 
     private var meta: String {
@@ -577,6 +577,7 @@ private struct SaveHereCard: View {
 private struct SavePreviewCard: View {
     let session: SaveSession
     @Environment(\.laqta) private var palette
+    @Environment(\.layoutDirection) private var layoutDirection
 
     var body: some View {
         HStack(alignment: .center, spacing: 14) {
@@ -682,8 +683,8 @@ private struct SavePreviewCard: View {
                 .fill(palette.field)
                 .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(palette.line, lineWidth: 1))
                 .frame(width: 62, height: 86)
-                .rotationEffect(.degrees(-12))
-                .offset(x: 6, y: 8)
+                .rotationEffect(.degrees(-12 * layoutDirection.sign))
+                .offset(x: 6 * layoutDirection.sign, y: 8)
                 .opacity(session.stagedCount > 1 ? 1 : 0)
             Group {
                 if let image = session.firstPreview {
@@ -720,9 +721,9 @@ private struct SavePreviewCard: View {
             }
             .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 12, style: .continuous).strokeBorder(palette.goldHi, lineWidth: 2))
-            .rotationEffect(.degrees(-5))
+            .rotationEffect(.degrees(-5 * layoutDirection.sign))
             .shadow(color: .black.opacity(0.3), radius: 9, y: 8)
-            .offset(x: 12, y: 4)
+            .offset(x: 12 * layoutDirection.sign, y: 4)
         }
         .frame(width: 82, height: 96, alignment: .topLeading)
     }
@@ -817,7 +818,7 @@ private struct DuplicateNotice: View {
                         .laqtaFont(15, weight: .semibold)
                         .foregroundStyle(palette.ink)
                     HStack(spacing: 4) {
-                        Text(verbatim: "In")
+                        Text("In")
                         FolderNameText(name: folderName, size: 15, color: palette.goldHi)
                         Text(verbatim: detail)
                             .lineLimit(1)
@@ -865,7 +866,7 @@ private struct DuplicateNotice: View {
     private var detail: String {
         let folders = Set(matches.map(\.folderName))
         if folders.count > 1 {
-            return "and \(LaqtaFormat.count(folders.count - 1, "more folder", "more folders"))"
+            return String(localized: "and \(LaqtaFormat.count(folders.count - 1, "more folder", "more folders"))")
         }
         guard let first = matches.first else { return "" }
         return "· saved \(LaqtaFormat.relative(first.addedAt))"

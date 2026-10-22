@@ -278,9 +278,17 @@ struct ImportSheet: View {
         let assets = selectedAssets.compactMap { recents.asset(with: $0) }
         let videos = assets.filter { $0.mediaType == .video }.count
         let photos = assets.count - videos
-        if videos == 0 { return photos == 1 ? "Continue with 1 photo" : "Continue with \(photos) photos" }
-        if photos == 0 { return videos == 1 ? "Continue with 1 video" : "Continue with \(videos) videos" }
-        return "Continue with \(assets.count) items"
+        if videos == 0 {
+            return photos == 1
+                ? String(localized: "Continue with 1 photo")
+                : String(localized: "Continue with \(photos) photos")
+        }
+        if photos == 0 {
+            return videos == 1
+                ? String(localized: "Continue with 1 video")
+                : String(localized: "Continue with \(videos) videos")
+        }
+        return String(localized: "Continue with \(assets.count) items")
     }
 
     private func continueWithAssets() {
@@ -421,7 +429,7 @@ struct ImportSheet: View {
             }
             isLoadingPicked = false
             guard !inputs.isEmpty else {
-                fileError = "Laqta couldn't open the chosen files."
+                fileError = String(localized: "Laqta couldn't open the chosen files.")
                 return
             }
             start(inputs)
@@ -439,7 +447,7 @@ struct ImportSheet: View {
             }.value
             isLoadingPicked = false
             guard let result else {
-                fileError = "Laqta couldn't make a PDF from the scan."
+                fileError = String(localized: "Laqta couldn't make a PDF from the scan.")
                 return
             }
             start([.file(url: result.url, name: result.originalName, assetID: nil)])

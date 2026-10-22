@@ -206,15 +206,15 @@ nonisolated enum BackupError: LocalizedError, Equatable {
 
     var errorDescription: String? {
         switch self {
-        case .iCloudUnavailable: "iCloud Drive isn't available. Sign in to iCloud and turn on iCloud Drive for Laqta."
-        case .notABackup: "This file isn't a Laqta backup."
-        case .newerFormat: "This backup was made by a newer version of Laqta. Update Laqta, then try again."
-        case .damaged: "This backup is incomplete or damaged."
-        case .notEnoughSpace: "There isn't enough free space on this device."
-        case .cancelled: "Stopped."
-        case .nothingToBackUp: "There's nothing to back up yet."
-        case .mediaUnavailable: "Some original files aren't available on this device yet. Download them from iCloud, then try backing up again. Your earlier backups are kept."
-        case .keyUnavailable: "Laqta can't reach the key that locks your private folders. Turn on iCloud Keychain, or unlock this device once, and try again."
+        case .iCloudUnavailable: String(localized: "iCloud Drive isn't available. Sign in to iCloud and turn on iCloud Drive for Laqta.")
+        case .notABackup: String(localized: "This file isn't a Laqta backup.")
+        case .newerFormat: String(localized: "This backup was made by a newer version of Laqta. Update Laqta, then try again.")
+        case .damaged: String(localized: "This backup is incomplete or damaged.")
+        case .notEnoughSpace: String(localized: "There isn't enough free space on this device.")
+        case .cancelled: String(localized: "Stopped.")
+        case .nothingToBackUp: String(localized: "There's nothing to back up yet.")
+        case .mediaUnavailable: String(localized: "Some original files aren't available on this device yet. Download them from iCloud, then try backing up again. Your earlier backups are kept.")
+        case .keyUnavailable: String(localized: "Laqta can't reach the key that locks your private folders. Turn on iCloud Keychain, or unlock this device once, and try again.")
         }
     }
 }

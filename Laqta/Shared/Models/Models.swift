@@ -920,9 +920,9 @@ nonisolated struct SeedFolder: Sendable {
     let locked: Bool
 
     static let all: [SeedFolder] = [
-        SeedFolder(id: UUID(uuidString: "7A0C3C1E-2B1A-4F7B-9E51-0A1C2D3E4F01")!, name: "Travel", symbol: "airplane", tone: .ember, locked: false),
-        SeedFolder(id: UUID(uuidString: "7A0C3C1E-2B1A-4F7B-9E51-0A1C2D3E4F02")!, name: "Perfume", symbol: "drop", tone: .olive, locked: false),
-        SeedFolder(id: UUID(uuidString: "7A0C3C1E-2B1A-4F7B-9E51-0A1C2D3E4F03")!, name: "Cities", symbol: "building.2", tone: .tide, locked: false),
-        SeedFolder(id: UUID(uuidString: "7A0C3C1E-2B1A-4F7B-9E51-0A1C2D3E4F04")!, name: "Private", symbol: "lock", tone: .dusk, locked: true)
+        SeedFolder(id: UUID(uuidString: "7A0C3C1E-2B1A-4F7B-9E51-0A1C2D3E4F01")!, name: String(localized: "Travel"), symbol: "airplane", tone: .ember, locked: false),
+        SeedFolder(id: UUID(uuidString: "7A0C3C1E-2B1A-4F7B-9E51-0A1C2D3E4F02")!, name: String(localized: "Perfume"), symbol: "drop", tone: .olive, locked: false),
+        SeedFolder(id: UUID(uuidString: "7A0C3C1E-2B1A-4F7B-9E51-0A1C2D3E4F03")!, name: String(localized: "Cities"), symbol: "building.2", tone: .tide, locked: false),
+        SeedFolder(id: UUID(uuidString: "7A0C3C1E-2B1A-4F7B-9E51-0A1C2D3E4F04")!, name: String(localized: "Private"), symbol: "lock", tone: .dusk, locked: true)
     ]
 }

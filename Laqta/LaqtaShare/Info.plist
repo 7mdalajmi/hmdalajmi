@@ -5,6 +5,7 @@
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
+		<string>ar</string>
 	</array>
 	<key>LaqtaAppGroupID</key>
 	<string>$(APP_GROUP_ID)</string>

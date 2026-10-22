@@ -13,8 +13,7 @@ struct LaqtaMacApp: App {
                 MacLibraryView(library: library)
                     .modelContainer(container)
                     .frame(minWidth: 940, minHeight: 620)
-                    .environment(\.layoutDirection, .rightToLeft)
-                    .environment(\.locale, Locale(identifier: "ar_KW"))
+                    .environment(\.locale, LaqtaLocale.current)
             } else {
                 ContentUnavailableView {
                     Label("تعذر فتح المكتبة", systemImage: "externaldrive.badge.exclamationmark")
@@ -56,8 +55,7 @@ struct LaqtaMacApp: App {
         Settings {
             MacSettingsView(library: library)
                 .frame(width: 580, height: 430)
-                .environment(\.layoutDirection, .rightToLeft)
-                .environment(\.locale, Locale(identifier: "ar_KW"))
+                .environment(\.locale, LaqtaLocale.current)
         }
     }
 }

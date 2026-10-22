@@ -27,8 +27,22 @@ nonisolated enum LaqtaFormat {
 
     // MARK: Counts
 
+    /// "1 item", "7 items" — and in Arabic the one noun that works after any number.
+    ///
+    /// The two words are catalog keys, not text: they are looked up, so a counted
+    /// phrase reads in the reader's language instead of staying English inside an
+    /// otherwise translated sentence. `localizedWord` is where the lookup happens.
     static func count(_ value: Int, _ singular: String, _ plural: String) -> String {
-        "\(number(value)) \(value == 1 ? singular : plural)"
+        "\(number(value)) \(localizedWord(value == 1 ? singular : plural))"
+    }
+
+    /// A noun the catalog knows, looked up at run time.
+    ///
+    /// Xcode can't see through this to extract the key, so every word passed to
+    /// `count` is in Localizable.xcstrings by hand. A word that isn't comes back as
+    /// itself, which is exactly what it used to do everywhere.
+    static func localizedWord(_ word: String) -> String {
+        String(localized: String.LocalizationValue(word))
     }
 
     static func number(_ value: Int) -> String {
@@ -50,12 +64,12 @@ nonisolated enum LaqtaFormat {
         if stats.videos > 0 { parts.append((stats.videos, count(stats.videos, "video", "videos"))) }
         if stats.documents > 0 { parts.append((stats.documents, count(stats.documents, "PDF", "PDFs"))) }
         if stats.links > 0 { parts.append((stats.links, count(stats.links, "link", "links"))) }
-        guard !parts.isEmpty else { return "Empty" }
+        guard !parts.isEmpty else { return localizedWord("Empty") }
         if parts.count <= 3 {
             return parts.map(\.text).joined(separator: " · ")
         }
         let rest = parts.dropFirst(2).reduce(0) { $0 + $1.count }
-        return (parts.prefix(2).map(\.text) + ["\(number(rest)) more"]).joined(separator: " · ")
+        return (parts.prefix(2).map(\.text) + ["\(number(rest)) \(localizedWord("more"))"]).joined(separator: " · ")
     }
 
     /// "184K"
@@ -66,6 +80,7 @@ nonisolated enum LaqtaFormat {
     static func bytes(_ value: Int64) -> String {
         // The system spells zero out ("Zero KB").
         guard value > 0 else { return "0 KB" }
+
         return value.formatted(.byteCount(style: .file).locale(locale))
     }
 
@@ -75,17 +90,17 @@ nonisolated enum LaqtaFormat {
     static func relative(_ date: Date, now: Date = .now) -> String {
         let seconds = now.timeIntervalSince(date)
         let calendar = Calendar.current
-        if seconds < 60 { return "just now" }
-        if seconds < 3600 { return "\(number(Int(seconds / 60)))m ago" }
+        if seconds < 60 { return String(localized: "just now") }
+        if seconds < 3600 { return String(localized: "\(number(Int(seconds / 60)))m ago") }
         if seconds < 24 * 3600, calendar.isDate(date, inSameDayAs: now) || seconds < 6 * 3600 {
-            return "\(number(Int(seconds / 3600)))h ago"
+            return String(localized: "\(number(Int(seconds / 3600)))h ago")
         }
-        if calendar.isDateInYesterday(date) { return "yesterday" }
+        if calendar.isDateInYesterday(date) { return String(localized: "yesterday") }
         return shortDate(date, now: now)
     }
 
     static func updated(_ date: Date, now: Date = .now) -> String {
-        "Updated \(relative(date, now: now))"
+        String(localized: "Updated \(relative(date, now: now))")
     }
 
     /// "Sep 12" (adds the year when it is not this year).
@@ -109,8 +124,8 @@ nonisolated enum LaqtaFormat {
     /// "Today, 9:14 PM", "Yesterday, 5:48 PM", "Sep 11, 6:20 PM"
     static func viewerDate(_ date: Date, now: Date = .now) -> String {
         let calendar = Calendar.current
-        if calendar.isDateInToday(date) { return "Today, \(time(date))" }
-        if calendar.isDateInYesterday(date) { return "Yesterday, \(time(date))" }
+        if calendar.isDateInToday(date) { return String(localized: "Today, \(time(date))") }
+        if calendar.isDateInYesterday(date) { return String(localized: "Yesterday, \(time(date))") }
         return dateTime(date, now: now)
     }
 
@@ -127,10 +142,10 @@ nonisolated enum LaqtaFormat {
         let end = calendar.startOfDay(for: date)
         let days = calendar.dateComponents([.day], from: start, to: end).day ?? 0
         switch days {
-        case ..<0: return "passed"
-        case 0: return "today"
-        case 1: return "tomorrow"
-        default: return "in \(number(days)) days"
+        case ..<0: return String(localized: "passed")
+        case 0: return String(localized: "today")
+        case 1: return String(localized: "tomorrow")
+        default: return String(localized: "in \(number(days)) days")
         }
     }
 
@@ -178,10 +193,12 @@ nonisolated enum LaqtaFormat {
     /// "9 min", "1 hr 5 min"
     static func travelTime(_ seconds: Double) -> String {
         let minutes = max(1, (wholeSeconds(seconds) + 30) / 60)
-        if minutes < 60 { return "\(number(minutes)) min" }
+        if minutes < 60 { return String(localized: "\(number(minutes)) min") }
         let hours = minutes / 60
         let rest = minutes % 60
-        return rest == 0 ? "\(number(hours)) hr" : "\(number(hours)) hr \(number(rest)) min"
+        return rest == 0
+            ? String(localized: "\(number(hours)) hr")
+            : String(localized: "\(number(hours)) hr \(number(rest)) min")
     }
 
     /// "5.2 km"

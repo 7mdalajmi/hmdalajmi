@@ -68,19 +68,19 @@ nonisolated struct RestoreSummary: Sendable, Equatable {
     var message: String {
         var parts: [String] = []
         let added = addedItems + recoveredItems
-        if added > 0 { parts.append("Added \(LaqtaFormat.count(added, "item", "items"))") }
+        if added > 0 { parts.append(String(localized: "Added \(LaqtaFormat.count(added, "item", "items"))")) }
         let folders = addedFolders + recoveredFolders
         if folders > 0 { parts.append(LaqtaFormat.count(folders, "folder", "folders")) }
-        if parts.isEmpty { parts.append("Everything in this backup is already in Laqta") }
-        var text = parts.joined(separator: " and ") + "."
+        if parts.isEmpty { parts.append(String(localized: "Everything in this backup is already in Laqta")) }
+        var text = parts.joined(separator: String(localized: " and ")) + "."
         if alreadyThere > 0, added > 0 {
-            text += " \(LaqtaFormat.count(alreadyThere, "item was", "items were")) already in Laqta."
+            text += " " + String(localized: "\(LaqtaFormat.count(alreadyThere, "item was", "items were")) already in Laqta.")
         }
         if missingFiles > 0 {
-            text += " \(LaqtaFormat.count(missingFiles, "item", "items")) couldn't be restored because the file is missing."
+            text += " " + String(localized: "\(LaqtaFormat.count(missingFiles, "item", "items")) couldn't be restored because the file is missing.")
         }
         if sealedWithoutKey > 0 {
-            text += " \(LaqtaFormat.count(sealedWithoutKey, "item", "items")) from your locked folders stayed in the backup: this device doesn't have the key. Turn on iCloud Keychain on both devices and restore again."
+            text += " " + String(localized: "\(LaqtaFormat.count(sealedWithoutKey, "item", "items")) from your locked folders stayed in the backup: this device doesn't have the key. Turn on iCloud Keychain on both devices and restore again.")
         }
         return text
     }
@@ -214,7 +214,7 @@ nonisolated enum BackupEngine {
                 }
             }
             if index % 5 == 0 || index == items.count - 1 {
-                progress(Double(index + 1) / Double(total) * 0.95, "Backing up \(LaqtaFormat.number(index + 1)) of \(LaqtaFormat.number(items.count))")
+                progress(Double(index + 1) / Double(total) * 0.95, String(localized: "Backing up \(LaqtaFormat.number(index + 1)) of \(LaqtaFormat.number(items.count))"))
             }
         }
 
@@ -229,12 +229,12 @@ nonisolated enum BackupEngine {
         guard let manifestURL = BackupPlace.manifestURL(id: finished.id), let infoURL = BackupPlace.infoURL(id: finished.id) else {
             throw BackupError.iCloudUnavailable
         }
-        progress(0.97, "Saving the backup")
+        progress(0.97, String(localized: "Saving the backup"))
         try CloudFiles.write(try manifest.encoded(), to: manifestURL)
         // The small info file is written last: a backup is listed only once it's complete.
         try CloudFiles.write(try BackupManifest.encoder().encode(finished), to: infoURL)
         prune(keep: keep, deviceID: finished.deviceID)
-        progress(1, "Backed up")
+        progress(1, String(localized: "Backed up"))
         return finished
     }
 
@@ -416,13 +416,13 @@ nonisolated enum BackupEngine {
         let archive = folder.appending(path: "Laqta Backup \(formatter.string(from: info.createdAt)).laqtabackup")
         let totalBytes = max(bytes, 1)
         try BackupArchive.write(entries: entries, to: archive, isCancelled: { Task.isCancelled }) { written in
-            progress(min(0.99, Double(written) / Double(totalBytes)), "Preparing \(LaqtaFormat.bytes(written)) of \(LaqtaFormat.bytes(totalBytes))")
+            progress(min(0.99, Double(written) / Double(totalBytes)), String(localized: "Preparing \(LaqtaFormat.bytes(written)) of \(LaqtaFormat.bytes(totalBytes))"))
         }
         protect(archive, with: .completeUnlessOpen)
         try? manager.removeItem(at: manifestURL)
         // The sealed copies were only there to be written into the archive.
         try? manager.removeItem(at: folder.appending(path: "Sealed", directoryHint: .isDirectory))
-        progress(1, "Ready")
+        progress(1, String(localized: "Ready"))
         completed = true
         return archive
     }
@@ -452,7 +452,7 @@ nonisolated enum BackupEngine {
             NSFileCoordinator().coordinate(readingItemAt: url, options: .withoutChanges, error: &coordinationError) { readURL in
                 result = Result {
                     _ = try BackupArchive.extract(readURL, to: folder, isCancelled: { Task.isCancelled }) { done in
-                        progress(min(0.5, Double(done) / Double(max(size, 1)) * 0.5), "Reading the backup")
+                        progress(min(0.5, Double(done) / Double(max(size, 1)) * 0.5), String(localized: "Reading the backup"))
                     }
                 }
             }
@@ -583,7 +583,7 @@ enum BackupRestorer {
             }
             defer {
                 if index % 10 == 0 || index == manifest.items.count - 1 {
-                    progress(0.5 + Double(index + 1) / Double(total) * 0.5, "Restoring \(LaqtaFormat.number(index + 1)) of \(LaqtaFormat.number(manifest.items.count))")
+                    progress(0.5 + Double(index + 1) / Double(total) * 0.5, String(localized: "Restoring \(LaqtaFormat.number(index + 1)) of \(LaqtaFormat.number(manifest.items.count))"))
                 }
             }
             if let existing = itemsByID[record.id] {
@@ -637,7 +637,7 @@ enum BackupRestorer {
             var itemRecord = record
             if itemRecord.folderID.flatMap({ foldersByID[$0] }) == nil {
                 if fallbackFolder == nil {
-                    let folder = LibraryWriter.createFolder(name: "Restored", tone: .tide, symbol: "arrow.counterclockwise", locked: false, context: context)
+                    let folder = LibraryWriter.createFolder(name: String(localized: "Restored"), tone: .tide, symbol: "arrow.counterclockwise", locked: false, context: context)
                     fallbackFolder = folder
                     foldersByID[folder.id] = folder
                     summary.addedFolders += 1

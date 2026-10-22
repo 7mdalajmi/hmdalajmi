@@ -72,8 +72,10 @@ struct LaqtaApp: App {
                 .environment(purchases)
                 .environment(reminders)
                 .laqtaThemed()
+                // The reader's own language and region, with Western digits. The
+                // layout direction is not set here: Arabic has to be able to flip the
+                // whole app, and forcing left-to-right was what stopped it.
                 .environment(\.locale, LaqtaLocale.current)
-                .environment(\.layoutDirection, .leftToRight)
         }
         .backgroundTask(.processingTask(BackgroundWork.maintenanceIdentifier)) {
             await maintenance.runInBackground()

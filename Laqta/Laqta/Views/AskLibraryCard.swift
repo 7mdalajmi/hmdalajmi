@@ -18,6 +18,7 @@ struct AskLibraryCard: View {
     let onOpen: (UUID) -> Void
 
     @Environment(\.laqta) private var palette
+    @Environment(\.layoutDirection) private var layoutDirection
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -105,7 +106,7 @@ struct AskLibraryCard: View {
                     Rectangle()
                         .fill(palette.accentFill)
                         .frame(width: 2)
-                        .offset(x: -11)
+                        .offset(x: -11 * layoutDirection.sign)
                 }
             if let best = reply.bestID {
                 Button {

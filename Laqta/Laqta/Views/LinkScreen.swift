@@ -683,7 +683,7 @@ private struct LinkContent: View {
                 FolderNameText(name: folder.name, size: 15, color: palette.goldHi)
             }
             Text(verbatim: "·")
-            Text(verbatim: "Shared from \(item.sourceName ?? "Safari") · \(LaqtaFormat.shortDate(item.addedAt))")
+            Text("Shared from \(item.sourceName ?? "Safari") · \(LaqtaFormat.shortDate(item.addedAt))")
                 .lineLimit(1)
         }
         .laqtaFont(12)

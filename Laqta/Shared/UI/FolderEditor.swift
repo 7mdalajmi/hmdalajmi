@@ -92,7 +92,7 @@ struct FolderEditorSheet: View {
                     .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).strokeBorder(palette.buttonBorder, lineWidth: 1))
 
                     VStack(alignment: .leading, spacing: 12) {
-                        SectionLabel(verbatim: "Cover Mood · \(tone.title)")
+                        SectionLabel(verbatim: String(localized: "Cover Mood · \(tone.title)"))
                         ScrollView(.horizontal) {
                             HStack(alignment: .top, spacing: 20) {
                                 ForEach(FolderTone.byFamily, id: \.family) { group in

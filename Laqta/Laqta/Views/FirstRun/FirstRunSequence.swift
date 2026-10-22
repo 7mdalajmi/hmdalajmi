@@ -18,6 +18,7 @@ struct FirstRunSequence: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.laqta) private var palette
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.layoutDirection) private var layoutDirection
 
     @State private var chapter = 0
     @State private var showContinue = false
@@ -45,7 +46,7 @@ struct FirstRunSequence: View {
             currentChapter
                 .id(chapter)
                 .transition(.asymmetric(
-                    insertion: .opacity.combined(with: .offset(x: reduceMotion ? 0 : 26)),
+                    insertion: .opacity.combined(with: .offset(x: reduceMotion ? 0 : 26 * layoutDirection.sign)),
                     removal: .opacity
                 ))
 
@@ -65,13 +66,13 @@ struct FirstRunSequence: View {
         .gesture(
             DragGesture(minimumDistance: 24)
                 .onEnded { value in
-                    guard !isLast, value.translation.width < -40 else { return }
+                    // Left in English, right in Arabic.
+                    guard !isLast, value.translation.width * layoutDirection.sign < -40 else { return }
                     advance()
                 }
         )
         .task(id: chapter) { await revealContinue() }
         .interactiveDismissDisabled()
-        .environment(\.layoutDirection, .leftToRight)
     }
 
     // MARK: Chrome

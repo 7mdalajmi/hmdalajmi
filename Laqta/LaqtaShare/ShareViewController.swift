@@ -85,7 +85,6 @@ final class ShareViewController: UIViewController {
             ShareRoot(session: session) { [weak self] in self?.cancel() }
                 .laqtaThemed()
                 .environment(\.locale, LaqtaLocale.current)
-                .environment(\.layoutDirection, .leftToRight)
                 .preferredColorScheme(appearance.colorScheme)
         ))
     }

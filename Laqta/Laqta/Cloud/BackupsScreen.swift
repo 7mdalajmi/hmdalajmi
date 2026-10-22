@@ -412,7 +412,7 @@ struct BackupsScreen: View {
                 ProgressView()
                     .tint(palette.goldHi)
             } else {
-                Image(systemName: "chevron.right")
+                Image(systemName: "chevron.forward")
                     .laqtaIconFont(13, weight: .semibold)
                     .foregroundStyle(palette.ink3)
                     .accessibilityHidden(true)

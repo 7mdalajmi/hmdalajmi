@@ -326,11 +326,24 @@ nonisolated enum LaqtaFont {
     }
 }
 
-/// Numbers and dates always use Western digits.
+extension LayoutDirection {
+    /// `1` left-to-right, `-1` right-to-left. Raw horizontal offsets — a badge nudged
+    /// in from an edge, a light sweeping across a card — are multiplied by this, so
+    /// they mirror along with everything SwiftUI flips by itself.
+    var sign: CGFloat { self == .rightToLeft ? -1 : 1 }
+}
+
+/// The reader's own locale, with one change: numbers and dates always use Western
+/// digits (١٢٣ reads as a different number to half the people who use this app).
+///
+/// It used to answer `en_<region>`, which did more than pick digits: SwiftUI resolves
+/// a `Text` through this locale, so the whole app was pinned to English no matter what
+/// language the phone was set to, and no translation could ever show.
 nonisolated enum LaqtaLocale {
     static let current: Locale = {
-        let region = Locale.current.region?.identifier ?? "US"
-        return Locale(identifier: "en_\(region)@numbers=latn")
+        var components = Locale.Components(locale: .current)
+        components.numberingSystem = Locale.NumberingSystem("latn")
+        return Locale(components: components)
     }()
 }
 

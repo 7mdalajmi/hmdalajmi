@@ -156,7 +156,7 @@ private struct DocumentContent: View {
             LinearGradient(colors: [Color(hex: 0x2E2721), palette.bg.opacity(0)], startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
         }
-        .accessibilityLabel(Text(verbatim: "Read \(item.displayTitle)"))
+        .accessibilityLabel(Text("Read \(item.displayTitle)"))
     }
 
     private var pageAspect: CGFloat {
@@ -599,7 +599,7 @@ struct DocumentReaderView: View {
                 }
                 if pageCount > 0 {
                     ToolbarItem(placement: .bottomBar) {
-                        Text(verbatim: "Page \(page) of \(pageCount)")
+                        Text("Page \(page) of \(pageCount)")
                             .laqtaFont(13, weight: .medium, monospacedDigit: true)
                             .foregroundStyle(.secondary)
                     }

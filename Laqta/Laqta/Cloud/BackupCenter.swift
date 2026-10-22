@@ -100,9 +100,9 @@ final class BackupCenter {
     }
 
     var summary: String {
-        if activity == .backingUp { return "Backing up…" }
-        guard isICloudAvailable else { return "iCloud is off" }
-        guard let lastBackupAt else { return frequency == .off ? "Off" : "Not backed up yet" }
+        if activity == .backingUp { return String(localized: "Backing up…") }
+        guard isICloudAvailable else { return String(localized: "iCloud is off") }
+        guard let lastBackupAt else { return String(localized: frequency == .off ? "Off" : "Not backed up yet") }
         return LaqtaFormat.relative(lastBackupAt)
     }
 
@@ -121,7 +121,7 @@ final class BackupCenter {
     func backUpNow() {
         guard !isBusy else { return }
         job = Task {
-            await ContinuedWork.shared.perform(title: "Backing up Laqta", subtitle: "Preparing…", reporter: reporter) {
+            await ContinuedWork.shared.perform(title: String(localized: "Backing up Laqta"), subtitle: String(localized: "Preparing…"), reporter: reporter) {
                 await self.backUp(userInitiated: true)
             }
             self.job = nil
@@ -162,7 +162,7 @@ final class BackupCenter {
             AppGroup.defaults.set(message, forKey: SettingsKey.lastBackupError)
             DebugLog.write("backup: failed \(error)")
             if userInitiated {
-                notice = Notice(title: "Backup didn't finish", text: message)
+                notice = Notice(title: String(localized: "Backup didn't finish"), text: message)
             }
         }
     }
@@ -197,7 +197,7 @@ final class BackupCenter {
         guard !isBusy else { return nil }
         let box = Box<BackupFile>()
         let task = Task {
-            await ContinuedWork.shared.perform(title: "Preparing a Laqta backup", subtitle: "Preparing…", reporter: reporter) {
+            await ContinuedWork.shared.perform(title: String(localized: "Preparing a Laqta backup"), subtitle: String(localized: "Preparing…"), reporter: reporter) {
                 box.value = await self.export()
             }
         }
@@ -222,7 +222,7 @@ final class BackupCenter {
         } catch BackupError.cancelled {
             return nil
         } catch {
-            notice = Notice(title: "The backup file wasn't made", text: error.localizedDescription)
+            notice = Notice(title: String(localized: "The backup file wasn't made"), text: error.localizedDescription)
             return nil
         }
     }
@@ -232,9 +232,9 @@ final class BackupCenter {
         guard let result else { return }
         switch result {
         case .success:
-            notice = Notice(title: "Backup saved", text: "Keep the file somewhere safe. To restore it, open Backups and choose Restore from a File.")
+            notice = Notice(title: String(localized: "Backup saved"), text: String(localized: "Keep the file somewhere safe. To restore it, open Backups and choose Restore from a File."))
         case let .failure(error):
-            notice = Notice(title: "The backup wasn't saved", text: error.localizedDescription)
+            notice = Notice(title: String(localized: "The backup wasn't saved"), text: error.localizedDescription)
         }
     }
 
@@ -275,11 +275,11 @@ final class BackupCenter {
     private func runRestore(prepare: @escaping @Sendable () async throws -> PreparedRestore) {
         guard !isBusy else { return }
         job = Task {
-            await ContinuedWork.shared.perform(title: "Restoring Laqta", subtitle: "Preparing…", reporter: reporter) {
+            await ContinuedWork.shared.perform(title: String(localized: "Restoring Laqta"), subtitle: String(localized: "Preparing…"), reporter: reporter) {
                 guard let context = self.context else { return }
                 self.activity = .restoring
                 self.progress = 0
-                self.detail = "Reading the backup…"
+                self.detail = String(localized: "Reading the backup…")
                 defer { self.activity = .idle }
                 do {
                     let prepared = try await prepare()
@@ -289,13 +289,19 @@ final class BackupCenter {
                     self.library?.refresh()
                     self.intelligence?.processPending(context: context)
                     await YouTubeRefresher.refreshMissing(context: context)
-                    self.notice = Notice(title: "Restore finished", text: summary.message)
+                    self.notice = Notice(title: String(localized: "Restore finished"), text: summary.message)
                 } catch is CancellationError {
-                    self.notice = Notice(title: "Restore stopped", text: "What was restored so far stays in Laqta.")
+                    self.notice = Notice(
+                        title: String(localized: "Restore stopped"),
+                        text: String(localized: "What was restored so far stays in Laqta.")
+                    )
                 } catch BackupError.cancelled {
-                    self.notice = Notice(title: "Restore stopped", text: "What was restored so far stays in Laqta.")
+                    self.notice = Notice(
+                        title: String(localized: "Restore stopped"),
+                        text: String(localized: "What was restored so far stays in Laqta.")
+                    )
                 } catch {
-                    self.notice = Notice(title: "Couldn't restore", text: error.localizedDescription)
+                    self.notice = Notice(title: String(localized: "Couldn't restore"), text: error.localizedDescription)
                 }
             }
             self.job = nil

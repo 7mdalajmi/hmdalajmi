@@ -101,6 +101,7 @@ struct FolderCard: View {
 struct GoldSweep: View {
     @State private var progress: CGFloat = -1
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.layoutDirection) private var layoutDirection
 
     var body: some View {
         GeometryReader { proxy in
@@ -114,7 +115,8 @@ struct GoldSweep: View {
                 endPoint: .trailing
             )
             .frame(width: proxy.size.width)
-            .offset(x: progress * proxy.size.width)
+            // Runs the way the language reads.
+            .offset(x: progress * proxy.size.width * layoutDirection.sign)
         }
         .allowsHitTesting(false)
         .opacity(reduceMotion ? 0 : 1)

@@ -203,9 +203,9 @@ final class CloudSyncModel {
         // CKError codes: 9 notAuthenticated, 25 quotaExceeded, 3/4 network, 36 managedAccountRestricted.
         if nsError.domain == "CKErrorDomain" {
             switch nsError.code {
-            case 9: return "Sign in to iCloud to sync."
-            case 25: return "Your iCloud storage is full."
-            case 3, 4: return "Waiting for a network connection."
+            case 9: return String(localized: "Sign in to iCloud to sync.")
+            case 25: return String(localized: "Your iCloud storage is full.")
+            case 3, 4: return String(localized: "Waiting for a network connection.")
             case 36: return "iCloud is restricted on this device."
             default: break
             }
@@ -249,7 +249,8 @@ final class CloudSyncModel {
         guard await store?.reopen() == true else {
             AppGroup.defaults.set(false, forKey: SettingsKey.cloudSync)
             switching = .none
-            status = .failed(AppGroup.defaults.string(forKey: SettingsKey.lastSyncError) ?? "The library couldn't be reopened. Try again.")
+            status = .failed(AppGroup.defaults.string(forKey: SettingsKey.lastSyncError)
+                ?? String(localized: "The library couldn't be reopened. Try again."))
             return
         }
         switching = .none
@@ -287,7 +288,7 @@ final class CloudSyncModel {
         if failed > 0 {
             DebugLog.write("cloud: \(failed) files stayed in iCloud")
             switching = .none
-            status = .failed("Some files couldn't be downloaded. iCloud sync stays on so your items remain available. Try again when you have a connection and enough storage.")
+            status = .failed(String(localized: "Some files couldn't be downloaded. iCloud sync stays on so your items remain available. Try again when you have a connection and enough storage."))
             return false
         }
         guard !cancelSwitch, !Task.isCancelled else {
@@ -299,7 +300,8 @@ final class CloudSyncModel {
         guard await store?.reopen() == true else {
             AppGroup.defaults.set(true, forKey: SettingsKey.cloudSync)
             switching = .none
-            status = .failed(AppGroup.defaults.string(forKey: SettingsKey.lastSyncError) ?? "The library couldn't be reopened. Try again.")
+            status = .failed(AppGroup.defaults.string(forKey: SettingsKey.lastSyncError)
+                ?? String(localized: "The library couldn't be reopened. Try again."))
             return false
         }
         pendingUploads = 0
@@ -357,14 +359,16 @@ final class CloudSyncModel {
         case .off:
             return "Off"
         case .unavailable:
-            return isAccountAvailable ? "Waiting for iCloud" : "Sign in to iCloud and turn on iCloud Drive"
+            return String(localized: isAccountAvailable ? "Waiting for iCloud" : "Sign in to iCloud and turn on iCloud Drive")
         case .syncing:
             return "Syncing…"
         case let .uploading(count):
-            return count == 1 ? "Uploading 1 item…" : "Uploading \(LaqtaFormat.number(count)) items…"
+            return count == 1
+                ? String(localized: "Uploading 1 item…")
+                : String(localized: "Uploading \(LaqtaFormat.number(count)) items…")
         case let .upToDate(date):
             guard let date else { return "On" }
-            return "Up to date · \(LaqtaFormat.relative(date))"
+            return String(localized: "Up to date · \(LaqtaFormat.relative(date))")
         case let .failed(message):
             return message
         }

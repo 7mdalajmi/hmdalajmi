@@ -162,7 +162,7 @@ struct InsightsSheet: View {
                         Text("Something in")
                         FolderNameText(name: folder?.name ?? "", size: 13, color: palette.ink2)
                             .frame(minHeight: 15)
-                        Text(verbatim: "is due \(LaqtaFormat.dueIn(entry.date))")
+                        Text("is due \(LaqtaFormat.dueIn(entry.date))")
                     }
                     .laqtaFont(13)
                     .foregroundStyle(palette.ink2)

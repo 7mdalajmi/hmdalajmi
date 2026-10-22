@@ -38,7 +38,7 @@ struct CloudSettingsSection: View {
                     ProgressView(value: Double(done), total: Double(max(total, 1)))
                         .tint(palette.goldHi)
                     HStack {
-                        Text(verbatim: "Downloading \(LaqtaFormat.number(done)) of \(LaqtaFormat.number(total)) to this device…")
+                        Text("Downloading \(LaqtaFormat.number(done)) of \(LaqtaFormat.number(total)) to this device…")
                             .laqtaFont(12)
                             .foregroundStyle(palette.ink2)
                         Spacer()

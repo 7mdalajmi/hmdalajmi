@@ -900,7 +900,7 @@ private struct NotePill: View {
             .laqtaGlass(in: RoundedRectangle(cornerRadius: 20, style: .continuous))
         }
         .buttonStyle(.pressable)
-        .accessibilityLabel(Text(verbatim: "Note: \(note)"))
+        .accessibilityLabel(Text("Note: \(note)"))
         .accessibilityHint(Text("Edit the note"))
     }
 }

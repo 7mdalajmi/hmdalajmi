@@ -66,7 +66,7 @@ struct MergeFoldersCard: View {
         guard let first = pairs.first else { return "" }
         return pairs.count == 1
             ? "“\(first.name)” arrived twice"
-            : "\(LaqtaFormat.count(pairs.count, "folder name", "folder names")) arrived twice"
+            : String(localized: "\(LaqtaFormat.count(pairs.count, "folder name", "folder names")) arrived twice")
     }
 }
 
@@ -137,7 +137,7 @@ struct MergeFoldersSheet: View {
                 Button {
                     merge(pair)
                 } label: {
-                    LaqtaButtonLabel(verbatim: "Merge · \(LaqtaFormat.count(pair.total, "item", "items"))", kind: .gold, small: true)
+                    LaqtaButtonLabel("Merge · \(LaqtaFormat.count(pair.total, "item", "items"))", kind: .gold, small: true)
                 }
                 .buttonStyle(.pressable)
                 Button {
@@ -168,7 +168,7 @@ struct MergeFoldersSheet: View {
             Text(verbatim: LaqtaFormat.count(count, "item", "items"))
                 .laqtaFont(14, weight: .semibold, monospacedDigit: true)
                 .foregroundStyle(palette.ink)
-            Text(verbatim: "Since \(LaqtaFormat.shortDate(since))")
+            Text("Since \(LaqtaFormat.shortDate(since))")
                 .laqtaFont(11.5)
                 .foregroundStyle(palette.ink3)
         }
@@ -182,7 +182,7 @@ struct MergeFoldersSheet: View {
         }
         library.refresh()
         library.highlight(pair.keepID)
-        toasts.show("“\(pair.name)” now holds \(LaqtaFormat.count(pair.total, "item", "items"))", systemImage: "arrow.triangle.merge")
+        toasts.show(String(localized: "“\(pair.name)” now holds \(LaqtaFormat.count(pair.total, "item", "items"))"), systemImage: "arrow.triangle.merge")
     }
 
     private func keepBoth(_ pair: FolderMergePair) {

@@ -417,12 +417,14 @@ struct DaysLeftBadge: View {
 
     static func text(for deletedAt: Date?) -> String {
         let days = daysLeft(for: deletedAt)
-        return days <= 1 ? "Deleted tomorrow" : "\(days) days left"
+        return days <= 1
+            ? String(localized: "Deleted tomorrow")
+            : String(localized: "\(days) days left")
     }
 
     var body: some View {
         let days = Self.daysLeft(for: deletedAt)
-        Text(verbatim: days <= 1 ? "1 day" : "\(days) days")
+        Text(days <= 1 ? "1 day" : "\(days) days")
             .laqtaFont(10.5, weight: .semibold, monospacedDigit: true, maxScale: 1.25)
             .foregroundStyle(days <= 3 ? Color(hex: 0xFFB4A2) : .white)
             .padding(.horizontal, 7)
@@ -516,7 +518,7 @@ private struct TrashPreviewSheet: View {
                         }
                         .laqtaFont(13)
                         .foregroundStyle(palette.ink2)
-                        Text(verbatim: "Deleted \(LaqtaFormat.relative(item.deletedAt ?? .now)) · \(DaysLeftBadge.text(for: item.deletedAt))")
+                        Text("Deleted \(LaqtaFormat.relative(item.deletedAt ?? .now)) · \(DaysLeftBadge.text(for: item.deletedAt))")
                             .laqtaFont(13)
                             .foregroundStyle(palette.ink2)
                     }

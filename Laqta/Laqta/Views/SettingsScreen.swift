@@ -75,7 +75,7 @@ struct SettingsScreen: View {
                 }
                 .padding(.top, 18)
 
-                Text(verbatim: "Settings")
+                Text("Settings")
                     .laqtaDisplayFont(44)
                     .foregroundStyle(palette.goldHi)
                     .accessibilityAddTraits(.isHeader)
@@ -299,7 +299,7 @@ struct SettingsScreen: View {
         .frame(maxWidth: .infinity)
         .padding(.vertical, 22)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel(Text(verbatim: "Laqta, version \(appVersion), build \(buildNumber)"))
+        .accessibilityLabel(Text("Laqta, version \(appVersion), build \(buildNumber)"))
     }
 
     private var aboutSection: some View {
@@ -333,7 +333,7 @@ struct SettingsScreen: View {
 
     private var versionFooter: some View {
         VStack(spacing: 6) {
-            Text(verbatim: "Built for iOS 27")
+            Text("Built for iOS 27")
                 .laqtaFont(12)
                 .foregroundStyle(palette.ink3)
             if !AppGroup.isConfigured {

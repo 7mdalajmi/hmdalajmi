@@ -238,7 +238,7 @@ struct CleanupSheet: View {
         guard !targets.isEmpty else { return }
         library.trash(targets, context: modelContext)
         toasts.show(
-            "\(LaqtaFormat.count(targets.count, "shot", "shots")) moved to Recently Deleted",
+            String(localized: "\(LaqtaFormat.count(targets.count, "shot", "shots")) moved to Recently Deleted"),
             systemImage: "trash"
         )
         dismiss()
@@ -326,7 +326,7 @@ struct SimilarShotsSheet: View {
             Button {
                 drop(family)
             } label: {
-                Text(verbatim: "Keep the best · let \(LaqtaFormat.count(family.others.count, "copy", "copies")) go")
+                Text("Keep the best · let \(LaqtaFormat.count(family.others.count, "copy", "copies")) go")
                     .laqtaFont(14, weight: .semibold)
                     .foregroundStyle(palette.goldHi)
                     .frame(maxWidth: .infinity, minHeight: 44)
@@ -344,7 +344,7 @@ struct SimilarShotsSheet: View {
         guard !targets.isEmpty else { return }
         library.trash(targets, context: modelContext)
         toasts.show(
-            "\(LaqtaFormat.count(targets.count, "copy", "copies")) moved to Recently Deleted",
+            String(localized: "\(LaqtaFormat.count(targets.count, "copy", "copies")) moved to Recently Deleted"),
             systemImage: "trash"
         )
     }

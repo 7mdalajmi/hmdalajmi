@@ -193,7 +193,7 @@ struct LegalDocumentScreen: View {
                             .laqtaDisplayFont(36)
                             .foregroundStyle(palette.goldHi)
                             .accessibilityAddTraits(.isHeader)
-                        Text(verbatim: "Effective \(LegalDocument.effectiveDate)")
+                        Text("Effective \(LegalDocument.effectiveDate)")
                             .laqtaFont(12)
                             .foregroundStyle(palette.ink3)
                         Text(verbatim: document.summary)
