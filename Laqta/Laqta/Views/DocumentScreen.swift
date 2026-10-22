@@ -301,7 +301,7 @@ private struct DocumentContent: View {
         Task {
             try? await Task.sleep(for: .milliseconds(350))
             library.trash([target], context: modelContext)
-            toasts.show("Moved to Recently Deleted", systemImage: "trash", actionTitle: "Undo") {
+            toasts.show(String(localized: "Moved to Recently Deleted"), systemImage: "trash", actionTitle: String(localized: "Undo")) {
                 library.restore([target], context: modelContext)
             }
         }
@@ -322,7 +322,7 @@ private struct DocumentContent: View {
                     .fill(palette.hair)
                     .frame(height: 1)
             }
-            Text(verbatim: analysis.basis ?? (isReading ? "Reading the PDF on this device…" : "Not read yet"))
+            Text(verbatim: analysis.basis ?? String(localized: isReading ? "Reading the PDF on this device…" : "Not read yet"))
                 .laqtaFont(12)
                 .foregroundStyle(palette.ink2)
                 .padding(.leading, 44)
@@ -382,7 +382,7 @@ private struct DocumentContent: View {
                         CardHeader("Text", systemImage: "text.viewfinder") {
                             Button {
                                 Clipboard.copy(text)
-                                localToasts.show("Text copied", systemImage: "doc.on.doc")
+                                localToasts.show(String(localized: "Text copied"), systemImage: "doc.on.doc")
                             } label: {
                                 Label("Copy", systemImage: "doc.on.doc")
                                     .laqtaFont(13, weight: .semibold)
@@ -394,7 +394,7 @@ private struct DocumentContent: View {
                     }
                 } else if item.analysisState == .done {
                     LaqtaCard {
-                        Text(verbatim: analysis.source?.reason ?? "Laqta couldn't find readable text in this PDF.")
+                        Text(verbatim: analysis.source?.reason ?? String(localized: "Laqta couldn't find readable text in this PDF."))
                             .laqtaFont(14)
                             .foregroundStyle(palette.ink2)
                         Button {
@@ -417,14 +417,14 @@ private struct DocumentContent: View {
 
     private var contentsCard: some View {
         LaqtaCard {
-            CardHeader(verbatim: analysis.sectionsTitle ?? "Contents", systemImage: "list.bullet")
+            CardHeader(verbatim: analysis.sectionsTitle ?? String(localized: "Contents"), systemImage: "list.bullet")
             VStack(spacing: 0) {
                 ForEach(Array(analysis.sections.enumerated()), id: \.offset) { index, section in
                     Button {
                         reader = ReaderRequest(page: section.page ?? 1)
                     } label: {
                         HStack(spacing: 12) {
-                            Text(verbatim: section.page.map { "p. \($0)" } ?? "\(index + 1)")
+                            Text(verbatim: section.page.map { String(localized: "p. \($0)") } ?? "\(index + 1)")
                                 .laqtaFont(12, weight: .semibold, monospacedDigit: true)
                                 .foregroundStyle(palette.goldHi)
                                 .padding(.horizontal, 8)

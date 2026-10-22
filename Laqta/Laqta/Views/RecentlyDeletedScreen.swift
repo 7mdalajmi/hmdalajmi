@@ -256,13 +256,13 @@ struct RecentlyDeletedScreen: View {
                 recover(items.filter { selection.contains($0.id) })
                 isSelecting = false
             } label: {
-                LaqtaButtonLabel(verbatim: selection.isEmpty ? "Recover" : "Recover \(selection.count)", systemImage: "arrow.uturn.backward", kind: .line, fullWidth: true)
+                LaqtaButtonLabel(selection.isEmpty ? "Recover" : "Recover \(selection.count)", systemImage: "arrow.uturn.backward", kind: .line, fullWidth: true)
             }
             .disabled(selection.isEmpty)
             Button {
                 pendingAction = .deleteSelection
             } label: {
-                LaqtaButtonLabel(verbatim: selection.isEmpty ? "Delete" : "Delete \(selection.count)", systemImage: "trash", fullWidth: true)
+                LaqtaButtonLabel(selection.isEmpty ? "Delete" : "Delete \(selection.count)", systemImage: "trash", fullWidth: true)
             }
             .disabled(selection.isEmpty)
             .confirmationDialog(dialogTitle, isPresented: confirming(.deleteSelection), titleVisibility: .visible) {
@@ -327,14 +327,19 @@ struct RecentlyDeletedScreen: View {
         withAnimation {
             library.restore(items, context: modelContext)
         }
-        toasts.show(items.count == 1 ? "Recovered" : "\(items.count) items recovered", systemImage: "arrow.uturn.backward")
+        toasts.show(
+            items.count == 1
+                ? String(localized: "Recovered")
+                : String(localized: "\(items.count) items recovered"),
+            systemImage: "arrow.uturn.backward"
+        )
     }
 
     private func recover(_ folder: Folder) {
         withAnimation {
             library.restore(folder: folder, context: modelContext)
         }
-        toasts.show("“\(folder.name)” recovered", systemImage: "arrow.uturn.backward")
+        toasts.show(String(localized: "“\(folder.name)” recovered"), systemImage: "arrow.uturn.backward")
     }
 
     private func recoverAll() {
@@ -344,7 +349,7 @@ struct RecentlyDeletedScreen: View {
             }
             library.restore(items.filter { $0.deletedAt != nil }, context: modelContext)
         }
-        toasts.show("Everything was recovered", systemImage: "arrow.uturn.backward")
+        toasts.show(String(localized: "Everything was recovered"), systemImage: "arrow.uturn.backward")
     }
 
     private var isSingleDeletion: Bool {
@@ -369,7 +374,7 @@ struct RecentlyDeletedScreen: View {
         case .deleteAll?:
             "Delete everything in Recently Deleted?"
         case let .deleteFolder(folder)?:
-            "Delete “\(folder.name)” for good?"
+            String(localized: "Delete “\(folder.name)” for good?")
         case .deleteItem?:
             "Delete this item for good?"
         case nil:
@@ -512,7 +517,7 @@ private struct TrashPreviewSheet: View {
                         HStack(spacing: 4) {
                             Text(verbatim: item.kindLabel)
                             if let folderName {
-                                Text(verbatim: "· from")
+                                Text("· from")
                                 FolderNameText(name: folderName, size: 15, color: palette.goldHi)
                             }
                         }

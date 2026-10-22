@@ -174,7 +174,7 @@ struct ShotViewer: View {
             EventEditView(draft: draft) { saved in
                 if saved {
                     completedActions.insert(draft.actionKey)
-                    toasts.show("Added to Calendar · \(draft.title)", systemImage: "checkmark")
+                    toasts.show(String(localized: "Added to Calendar · \(draft.title)"), systemImage: "checkmark")
                 }
             }
             .ignoresSafeArea()
@@ -500,9 +500,9 @@ struct ShotViewer: View {
             Task {
                 if await Reminders.schedule(title: title, at: date) {
                     completedActions.insert(key)
-                    toasts.show("Reminder set · \(LaqtaFormat.eventDate(date, allDay: true))", systemImage: "bell")
+                    toasts.show(String(localized: "Reminder set · \(LaqtaFormat.eventDate(date, allDay: true))"), systemImage: "bell")
                 } else {
-                    toasts.show("Allow notifications to get reminders", systemImage: "bell.slash")
+                    toasts.show(String(localized: "Allow notifications to get reminders"), systemImage: "bell.slash")
                 }
             }
         case let .open(url):
@@ -527,7 +527,7 @@ struct ShotViewer: View {
         withAnimation {
             library.trash([current], context: modelContext)
         }
-        toasts.show("Moved to Recently Deleted", systemImage: "trash", actionTitle: "Undo") {
+        toasts.show(String(localized: "Moved to Recently Deleted"), systemImage: "trash", actionTitle: String(localized: "Undo")) {
             withAnimation {
                 library.restore([current], context: modelContext)
             }

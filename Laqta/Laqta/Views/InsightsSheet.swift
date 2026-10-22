@@ -103,7 +103,7 @@ struct InsightsSheet: View {
             EventEditView(draft: draft) { saved in
                 if saved {
                     added.insert(draft.actionKey)
-                    toasts.show("Added to Calendar · \(draft.title)")
+                    toasts.show(String(localized: "Added to Calendar · \(draft.title)"))
                 }
             }
             .ignoresSafeArea()
@@ -263,7 +263,7 @@ struct InsightsSheet: View {
                 .frame(width: 44, height: 44)
                 .background(palette.field, in: Circle())
             VStack(alignment: .leading, spacing: 3) {
-                Text(verbatim: originals.count == 1 ? "1 original still in Photos" : "\(originals.count) originals still in Photos")
+                Text(originals.count == 1 ? "1 original still in Photos" : "\(originals.count) originals still in Photos")
                     .laqtaFont(16, weight: .semibold)
                     .foregroundStyle(palette.ink)
                 Text("Laqta already has copies.")

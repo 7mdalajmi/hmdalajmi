@@ -45,7 +45,7 @@ struct ShotPlaceSheet: View {
                     }
                     PlaceTextCard(text: contacts.text) { text in
                         Clipboard.copy(text)
-                        toasts.show("Text copied", systemImage: "doc.on.doc")
+                        toasts.show(String(localized: "Text copied"), systemImage: "doc.on.doc")
                     }
                     if contacts.handles.contains(where: { !$0.isExplicit }) {
                         Text("A handle written on its own is read as Instagram — that is what it nearly always means on a sign.")

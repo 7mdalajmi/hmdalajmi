@@ -90,7 +90,7 @@ struct SearchScreen: View {
                                 openItem(itemID)
                             }
                         }
-                        SectionLabel(verbatim: results.isEmpty ? "No results" : LaqtaFormat.count(results.count, "result", "results"))
+                        SectionLabel(verbatim: results.isEmpty ? String(localized: "No results") : LaqtaFormat.count(results.count, "result", "results"))
                             .padding(.bottom, 4)
                         ForEach(results) { result in
                             Button {

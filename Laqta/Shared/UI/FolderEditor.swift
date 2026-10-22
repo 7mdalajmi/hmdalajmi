@@ -134,7 +134,7 @@ struct FolderEditorSheet: View {
                                         .background(item == symbol ? palette.accentFill : palette.field, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
                                 }
                                 .buttonStyle(.pressable)
-                                .accessibilityLabel(Text(verbatim: "\(Self.symbolNames[item] ?? item) icon"))
+                                .accessibilityLabel(Text("\(Self.symbolNames[item] ?? item) icon"))
                                 .accessibilityAddTraits(item == symbol ? .isSelected : [])
                             }
                         }
@@ -206,9 +206,9 @@ struct FolderEditorSheet: View {
     private var preview: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 2) {
-                FolderNameText(name: trimmedName.isEmpty ? "مجلد جديد" : trimmedName, size: 28)
+                FolderNameText(name: trimmedName.isEmpty ? String(localized: "New folder") : trimmedName, size: 28)
                     .opacity(trimmedName.isEmpty ? 0.45 : 1)
-                Text(verbatim: folder == nil ? "Empty · Created just now" : LaqtaFormat.updated(folder?.lastUpdate ?? .now))
+                Text(verbatim: folder == nil ? String(localized: "Empty · Created just now") : LaqtaFormat.updated(folder?.lastUpdate ?? .now))
                     .laqtaFont(13)
                     .foregroundStyle(palette.meta)
             }

@@ -128,7 +128,7 @@ struct BackupsScreen: View {
                 pendingFile = nil
             }
         } message: {
-            Text(verbatim: "\(pendingFile?.lastPathComponent ?? "")\nItems that aren't in Laqta are added. Nothing is replaced or deleted.")
+            Text("\(pendingFile?.lastPathComponent ?? "")\nItems that aren't in Laqta are added. Nothing is replaced or deleted.")
         }
         .confirmationDialog(
             "Delete this backup?",

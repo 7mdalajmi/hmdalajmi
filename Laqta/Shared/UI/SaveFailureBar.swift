@@ -23,7 +23,7 @@ nonisolated struct SaveFailureRecovery {
     var systemImage: String
     var action: @MainActor () -> Void
 
-    init(title: LocalizedStringKey, systemImage: String = "clock.arrow.circlepath", action: @MainActor @escaping () -> Void) {
+    init(title: LocalizedStringKey, systemImage: String = "clock.arrow.circlepath", action: @escaping @MainActor () -> Void) {
         self.title = title
         self.systemImage = systemImage
         self.action = action

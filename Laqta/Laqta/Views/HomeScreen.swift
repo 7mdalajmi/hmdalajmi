@@ -99,7 +99,7 @@ struct HomeScreen: View {
             library.trash(folder: folder, context: modelContext)
         }
         let name = folder.name
-        toasts.show("“\(name)” moved to Recently Deleted", systemImage: "trash", actionTitle: "Undo") {
+        toasts.show(String(localized: "“\(name)” moved to Recently Deleted"), systemImage: "trash", actionTitle: String(localized: "Undo")) {
             withAnimation {
                 library.restore(folder: folder, context: modelContext)
             }
@@ -638,7 +638,7 @@ struct TrashRow: View {
                 Text("Recently Deleted")
                     .laqtaFont(15, weight: .semibold)
                     .foregroundStyle(palette.ink)
-                Text(verbatim: "\(LaqtaFormat.count(count, "item", "items")) · kept for 30 days")
+                Text("\(LaqtaFormat.count(count, "item", "items")) · kept for 30 days")
                     .laqtaFont(12)
                     .foregroundStyle(palette.ink2)
             }

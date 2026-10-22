@@ -130,7 +130,7 @@ struct AskLibraryCard: View {
                 .buttonStyle(.pressable)
             }
             if !reply.otherIDs.isEmpty {
-                Text(verbatim: "\(LaqtaFormat.count(reply.otherIDs.count, "other shot", "other shots")) close to it — they are in the results below.")
+                Text("\(LaqtaFormat.count(reply.otherIDs.count, "other shot", "other shots")) close to it — they are in the results below.")
                     .laqtaFont(11.5)
                     .foregroundStyle(palette.ink3)
             }

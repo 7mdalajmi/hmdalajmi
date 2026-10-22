@@ -189,7 +189,7 @@ struct CleanupSheet: View {
     private var buttonTitle: String {
         guard !pickedIDs.isEmpty else { return String(localized: "Pick a pile") }
         let count = LaqtaFormat.count(pickedIDs.count, "shot", "shots")
-        return "Move \(count) · \(LaqtaFormat.bytes(Int64(pickedBytes)))"
+        return String(localized: "Move \(count) · \(LaqtaFormat.bytes(Int64(pickedBytes)))")
     }
 
     private func pileRow(_ group: CleanupGroup) -> some View {

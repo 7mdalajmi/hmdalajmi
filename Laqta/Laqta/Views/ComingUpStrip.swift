@@ -169,7 +169,7 @@ struct ReminderPickerSheet: View {
                     if reminders.isScheduled(dated.itemID) {
                         Button {
                             reminders.cancel(itemID: dated.itemID)
-                            toasts.show("Reminder removed", systemImage: "bell.slash")
+                            toasts.show(String(localized: "Reminder removed"), systemImage: "bell.slash")
                             dismiss()
                         } label: {
                             Text("Remove the Reminder")
@@ -257,9 +257,9 @@ struct ReminderPickerSheet: View {
             let done = await reminders.schedule(dated, lead: lead, thumbnailURL: thumbnailURL)
             isWorking = false
             if done {
-                toasts.show("Reminder set", systemImage: "bell.fill")
+                toasts.show(String(localized: "Reminder set"), systemImage: "bell.fill")
             } else {
-                toasts.show("Notifications are off for Laqta", systemImage: "bell.slash")
+                toasts.show(String(localized: "Notifications are off for Laqta"), systemImage: "bell.slash")
             }
             dismiss()
         }

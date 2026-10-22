@@ -205,7 +205,7 @@ private struct IntelligenceContent: View {
                     .accessibilityLabel(Text("Translate the text in this shot"))
                     Button {
                         Clipboard.copy(text)
-                        toasts.show("Text copied", systemImage: "doc.on.doc")
+                        toasts.show(String(localized: "Text copied"), systemImage: "doc.on.doc")
                     } label: {
                         Label("Copy", systemImage: "doc.on.doc")
                             .laqtaFont(13, weight: .semibold)
@@ -364,7 +364,7 @@ struct PlaceCard: View {
         LaqtaCard {
             CardHeader("Place", systemImage: "mappin.and.ellipse") {
                 if let origin = place.origin {
-                    Text(verbatim: origin == "GPS" ? "From photo location" : origin)
+                    Text(verbatim: origin == "GPS" ? String(localized: "From photo location") : origin)
                         .laqtaFont(12)
                         .foregroundStyle(palette.ink2)
                         .multilineTextAlignment(.trailing)
@@ -439,7 +439,7 @@ struct PlaceCard: View {
                 }
                 Button {
                     Clipboard.copy([place.name, place.detail].compactMap { $0 }.joined(separator: ", "))
-                    toasts.show("Place copied", systemImage: "doc.on.doc")
+                    toasts.show(String(localized: "Place copied"), systemImage: "doc.on.doc")
                 } label: {
                     OutlineIconButtonLabel(systemImage: "doc.on.doc")
                 }
@@ -549,7 +549,7 @@ struct SourceCard: View {
                     }
                     Button {
                         Clipboard.copy(urlString)
-                        toasts.show("Link copied", systemImage: "doc.on.doc")
+                        toasts.show(String(localized: "Link copied"), systemImage: "doc.on.doc")
                     } label: {
                         LaqtaButtonLabel("Copy Link", systemImage: "doc.on.doc", kind: .line)
                     }
@@ -712,7 +712,7 @@ struct ExpandableText: View {
                 Button {
                     withAnimation(.snappy) { expanded.toggle() }
                 } label: {
-                    Text(verbatim: expanded ? "Show less" : "Show all \(lines.count) lines")
+                    Text(expanded ? "Show less" : "Show all \(lines.count) lines")
                         .laqtaFont(13, weight: .semibold)
                         .foregroundStyle(palette.goldHi)
                 }
@@ -757,7 +757,7 @@ struct EntityActions: View {
             EventEditView(draft: draft) { saved in
                 if saved {
                     doneKeys.insert(draft.actionKey)
-                    toasts.show("Added to Calendar · \(draft.title) · \(LaqtaFormat.eventDate(draft.start, allDay: draft.allDay))")
+                    toasts.show(String(localized: "Added to Calendar · \(draft.title) · \(LaqtaFormat.eventDate(draft.start, allDay: draft.allDay))"))
                 }
             }
             .ignoresSafeArea()
@@ -810,7 +810,7 @@ struct EntityActions: View {
         case .price, .code:
             Clipboard.copy(entity.value)
             doneKeys.insert(entity.id)
-            toasts.show("Copied \(entity.display)", systemImage: "doc.on.doc")
+            toasts.show(String(localized: "Copied \(entity.display)"), systemImage: "doc.on.doc")
         }
     }
 }
@@ -920,7 +920,7 @@ private struct TranscriptCard: View {
                     Button {
                         withAnimation(.snappy) { expanded.toggle() }
                     } label: {
-                        Text(verbatim: expanded ? "Show less" : "Show all \(lines.count) lines")
+                        Text(expanded ? "Show less" : "Show all \(lines.count) lines")
                             .laqtaFont(13, weight: .semibold)
                             .foregroundStyle(palette.goldHi)
                     }
@@ -928,7 +928,7 @@ private struct TranscriptCard: View {
                 Spacer()
                 Button {
                     Clipboard.copy(lines.map(\.text).joined(separator: "\n"))
-                    toasts.show("Transcript copied", systemImage: "doc.on.doc")
+                    toasts.show(String(localized: "Transcript copied"), systemImage: "doc.on.doc")
                 } label: {
                     Label("Copy", systemImage: "doc.on.doc")
                         .laqtaFont(13, weight: .semibold)

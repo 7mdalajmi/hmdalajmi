@@ -272,7 +272,7 @@ private struct LinkContent: View {
         Button {
             if let url = item.linkURL {
                 Clipboard.copy(url)
-                toasts.show("Link copied", systemImage: "doc.on.doc")
+                toasts.show(String(localized: "Link copied"), systemImage: "doc.on.doc")
             }
         } label: {
             LaqtaButtonLabel("Copy Link", systemImage: "doc.on.doc", kind: .line, fullWidth: fullWidth)
@@ -312,7 +312,7 @@ private struct LinkContent: View {
         Task {
             try? await Task.sleep(for: .milliseconds(350))
             library.trash([target], context: modelContext)
-            rootToasts.show("Moved to Recently Deleted", systemImage: "trash", actionTitle: "Undo") {
+            rootToasts.show(String(localized: "Moved to Recently Deleted"), systemImage: "trash", actionTitle: String(localized: "Undo")) {
                 library.restore([target], context: modelContext)
             }
         }
@@ -561,7 +561,7 @@ private struct LinkContent: View {
         items.append(URLQueryItem(name: "t", value: "\(Int(chapter.seconds))s"))
         components?.queryItems = items
         openURL(components?.url ?? url)
-        toasts.show("Opening at \(LaqtaFormat.duration(chapter.seconds))", systemImage: "play")
+        toasts.show(String(localized: "Opening at \(LaqtaFormat.duration(chapter.seconds))"), systemImage: "play")
     }
 
     private var placesCard: some View {

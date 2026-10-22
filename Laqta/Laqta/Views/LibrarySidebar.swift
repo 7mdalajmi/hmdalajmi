@@ -308,7 +308,7 @@ struct LibrarySidebar: View {
         withAnimation {
             library.trash(folder: folder, context: modelContext)
         }
-        toasts.show("“\(folder.name)” moved to Recently Deleted", systemImage: "trash", actionTitle: "Undo") {
+        toasts.show(String(localized: "“\(folder.name)” moved to Recently Deleted"), systemImage: "trash", actionTitle: String(localized: "Undo")) {
             withAnimation {
                 library.restore(folder: folder, context: modelContext)
             }
@@ -358,7 +358,7 @@ private struct SidebarFolderRow: View {
 
             VStack(alignment: .leading, spacing: 1) {
                 FolderNameText(name: folder.name, size: 19, color: isSelected ? .white : palette.ink)
-                Text(verbatim: folder.isPrivate && !isUnlocked ? "Locked" : stats.summary)
+                Text(verbatim: folder.isPrivate && !isUnlocked ? String(localized: "Locked") : stats.summary)
                     .laqtaFont(12)
                     .foregroundStyle(isSelected ? Color.white.opacity(0.78) : palette.ink2)
                     .adaptiveLineLimit(1, accessibility: 2)

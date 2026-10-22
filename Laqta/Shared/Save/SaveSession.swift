@@ -282,7 +282,7 @@ final class SaveSession {
         for entry in providers {
             guard !didCancel, !Task.isCancelled else { return }
             index += 1
-            if total > 3 { statusText = "Preparing \(index) of \(total)…" }
+            if total > 3 { statusText = String(localized: "Preparing \(index) of \(total)…") }
             do {
                 let item = try await ItemProviderLoader.stage(entry.box, kind: entry.kind)
                 await addStaged(item)
@@ -293,7 +293,7 @@ final class SaveSession {
         for file in files {
             guard !didCancel, !Task.isCancelled else { return }
             index += 1
-            if total > 3 { statusText = "Preparing \(index) of \(total)…" }
+            if total > 3 { statusText = String(localized: "Preparing \(index) of \(total)…") }
             do {
                 let item = try await MediaStore.stageFile(at: file.url, originalName: file.name, sourceAssetID: file.assetID)
                 await addStaged(item)

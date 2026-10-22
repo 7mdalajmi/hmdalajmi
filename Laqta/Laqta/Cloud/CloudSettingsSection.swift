@@ -135,7 +135,7 @@ struct CloudSettingsSection: View {
     }
 
     private var syncSubtitle: String {
-        cloud.isEnabled ? cloud.statusText : "Your library on all your devices"
+        cloud.isEnabled ? cloud.statusText : String(localized: "Your library on all your devices")
     }
 
     private var backupSubtitle: String {

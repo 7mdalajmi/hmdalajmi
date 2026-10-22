@@ -64,7 +64,7 @@ struct FolderCameraSheet: View {
                 inputs: [.file(url: made, name: made.lastPathComponent, assetID: nil)],
                 fixedFolderID: folderID,
                 onFinish: {
-                    toasts.show("Saved to \(folder.name)", systemImage: "checkmark")
+                    toasts.show(String(localized: "Saved to \(folder.name)"), systemImage: "checkmark")
                     dismiss()
                 },
                 onCancel: { dismiss() }

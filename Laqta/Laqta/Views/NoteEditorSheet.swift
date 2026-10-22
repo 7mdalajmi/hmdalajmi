@@ -129,7 +129,7 @@ struct NoteEditorSheet: View {
             Text(verbatim: "\(LaqtaFormat.number(text.count)) / \(LaqtaFormat.number(Self.limit))")
                 .laqtaFont(12, monospacedDigit: true)
                 .foregroundStyle(text.count > Self.limit - 100 ? palette.goldHi : palette.ink3)
-                .accessibilityLabel(Text(verbatim: "\(text.count) of \(Self.limit) characters"))
+                .accessibilityLabel(Text("\(text.count) of \(Self.limit) characters"))
         }
         .overlay(alignment: .bottomLeading) {
             if !item.note.isEmpty {

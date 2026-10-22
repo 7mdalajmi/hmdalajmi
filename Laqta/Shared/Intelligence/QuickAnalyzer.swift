@@ -213,7 +213,7 @@ nonisolated enum QuickAnalyzer {
 nonisolated enum SourceDetector {
     static func detect(lines: [String], entities: [DetectedEntity], labels: [String], input: PhotoAnalysisInput) -> SourceRef? {
         let taken = input.capturedAt ?? input.addedAt
-        let takenText = "Taken \(LaqtaFormat.shortDate(taken)) at \(LaqtaFormat.time(taken))"
+        let takenText = String(localized: "Taken \(LaqtaFormat.shortDate(taken)) at \(LaqtaFormat.time(taken))")
         let joined = lines.joined(separator: " ").lowercased()
 
         if let shared = input.sharedURL, let url = URL(string: shared) {

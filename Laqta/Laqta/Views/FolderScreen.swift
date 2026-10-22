@@ -190,7 +190,7 @@ private struct FolderContent: View {
         Task {
             try? await Task.sleep(for: .milliseconds(350))
             library.trash(folder: target, context: modelContext)
-            toasts.show("“\(target.name)” moved to Recently Deleted", systemImage: "trash", actionTitle: "Undo") {
+            toasts.show(String(localized: "“\(target.name)” moved to Recently Deleted"), systemImage: "trash", actionTitle: String(localized: "Undo")) {
                 library.restore(folder: target, context: modelContext)
             }
         }
@@ -339,9 +339,11 @@ private struct FolderContent: View {
         }
         isSelecting = false
         toasts.show(
-            items.count == 1 ? "Moved to Recently Deleted" : "\(items.count) items moved to Recently Deleted",
+            items.count == 1
+                ? String(localized: "Moved to Recently Deleted")
+                : String(localized: "\(items.count) items moved to Recently Deleted"),
             systemImage: "trash",
-            actionTitle: "Undo"
+            actionTitle: String(localized: "Undo")
         ) {
             withAnimation {
                 library.restore(items, context: modelContext)
@@ -765,7 +767,7 @@ private struct FolderItemsView: View {
         withAnimation {
             library.trash([item], context: modelContext)
         }
-        toasts.show("Moved to Recently Deleted", systemImage: "trash", actionTitle: "Undo") {
+        toasts.show(String(localized: "Moved to Recently Deleted"), systemImage: "trash", actionTitle: String(localized: "Undo")) {
             withAnimation {
                 library.restore([item], context: modelContext)
             }

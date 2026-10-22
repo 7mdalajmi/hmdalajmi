@@ -101,7 +101,7 @@ nonisolated enum VideoAnalyzer {
 
     static func source(for input: VideoAnalysisInput) -> SourceRef {
         let taken = input.capturedAt ?? input.addedAt
-        let takenText = "Recorded \(LaqtaFormat.shortDate(taken)) at \(LaqtaFormat.time(taken))"
+        let takenText = String(localized: "Recorded \(LaqtaFormat.shortDate(taken)) at \(LaqtaFormat.time(taken))")
         if input.isScreenRecording {
             return SourceRef(
                 app: "Screen Recording",
@@ -112,7 +112,7 @@ nonisolated enum VideoAnalyzer {
             )
         }
         if let model = input.cameraModel {
-            return SourceRef(app: "Camera", headline: "Video · Camera", detail: takenText, url: nil, reason: "Recorded with \(ImageTools.displayCameraName(model)).")
+            return SourceRef(app: "Camera", headline: "Video · Camera", detail: takenText, url: nil, reason: String(localized: "Recorded with \(ImageTools.displayCameraName(model))."))
         }
         return SourceRef(app: "Video", headline: "Video", detail: takenText, url: nil, reason: nil)
     }
