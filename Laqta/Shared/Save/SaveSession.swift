@@ -305,8 +305,15 @@ final class SaveSession {
 
     private func record(_ error: any Error) {
         failedCount += 1
-        if let mediaError = error as? MediaError, case .notEnoughSpace = mediaError {
-            failureMessage = mediaError.errorDescription
+        if let mediaError = error as? MediaError {
+            switch mediaError {
+            // The two the user can do something about: free some space, or import
+            // the file from inside the app instead of through the share sheet.
+            case .notEnoughSpace, .tooLargeToShare:
+                failureMessage = mediaError.errorDescription
+            default:
+                break
+            }
         }
         DebugLog.write("save: staging failed \(error)")
     }

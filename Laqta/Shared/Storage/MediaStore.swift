@@ -18,6 +18,13 @@ nonisolated enum MediaStore {
     static let reservedSpace: Int64 = 250 * 1024 * 1024
     /// Files above this size are not hashed in the Share Extension (time limit).
     static let extensionHashLimit: Int64 = 4 * 1024 * 1024 * 1024
+    /// The largest file the Share Extension copies. Above this the copy takes long
+    /// enough that the system is as likely to end the extension as to let it finish,
+    /// and the app's own importer has no limit — so it says so instead of dying.
+    static let extensionFileLimit: Int64 = 2 * 1024 * 1024 * 1024
+    /// The largest item the Share Extension will take as bytes in memory rather than
+    /// as a file. Its whole budget is a fraction of the app's.
+    static let extensionDataLimit: Int64 = 64 * 1024 * 1024
 
     // MARK: Staging
 
@@ -28,6 +35,9 @@ nonisolated enum MediaStore {
         let didAccess = source.startAccessingSecurityScopedResource()
         defer { if didAccess { source.stopAccessingSecurityScopedResource() } }
         let size = (try? source.resourceValues(forKeys: [.fileSizeKey]).fileSize).map(Int64.init) ?? 0
+        if AppGroup.isRunningInExtension, size > extensionFileLimit {
+            throw MediaError.tooLargeToShare(limit: extensionFileLimit)
+        }
         try ensureSpace(for: size)
         let id = UUID()
         let destination = AppGroup.stagingURL.appending(path: "\(id.uuidString).\(fileExtension(for: source, kind: kind))")
@@ -37,6 +47,9 @@ nonisolated enum MediaStore {
 
     static func writeToStaging(_ data: Data) throws -> (id: UUID, url: URL) {
         try AppGroup.prepareDirectories()
+        if AppGroup.isRunningInExtension, Int64(data.count) > extensionDataLimit {
+            throw MediaError.tooLargeToShare(limit: extensionDataLimit)
+        }
         try ensureSpace(for: Int64(data.count))
         let id = UUID()
         let destination = AppGroup.stagingURL.appending(path: "\(id.uuidString).\(ImageTools.fileExtension(for: data))")

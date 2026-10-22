@@ -118,19 +118,56 @@ nonisolated enum ItemProviderLoader {
         if typeIdentifier == UTType.fileURL.identifier {
             return try await stageFileURLObject(provider, name: suggestedName)
         }
-        if let copy = try? await copyFileRepresentation(provider, typeIdentifier: typeIdentifier, kind: kind) {
-            return try await describeCopy(copy, kind: kind, name: suggestedName)
-        }
-        // Small photos can come as data; videos and PDFs never load into memory.
-        if kind == .photo {
-            if let copy = try? await copyDataRepresentation(provider, typeIdentifier: typeIdentifier) {
+        // A file representation is the only way a video or a large PDF can be taken at
+        // all: the sender writes it to disk and Laqta copies it, so the file never has
+        // to fit in the extension's memory. Every type the sender offers for this kind
+        // is tried that way before anything that loads bytes — one sender refusing the
+        // best type used to drop a whole image to the in-memory path.
+        for candidate in fileRepresentationTypes(provider, kind: kind, first: typeIdentifier) {
+            do {
+                let copy = try await copyFileRepresentation(provider, typeIdentifier: candidate, kind: kind)
                 return try await describeCopy(copy, kind: kind, name: suggestedName)
+            } catch {
+                // "Too large for the share sheet" is an answer, not a reason to try
+                // the same item another way.
+                if MediaError.isTooLargeToShare(error) { throw error }
             }
-            if let copy = try? await copyLoadedImage(provider) {
+        }
+        // Only photos are ever taken as bytes, and only up to a limit that leaves the
+        // extension alive. Videos and PDFs never are.
+        if kind == .photo {
+            do {
+                let copy = try await copyDataRepresentation(provider, typeIdentifier: typeIdentifier)
                 return try await describeCopy(copy, kind: kind, name: suggestedName)
+            } catch {
+                if MediaError.isTooLargeToShare(error) { throw error }
+            }
+            do {
+                let copy = try await copyLoadedImage(provider)
+                return try await describeCopy(copy, kind: kind, name: suggestedName)
+            } catch {
+                if MediaError.isTooLargeToShare(error) { throw error }
             }
         }
         return try await stageFileURLObject(provider, name: suggestedName)
+    }
+
+    /// The best type first, then every other type the sender registered for this kind.
+    private static func fileRepresentationTypes(_ provider: NSItemProvider, kind: MediaKind, first: String) -> [String] {
+        var types = [first]
+        for type in registeredTypes(provider) where conforms(type, to: kind) {
+            let identifier = type.identifier
+            if !types.contains(identifier) { types.append(identifier) }
+        }
+        return types
+    }
+
+    private static func conforms(_ type: UTType, to kind: MediaKind) -> Bool {
+        switch kind {
+        case .document: type.conforms(to: .pdf)
+        case .video: type.conforms(to: .movie) || type.conforms(to: .video)
+        case .photo: type.conforms(to: .image)
+        }
     }
 
     private static func describeCopy(_ copy: (id: UUID, url: URL), kind: MediaKind, name: String?) async throws -> StagedMedia {
@@ -180,11 +217,16 @@ nonisolated enum ItemProviderLoader {
     }
 
     /// Last resort for senders that only offer an in-memory image.
+    ///
+    /// JPEG, not PNG: a decoded 48-megapixel screenshot is already around 200 MB in
+    /// the extension's hands, and `pngData()` asked for about as much again, which is
+    /// how a big image took the whole extension down with it instead of saving. JPEG
+    /// at 0.92 is a few megabytes, and the pixels are whatever the sender decoded.
     private static func copyLoadedImage(_ provider: NSItemProvider) async throws -> (id: UUID, url: URL) {
         guard provider.canLoadObject(ofClass: UIImage.self) else { throw MediaError.noData }
         return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<(id: UUID, url: URL), any Error>) in
             _ = provider.loadObject(ofClass: UIImage.self) { object, error in
-                guard let image = object as? UIImage, let data = image.pngData() else {
+                guard let image = object as? UIImage, let data = image.jpegData(compressionQuality: 0.92) else {
                     continuation.resume(throwing: error ?? MediaError.noData)
                     return
                 }
