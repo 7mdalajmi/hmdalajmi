@@ -1,0 +1,5 @@
+// صكة: version and build, outside the .xcodeproj so a project rewrite never loses them.
+// The build goes up by one with every update or fix, in the same change (main reference, step 9).
+// The version changes only when Hamad asks.
+MARKETING_VERSION = 1.0
+CURRENT_PROJECT_VERSION = 7
