@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>LaqtaAppGroupID</key><string>$(APP_GROUP_ID)</string>
+<key>LaqtaLocalDistribution</key><string>$(LAQTA_LOCAL_DISTRIBUTION)</string>
+<key>NSHumanReadableCopyright</key><string>Laqta</string>
+<key>NSHighResolutionCapable</key><true/>
+<key>UTExportedTypeDeclarations</key><array><dict>
+<key>UTTypeIdentifier</key><string>Hmdalajmi.Laqta.backup</string>
+<key>UTTypeDescription</key><string>Laqta Backup</string>
+<key>UTTypeConformsTo</key><array><string>public.data</string></array>
+<key>UTTypeTagSpecification</key><dict><key>public.filename-extension</key><array><string>laqtabackup</string></array></dict>
+</dict></array>
+<key>CFBundleDocumentTypes</key><array><dict>
+<key>CFBundleTypeName</key><string>Laqta Backup</string>
+<key>CFBundleTypeRole</key><string>Viewer</string>
+<key>LSHandlerRank</key><string>Owner</string>
+<key>LSItemContentTypes</key><array><string>Hmdalajmi.Laqta.backup</string></array>
+</dict></array>
+</dict></plist>

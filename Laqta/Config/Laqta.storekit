@@ -1,0 +1,99 @@
+{
+  "identifier" : "4C51A7E0",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "0.00",
+      "familyShareable" : false,
+      "internalID" : "6A11B0C1",
+      "localizations" : [
+        {
+          "description" : "Thirty days of Laqta, free. Nothing is charged and nothing renews.",
+          "displayName" : "30-day Trial",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "Hmdalajmi.Laqta.trial30",
+      "referenceName" : "30-day Trial",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : true,
+      "internalID" : "6A11B0C2",
+      "localizations" : [
+        {
+          "description" : "Keep saving to Laqta for good. One payment, no subscription, every update included.",
+          "displayName" : "Laqta",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "Hmdalajmi.Laqta.unlock",
+      "referenceName" : "Laqta (full app)",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_billingIssuesEnabled" : false,
+    "_developerTeamID" : "Y9947WYZ9L",
+    "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}
