@@ -19,6 +19,12 @@ final class LibraryModel {
     private(set) var refreshToken = UUID()
     private(set) var isCleaningPhotos = false
     var lastCleanupMessage: String?
+    /// Originals Laqta believes it found but isn't sure about. The sheet shows each
+    /// one next to Laqta's own copy, and the user decides.
+    private(set) var originalsToConfirm: [OriginalToConfirm] = []
+    /// True once the user has asked for the cleanup themselves — a sheet full of
+    /// photos is an answer to a question they asked, not something to meet on launch.
+    private(set) var wantsOriginalsConfirmation = false
     /// Folder that just moved to the top (gold sweep on Home).
     private(set) var highlightedFolderID: UUID?
     /// Bumps when Recently Deleted changes, so counts refresh.
@@ -309,6 +315,31 @@ final class LibraryModel {
         (try? context.fetchCount(FetchDescriptor<Shot>(predicate: #Predicate<Shot> { $0.deletedAt != nil }))) ?? 0
     }
 
+    /// The user says this is the original: the item takes the asset's identifier, so
+    /// from now on it is known rather than guessed, and the deletion goes ahead.
+    func confirmOriginal(_ candidate: OriginalToConfirm, context: ModelContext) async {
+        originalsToConfirm.removeAll { $0.id == candidate.id }
+        if originalsToConfirm.isEmpty { wantsOriginalsConfirmation = false }
+        guard let item = LaqtaStore.item(with: candidate.id, context: context) else { return }
+        item.sourceAssetID = candidate.assetID
+        item.libraryStatus = .pendingDeletion
+        guard context.commit(.photoCleanup) else { return }
+        await runPhotoCleanup(context: context, userInitiated: true)
+    }
+
+    /// The user says it isn't: the original stays, and Laqta stops asking.
+    func keepOriginal(_ candidate: OriginalToConfirm, context: ModelContext) {
+        originalsToConfirm.removeAll { $0.id == candidate.id }
+        if originalsToConfirm.isEmpty { wantsOriginalsConfirmation = false }
+        guard let item = LaqtaStore.item(with: candidate.id, context: context) else { return }
+        item.libraryStatus = .declined
+        context.commit(.photoCleanup)
+    }
+
+    func dismissOriginalsToConfirm() {
+        wantsOriginalsConfirmation = false
+    }
+
     private func commitDeletion(
         files: [StoredFiles],
         operation: SaveOperation,
@@ -331,6 +362,14 @@ final class LibraryModel {
     }
 
     // MARK: Photos library
+
+    /// A guessed original, waiting to be looked at.
+    nonisolated struct OriginalToConfirm: Identifiable, Sendable, Equatable {
+        /// The item in Laqta.
+        let id: UUID
+        /// The asset in Photos the guess points at.
+        let assetID: String
+    }
 
     func pendingDeletionCount(context: ModelContext) -> Int {
         let pending = LibraryStatus.pendingDeletion.rawValue
@@ -400,34 +439,47 @@ final class LibraryModel {
             }
         }
 
-        let identifiers = Array(Set(matches.values))
+        // Only an original Laqta can name — one whose asset identifier the item itself
+        // carries — is deleted here. The rest were worked out from a file name, a pixel
+        // size and a capture time, and a photo is not something to delete on a guess.
+        let sure = pending.filter { matches[$0.id]?.isExact == true }
+        let guesses = pending.filter { matches[$0.id]?.isExact == false }
+        originalsToConfirm = guesses.compactMap { shot in
+            matches[shot.id].map { OriginalToConfirm(id: shot.id, assetID: $0.identifier) }
+        }
+        if userInitiated, !originalsToConfirm.isEmpty { wantsOriginalsConfirmation = true }
+        let identifiers = Array(Set(sure.compactMap { matches[$0.id]?.identifier }))
         guard !identifiers.isEmpty else {
             // Nothing was deleted from Photos, so a failed save here loses only a
             // "not in Photos any more" note that the next pass writes again.
             context.commit(.photoCleanup)
-            if userInitiated { lastCleanupMessage = "The originals are no longer in Photos." }
+            if userInitiated {
+                lastCleanupMessage = originalsToConfirm.isEmpty
+                    ? String(localized: "The originals are no longer in Photos.")
+                    : String(localized: "Laqta found photos that look like the originals. Check them before anything is deleted.")
+            }
             return
         }
 
         do {
             try await PhotoLibraryService.deleteAssets(withIdentifiers: identifiers)
-            for shot in pending where matches[shot.id] != nil {
+            for shot in sure {
                 shot.libraryStatus = .deleted
             }
             if userInitiated {
                 lastCleanupMessage = identifiers.count == 1
-                    ? "1 original moved to Recently Deleted in Photos."
-                    : "\(identifiers.count) originals moved to Recently Deleted in Photos."
+                    ? String(localized: "1 original moved to Recently Deleted in Photos.")
+                    : String(localized: "\(identifiers.count) originals moved to Recently Deleted in Photos.")
             }
         } catch {
             DebugLog.write("app: delete failed \(error)")
             if PhotoLibraryService.isUserCancellation(error) {
-                for shot in pending where matches[shot.id] != nil {
+                for shot in sure {
                     shot.libraryStatus = .declined
                 }
-                if userInitiated { lastCleanupMessage = "Kept. The originals stay in Photos." }
+                if userInitiated { lastCleanupMessage = String(localized: "Kept. The originals stay in Photos.") }
             } else if userInitiated {
-                lastCleanupMessage = "Photos couldn't delete the originals: \(error.localizedDescription)"
+                lastCleanupMessage = String(localized: "Photos couldn't delete the originals: \(error.localizedDescription)")
             }
         }
         // The originals are already gone from Photos: this save is the only record of

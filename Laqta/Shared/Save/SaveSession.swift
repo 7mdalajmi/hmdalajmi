@@ -853,24 +853,31 @@ final class SaveSession {
             skippedOwners[item.id] = match.itemID
         }
         let matches = await PhotoLibraryService.resolve(fingerprints)
-        let identifiers = Array(Set(matches.values))
+        // Only an original the item can name — one saved from inside Laqta, which
+        // carries the asset's own identifier — is deleted from here. An item shared
+        // from another app brings no identifier, so its original is a guess worked out
+        // from the file name, size and time; it stays where it is and waits for the
+        // app, which shows it to the user next to Laqta's copy before deleting it.
+        let sure = matches.filter { $0.value.isExact }
+        let identifiers = Array(Set(sure.values.map(\.identifier)))
         guard !identifiers.isEmpty else { return shots.isEmpty ? .notRequested : .waitingForApp }
 
         let outcome: RemovalOutcome
         let existing = LaqtaStore.items(withIDs: Array(skippedOwners.values), context: context)
         do {
             try await PhotoLibraryService.deleteAssets(withIdentifiers: identifiers)
-            for shot in shots where matches[shot.id] != nil {
+            for shot in shots where sure[shot.id] != nil {
                 shot.libraryStatus = .deleted
             }
-            for (stagedID, ownerID) in skippedOwners where matches[stagedID] != nil {
+            for (stagedID, ownerID) in skippedOwners where sure[stagedID] != nil {
                 existing.first { $0.id == ownerID }?.libraryStatus = .deleted
             }
-            outcome = .removed(identifiers.count)
+            // Anything Laqta only guessed at is still pending, and the app finishes it.
+            outcome = sure.count < matches.count ? .waitingForApp : .removed(identifiers.count)
         } catch {
             DebugLog.write("save: delete failed \(error)")
             guard PhotoLibraryService.isUserCancellation(error) else { return .waitingForApp }
-            for shot in shots where matches[shot.id] != nil {
+            for shot in shots where sure[shot.id] != nil {
                 shot.libraryStatus = .declined
             }
             outcome = .declined

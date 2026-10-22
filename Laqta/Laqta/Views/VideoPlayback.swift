@@ -156,21 +156,24 @@ struct PlayerLayerView: UIViewRepresentable {
     func makeUIView(context: Context) -> PlayerContainerView {
         let view = PlayerContainerView()
         view.accessibilityIgnoresInvertColors = true
-        view.playerLayer.videoGravity = .resizeAspect
-        view.playerLayer.player = player
+        view.playerLayer?.videoGravity = .resizeAspect
+        view.playerLayer?.player = player
         view.backgroundColor = .clear
         return view
     }
 
     func updateUIView(_ view: PlayerContainerView, context: Context) {
-        if view.playerLayer.player !== player {
-            view.playerLayer.player = player
+        if view.playerLayer?.player !== player {
+            view.playerLayer?.player = player
         }
     }
 
     final class PlayerContainerView: UIView {
         override static var layerClass: AnyClass { AVPlayerLayer.self }
-        var playerLayer: AVPlayerLayer { layer as! AVPlayerLayer }
+        /// `layerClass` makes this the view's own layer, so it is always there. It is
+        /// still asked for rather than forced: if some future UIKit hands back another
+        /// layer, the video goes missing — it doesn't take the app with it.
+        var playerLayer: AVPlayerLayer? { layer as? AVPlayerLayer }
     }
 }
 

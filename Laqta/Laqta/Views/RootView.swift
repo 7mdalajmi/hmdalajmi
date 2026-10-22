@@ -170,6 +170,15 @@ struct RootView: View {
             reminders.clearTapped()
             openTapped(tapped)
         }
+        // A photo is never deleted from Photos on a likeness: the sheet puts the two
+        // side by side first. It only opens when the cleanup was asked for.
+        .sheet(isPresented: Binding(
+            get: { library.wantsOriginalsConfirmation },
+            set: { if !$0 { library.dismissOriginalsToConfirm() } }
+        )) {
+            ConfirmOriginalsSheet()
+                .laqtaThemed()
+        }
         .sheet(item: $openedBackup) { opened in
             BackupsScreen(openedFile: opened.url)
                 .laqtaThemed()
