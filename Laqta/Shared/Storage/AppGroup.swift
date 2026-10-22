@@ -155,6 +155,9 @@ nonisolated enum SettingsKey {
     static let lastLibraryChange = "libraryLastChange"
     /// A damaged library was set aside: the app puts the newest backup into the new one.
     static let needsBackupAfterRecovery = "libraryNeedsBackupAfterRecovery"
+    /// When the Share Extension first had to save without iCloud mirroring, so the app
+    /// can make sure those items reach iCloud.
+    static let savedWithoutSyncSince = "cloudSavedWithoutSyncSince"
     static let lastPurgeAt = "trashLastPurge"
     static let lastYouTubeRefresh = "youTubeLastRefresh"
     // Trial and purchase

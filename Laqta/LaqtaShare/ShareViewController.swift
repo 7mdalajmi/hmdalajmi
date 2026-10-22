@@ -307,7 +307,10 @@ private struct ShareRoot: View {
             // there, instead of in front of a blank one.
             try? await Task.sleep(for: .milliseconds(1))
             do {
-                let opened = try LaqtaStore.makeContainer()
+                // The same setting the app opens with. Opening this file without
+                // mirroring while the app opens it with mirroring is how a shared
+                // item could stay on this phone and never reach the other devices.
+                let opened = try LaqtaStore.makeContainer(cloudSync: LaqtaStore.syncIsWanted)
                 // Only a library that has never been opened needs seeding. Every
                 // migration after that belongs to the app, not to a share.
                 if !AppGroup.defaults.bool(forKey: SettingsKey.didSeedFolders) {
@@ -318,7 +321,20 @@ private struct ShareRoot: View {
                 // them is drawn on the sheet any more.
                 ShareTiming.mark("library")
             } catch {
-                failure = error.localizedDescription
+                DebugLog.write("share: library open failed — \(error)")
+                // Saving is what the share sheet is for, so a library that won't open
+                // with mirroring is opened without it rather than refusing the save.
+                // The stamp tells the app to push those items up when it next runs.
+                guard LaqtaStore.syncIsWanted, let local = try? LaqtaStore.makeContainer(cloudSync: false) else {
+                    failure = error.localizedDescription
+                    return
+                }
+                let defaults = AppGroup.defaults
+                if defaults.double(forKey: SettingsKey.savedWithoutSyncSince) <= 0 {
+                    defaults.set(Date.now.timeIntervalSince1970, forKey: SettingsKey.savedWithoutSyncSince)
+                }
+                container = local
+                ShareTiming.mark("library")
             }
         }
     }

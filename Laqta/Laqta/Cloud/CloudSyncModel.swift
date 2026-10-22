@@ -118,12 +118,37 @@ final class CloudSyncModel {
     func appDidBecomeActive(context: ModelContext) {
         refreshStatus()
         guard isEnabled, store?.isSyncActive == true else { return }
+        exportItemsSavedWithoutSync(context: context)
         Task {
             if !CloudContainer.isResolved {
                 _ = await CloudContainer.resolve()
             }
             await uploadPendingMedia(context: context)
         }
+    }
+
+    /// Pushes up what the Share Extension saved while it couldn't open the library
+    /// with mirroring on.
+    ///
+    /// Those saves are outside the history CloudKit exports from, so without this
+    /// they would sit on one phone and look synced. Writing each item's index again
+    /// is a real change with the same meaning, which is all mirroring needs to carry
+    /// it up.
+    private func exportItemsSavedWithoutSync(context: ModelContext) {
+        let defaults = AppGroup.defaults
+        let stamp = defaults.double(forKey: SettingsKey.savedWithoutSyncSince)
+        guard stamp > 0 else { return }
+        // A minute back, because the share may have begun before the stamp was written.
+        let since = Date(timeIntervalSince1970: stamp - 60)
+        var descriptor = FetchDescriptor<Shot>(predicate: #Predicate<Shot> { $0.addedAt >= since })
+        descriptor.fetchLimit = 500
+        let items = (try? context.fetch(descriptor)) ?? []
+        for item in items {
+            item.refreshIndex()
+        }
+        guard context.commit(.cloudMove) else { return }
+        defaults.removeObject(forKey: SettingsKey.savedWithoutSyncSince)
+        DebugLog.write("cloud: pushed up \(items.count) item(s) saved without mirroring")
     }
 
     private func accountChanged() {

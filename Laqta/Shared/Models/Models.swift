@@ -608,13 +608,40 @@ nonisolated final class AnalysisCache: Sendable {
 
 // MARK: - Container
 
+/// Laqta 1.0's library, named so a later shape can be migrated from it.
+///
+/// It was unversioned until now, which left no way to describe a change to the
+/// models: SwiftData can only migrate between schemas it has been told about.
+/// The version is the one the unversioned schema already had (`Schema`'s own
+/// default), so no existing library is touched by naming it.
+nonisolated enum LaqtaSchemaV1: VersionedSchema {
+    static var versionIdentifier: Schema.Version { Schema.Version(1, 0, 0) }
+    static var models: [any PersistentModel.Type] { [Folder.self, Shot.self] }
+}
+
+/// Every shape of the library Laqta has shipped, oldest first. A new version is
+/// added here with the stage that reaches it; today there is one, and no stage.
+nonisolated enum LaqtaMigrationPlan: SchemaMigrationPlan {
+    static var schemas: [any VersionedSchema.Type] { [LaqtaSchemaV1.self] }
+    static var stages: [MigrationStage] { [] }
+}
+
 enum LaqtaStore {
-    static let schema = Schema([Folder.self, Shot.self])
+    static let schema = Schema(versionedSchema: LaqtaSchemaV1.self)
+
+    /// Whether the library should mirror to CloudKit.
+    ///
+    /// The app and the Share Extension have to agree, and they used to not: the app
+    /// opened the library with mirroring and the extension opened the same file
+    /// without it. Both read this now, so they can't drift apart.
+    static var syncIsWanted: Bool {
+        !AppEnvironment.isRunningTests && CloudConfig.isSyncEnabled && CloudConfig.isAccountAvailable
+    }
 
     static func makeContainer(cloudSync: Bool = false, inMemory: Bool = false) throws -> ModelContainer {
         if inMemory {
             let configuration = ModelConfiguration("Laqta", schema: schema, isStoredInMemoryOnly: true, allowsSave: true, cloudKitDatabase: .none)
-            return try ModelContainer(for: schema, configurations: [configuration])
+            return try ModelContainer(for: schema, migrationPlan: LaqtaMigrationPlan.self, configurations: [configuration])
         }
         try AppGroup.prepareDirectories()
         let database: ModelConfiguration.CloudKitDatabase = cloudSync ? .private(CloudConfig.containerIdentifier) : .none
@@ -625,7 +652,7 @@ enum LaqtaStore {
             allowsSave: true,
             cloudKitDatabase: database
         )
-        return try ModelContainer(for: schema, configurations: [configuration])
+        return try ModelContainer(for: schema, migrationPlan: LaqtaMigrationPlan.self, configurations: [configuration])
     }
 
     // MARK: A library that won't open

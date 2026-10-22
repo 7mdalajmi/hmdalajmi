@@ -37,7 +37,7 @@ final class LibraryStore {
 
     private func open() {
         let inMemory = AppEnvironment.isRunningTests
-        let wantsSync = !inMemory && CloudConfig.isSyncEnabled && CloudConfig.isAccountAvailable
+        let wantsSync = LaqtaStore.syncIsWanted
         #if DEBUG
         if wantsSync {
             CloudSchema.initializeIfNeeded()
