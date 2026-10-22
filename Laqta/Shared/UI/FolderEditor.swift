@@ -273,7 +273,8 @@ struct FolderEditorSheet: View {
         } else {
             target = LibraryWriter.createFolder(name: trimmedName, tone: tone, symbol: symbol, locked: isLocked, parentID: parentID, context: modelContext)
         }
-        try? modelContext.save()
+        // The sheet stays open when the save fails, so the button itself is the retry.
+        guard modelContext.commit(folder == nil ? .newFolder : .folderEdit) else { return }
         if AppGroup.isRunningInExtension { AppGroup.markExternalChange() }
         dismiss()
         onSaved(target)

@@ -312,12 +312,12 @@ final class CloudSyncModel {
                 }
                 self.pendingUploads = max(0, self.pendingUploads - 1)
                 if changed > 0, changed % 20 == 0 {
-                    try? context.save()
+                    context.commit(.cloudMove)
                 }
                 self.refreshStatus()
             }
             if changed > 0 {
-                try? context.save()
+                context.commit(.cloudMove)
             }
             self.pendingUploads = 0
             self.refreshStatus()

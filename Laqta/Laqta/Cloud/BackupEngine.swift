@@ -451,7 +451,8 @@ enum BackupRestorer {
         let total = max(manifest.items.count, 1)
         for (index, record) in manifest.items.enumerated() {
             if Task.isCancelled {
-                try? context.save()
+                // What is already restored is kept; a failure here puts it back.
+                try? context.commit()
                 throw BackupError.cancelled
             }
             defer {
@@ -502,10 +503,12 @@ enum BackupRestorer {
             context.insert(item)
             summary.addedItems += 1
             if summary.addedItems % 50 == 0 {
-                try? context.save()
+                // A batch that can't be stored stops the restore with the real reason,
+                // instead of counting items that were never written.
+                try context.commit()
             }
         }
-        try context.save()
+        try context.commit()
         LibraryWriter.noteChange()
         BackupEngine.finish(prepared)
         return summary

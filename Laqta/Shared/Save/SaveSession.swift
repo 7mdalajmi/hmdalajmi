@@ -668,7 +668,10 @@ final class SaveSession {
         // is still free, leaning toward the same meaning anyway.
         guard case let .new(name, symbol, _)? = suggestion?.target else { return }
         let folder = LibraryWriter.createFolder(name: name, symbol: symbol, locked: false, context: context)
-        try? context.save()
+        guard context.commit(.newFolder) else {
+            phase = .failed(String(localized: "Laqta couldn't make that folder. Try again, or pick a folder you already have."))
+            return
+        }
         await choose(folder, context: context)
     }
 
@@ -865,7 +868,8 @@ final class SaveSession {
             }
             outcome = .declined
         }
-        try? context.save()
+        // The originals have already left Photos; this is the only record of it.
+        context.commit(.photoCleanup)
         AppGroup.markExternalChange()
         return outcome
     }

@@ -107,6 +107,7 @@ struct RootView: View {
     @State private var sidebarSelection: SidebarItem? = .home
     @State private var curtainVisible = false
     @State private var openedBackup: OpenedBackup?
+    @State private var showingBackups = false
     @State private var dropImport = DropImportModel()
     @State private var showingWelcome = false
 
@@ -139,13 +140,15 @@ struct RootView: View {
         .environment(dropImport)
         .dropImportSheet(dropImport)
         .toastHost(toasts)
-        .alert("Laqta couldn't save the change", isPresented: Binding(
-            get: { library.storageError != nil },
-            set: { if !$0 { library.storageError = nil } }
-        )) {
-            Button("OK") { library.storageError = nil }
-        } message: {
-            Text(verbatim: library.storageError ?? "")
+        // A change that didn't reach the library says so until it is answered, and
+        // the sheet behind it offers the way out: try again, or restore a backup.
+        .saveFailureHost()
+        .environment(\.saveFailureRecovery, SaveFailureRecovery(title: "Restore from a Backup") {
+            showingBackups = true
+        })
+        .sheet(isPresented: $showingBackups) {
+            BackupsScreen()
+                .laqtaThemed()
         }
         .overlay {
             if curtainVisible {
@@ -187,6 +190,14 @@ struct RootView: View {
         )) { reason in
             PaywallSheet(reason: reason)
                 .laqtaThemed()
+        }
+        // A library that had to be started from nothing is filled from the newest
+        // backup here, where there is a context to restore into.
+        .task {
+            let defaults = AppGroup.defaults
+            guard defaults.bool(forKey: SettingsKey.needsBackupAfterRecovery) else { return }
+            defaults.set(false, forKey: SettingsKey.needsBackupAfterRecovery)
+            await backups.restoreNewestAfterRecovery()
         }
         .task {
             purchases.start()

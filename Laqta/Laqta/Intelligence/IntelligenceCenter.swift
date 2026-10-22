@@ -118,7 +118,7 @@ final class IntelligenceCenter {
                 await analyzeLink(item, context: context, mode: mode)
             } else {
                 item.analysisState = .shallow
-                try? context.save()
+                context.commit(.analysis)
             }
         case .photo:
             guard AppGroup.bool(SettingsKey.analyzeShots) else { return }
@@ -207,7 +207,7 @@ final class IntelligenceCenter {
         }
         analysis.analyzedAt = .now
         item.store(analysis, state: .done)
-        try? context.save()
+        context.commit(.analysis)
     }
 
     private func defaultQuestions(for analysis: ShotAnalysis, isScreenshot: Bool) -> [String] {
@@ -276,7 +276,7 @@ final class IntelligenceCenter {
         finishVideo(&analysis, item: item)
         item.store(analysis, state: .done)
         fresh.insert(item.id)
-        try? context.save()
+        context.commit(.analysis)
     }
 
     /// Transcribes (again) in a chosen language. Downloads the speech model when needed.
@@ -299,7 +299,10 @@ final class IntelligenceCenter {
         finishVideo(&analysis, item: item)
         item.store(analysis, state: item.analysisState == .pending ? .pending : .done)
         fresh.insert(item.id)
-        try? context.save()
+        // Reading the speech again is minutes of work: this one offers to try the save.
+        context.commit(.transcript, retry: { [weak self] in
+            Task { await self?.transcribe(item, language: language, context: context) }
+        })
     }
 
     private func apply(_ outcome: TranscriptionOutcome, to analysis: inout ShotAnalysis) {
@@ -447,7 +450,7 @@ final class IntelligenceCenter {
         analysis.analyzedAt = .now
         item.store(analysis, state: .done)
         fresh.insert(item.id)
-        try? context.save()
+        context.commit(.analysis)
     }
 
     // MARK: Links
@@ -455,7 +458,9 @@ final class IntelligenceCenter {
     func extractEverything(_ item: Shot, context: ModelContext) async {
         item.deepAnalysis = true
         item.analysisState = .pending
-        try? context.save()
+        guard context.commit(.linkDetails, retry: { [weak self] in
+            Task { await self?.extractEverything(item, context: context) }
+        }) else { return }
         await analyzeLink(item, context: context)
     }
 
@@ -463,7 +468,7 @@ final class IntelligenceCenter {
         guard !running.contains(item.id), let url = item.url else {
             if item.url == nil {
                 item.analysisState = .failed
-                try? context.save()
+                context.commit(.analysis)
             }
             return
         }
@@ -585,7 +590,7 @@ final class IntelligenceCenter {
         item.deepAnalysis = true
         item.store(analysis, state: .done)
         fresh.insert(item.id)
-        try? context.save()
+        context.commit(.linkDetails)
     }
 
     // MARK: Summaries
@@ -613,7 +618,7 @@ final class IntelligenceCenter {
         analysis.summary = Array(points.prefix(5))
         fresh.insert(item.id)
         item.store(analysis, state: item.analysisState == .pending ? .pending : .done)
-        try? context.save()
+        context.commit(.analysis)
     }
 
     // MARK: Questions

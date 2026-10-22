@@ -628,6 +628,48 @@ enum LaqtaStore {
         return try ModelContainer(for: schema, configurations: [configuration])
     }
 
+    // MARK: A library that won't open
+
+    /// Where a library that wouldn't open is kept.
+    ///
+    /// Nothing is deleted. A store SwiftData refuses today can still be readable by a
+    /// later build, by a Mac, or by hand — and it is the only copy of everything the
+    /// last backup doesn't have.
+    static var damagedURL: URL {
+        AppGroup.rootURL.appending(path: "Damaged", directoryHint: .isDirectory)
+    }
+
+    /// The library and the files SQLite keeps beside it.
+    static var libraryFileURLs: [URL] {
+        let store = AppGroup.storeURL
+        let folder = store.deletingLastPathComponent()
+        return ["", "-wal", "-shm"].map { folder.appending(path: store.lastPathComponent + $0) }
+    }
+
+    /// Moves the library aside so a new, empty one can open in its place.
+    /// Returns the folder it was moved to.
+    @discardableResult
+    static func setDamagedLibraryAside(now: Date = .now) throws -> URL {
+        let manager = FileManager.default
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd-HHmmss"
+        let folder = damagedURL.appending(path: "Laqta-\(formatter.string(from: now))", directoryHint: .isDirectory)
+        try manager.createDirectory(at: folder, withIntermediateDirectories: true)
+        var moved = false
+        for url in libraryFileURLs where manager.fileExists(atPath: url.path(percentEncoded: false)) {
+            try manager.moveItem(at: url, to: folder.appending(path: url.lastPathComponent))
+            moved = true
+        }
+        guard moved else {
+            try? manager.removeItem(at: folder)
+            // Nothing to move: the library is missing rather than damaged, and opening
+            // it again makes a new one anyway.
+            throw CocoaError(.fileNoSuchFile)
+        }
+        return folder
+    }
+
     /// First launch folders.
     static func seedIfNeeded(_ context: ModelContext) {
         let defaults = AppGroup.defaults
@@ -644,7 +686,9 @@ enum LaqtaStore {
                 folder.updatedAt = now.addingTimeInterval(Double(-index) * 60)
                 context.insert(folder)
             }
-            try? context.save()
+            // Marking the library seeded after a save that didn't happen left it empty
+            // for good: the flag only goes down once the folders are really stored.
+            guard context.commit(.setUp) else { return }
         }
         defaults.set(true, forKey: SettingsKey.didSeedFolders)
         defaults.set(true, forKey: SettingsKey.didUpgradeTo2)
@@ -666,7 +710,7 @@ enum LaqtaStore {
                 }
                 folder.symbol = FolderSymbols.outline(folder.symbol)
             }
-            try? context.save()
+            guard context.commit(.setUp) else { return }
             defaults.set(true, forKey: SettingsKey.didUpgradeTo2)
         }
         if !defaults.bool(forKey: SettingsKey.didUpgradeTo21) {
@@ -676,7 +720,7 @@ enum LaqtaStore {
             for link in links {
                 if let url = link.url { link.linkKey = DuplicateKey.link(for: url) }
             }
-            try? context.save()
+            guard context.commit(.setUp) else { return }
             defaults.set(true, forKey: SettingsKey.didUpgradeTo21)
         }
         if !defaults.bool(forKey: SettingsKey.didCheckModelPlaces) {
@@ -692,7 +736,7 @@ enum LaqtaStore {
                     photo.analysisState = .pending
                 }
             }
-            try? context.save()
+            guard context.commit(.setUp) else { return }
             defaults.set(true, forKey: SettingsKey.didCheckModelPlaces)
         }
     }

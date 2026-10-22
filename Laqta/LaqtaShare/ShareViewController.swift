@@ -292,6 +292,7 @@ private struct ShareRoot: View {
             if let container {
                 SaveSheet(session: session)
                     .modelContainer(container)
+                    .saveFailureHost()
             } else if let failure {
                 ShareUnavailableView(message: failure, onClose: onClose)
             } else {

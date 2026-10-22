@@ -103,7 +103,7 @@ enum FolderMerge {
             apply(pair, context: context)
         }
         if !ready.isEmpty {
-            try? context.save()
+            guard context.commit(.merge) else { return 0 }
             DebugLog.write("merge: folded \(ready.count) empty folder(s)")
         }
         return ready.count
@@ -111,7 +111,7 @@ enum FolderMerge {
 
     static func merge(_ pair: FolderMergePair, context: ModelContext) {
         apply(pair, context: context)
-        try? context.save()
+        guard context.commit(.merge, retry: { merge(pair, context: context) }) else { return }
         DebugLog.write("merge: joined “\(pair.name)” (\(pair.total) items)")
     }
 

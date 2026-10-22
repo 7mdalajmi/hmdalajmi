@@ -399,7 +399,7 @@ private struct DocumentContent: View {
                             .foregroundStyle(palette.ink2)
                         Button {
                             item.analysisState = .pending
-                            try? modelContext.save()
+                            guard modelContext.commit(.analysis) else { return }
                             Task { await intelligence.analyzeDocument(item, context: modelContext) }
                         } label: {
                             LaqtaButtonLabel("Read Again", systemImage: "arrow.clockwise", kind: .line, small: true)

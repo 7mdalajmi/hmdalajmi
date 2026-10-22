@@ -246,6 +246,25 @@ final class BackupCenter {
         }
     }
 
+    /// Puts the newest iCloud backup back into a library that was just started from
+    /// nothing, without asking: there is nothing in it to lose, and the alternative is
+    /// an empty app with the user's shots still sitting in iCloud.
+    func restoreNewestAfterRecovery() async {
+        guard !isBusy, context != nil else { return }
+        await loadBackups()
+        guard let newest = backups.max(by: { $0.createdAt < $1.createdAt }) else {
+            notice = Notice(
+                title: String(localized: "Nothing to put back"),
+                text: waitingBackups > 0
+                    ? String(localized: "Laqta started a new library. Its backups haven't finished downloading from iCloud — open Backups in Settings once they have.")
+                    : String(localized: "Laqta started a new library. There is no backup of the old one in iCloud, so there is nothing to put back.")
+            )
+            return
+        }
+        DebugLog.write("store: restoring \(newest.id) into the new library")
+        restore(newest)
+    }
+
     func restore(fileAt url: URL) {
         let handler = progressHandler()
         runRestore {

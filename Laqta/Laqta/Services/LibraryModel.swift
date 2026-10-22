@@ -19,7 +19,6 @@ final class LibraryModel {
     private(set) var refreshToken = UUID()
     private(set) var isCleaningPhotos = false
     var lastCleanupMessage: String?
-    var storageError: String?
     /// Folder that just moved to the top (gold sweep on Home).
     private(set) var highlightedFolderID: UUID?
     /// Bumps when Recently Deleted changes, so counts refresh.
@@ -64,14 +63,22 @@ final class LibraryModel {
     // MARK: Editing
 
     func move(_ items: [Shot], to folder: Folder, context: ModelContext) {
+        let ids = items.map(\.id)
+        let folderID = folder.id
         LibraryWriter.move(items, to: folder)
-        try? context.save()
+        guard context.commit(.move, retry: { [weak self] in
+            guard let self, let folder = LaqtaStore.folder(with: folderID, context: context) else { return }
+            self.move(LaqtaStore.items(withIDs: ids, context: context), to: folder, context: context)
+        }) else { return }
         highlight(folder.id)
     }
 
     func toggleFavorite(_ item: Shot, context: ModelContext) {
         item.isFavorite.toggle()
-        try? context.save()
+        // The rollback puts the old value back, so doing it again means the same thing.
+        guard context.commit(.favorite, retry: { [weak self] in
+            self?.toggleFavorite(item, context: context)
+        }) else { return }
         LibraryWriter.noteChange()
     }
 
@@ -86,14 +93,18 @@ final class LibraryModel {
 
     func setNote(_ text: String, for item: Shot, context: ModelContext) {
         item.setNote(text)
-        try? context.save()
+        guard context.commit(.note, retry: { [weak self] in
+            self?.setNote(text, for: item, context: context)
+        }) else { return }
         LibraryWriter.noteChange()
     }
 
     func setSort(_ sort: FolderSort, for folder: Folder, context: ModelContext) {
         guard folder.sort != sort else { return }
         folder.sort = sort
-        try? context.save()
+        context.commit(.sort, retry: { [weak self] in
+            self?.setSort(sort, for: folder, context: context)
+        })
     }
 
     // MARK: Recently Deleted
@@ -108,7 +119,10 @@ final class LibraryModel {
             item.deletedAt = now
             item.deletionBatch = batch
         }
-        try? context.save()
+        let ids = live.map(\.id)
+        guard context.commit(.trash, retry: { [weak self] in
+            self?.trash(LaqtaStore.items(withIDs: ids, context: context), context: context)
+        }) else { return }
         LibraryWriter.noteChange()
         trashVersion += 1
     }
@@ -128,7 +142,11 @@ final class LibraryModel {
                 item.deletionBatch = batch
             }
         }
-        try? context.save()
+        let folderID = folder.id
+        guard context.commit(.trash, retry: { [weak self] in
+            guard let self, let folder = LaqtaStore.folder(with: folderID, context: context) else { return }
+            self.trash(folder: folder, context: context)
+        }) else { return }
         LibraryWriter.noteChange()
         trashVersion += 1
     }
@@ -150,7 +168,10 @@ final class LibraryModel {
             }
             folder.touch()
         }
-        try? context.save()
+        let ids = items.map(\.id)
+        guard context.commit(.restore, retry: { [weak self] in
+            self?.restore(LaqtaStore.items(withIDs: ids, context: context), context: context)
+        }) else { return }
         LibraryWriter.noteChange()
         trashVersion += 1
         if let first = folders.first { highlight(first) }
@@ -180,7 +201,11 @@ final class LibraryModel {
             folder.parentID = nil
         }
         folder.touch()
-        try? context.save()
+        let folderID = folder.id
+        guard context.commit(.restore, retry: { [weak self] in
+            guard let self, let folder = LaqtaStore.folder(with: folderID, context: context) else { return }
+            self.restore(folder: folder, context: context)
+        }) else { return }
         LibraryWriter.noteChange()
         trashVersion += 1
         highlight(folder.id)
@@ -189,10 +214,13 @@ final class LibraryModel {
     /// Removes items and their files for good.
     func deletePermanently(_ items: [Shot], context: ModelContext) {
         let files = items.map { StoredFiles(fileName: $0.fileName, thumbnailName: $0.thumbnailName) }
+        let ids = items.map(\.id)
         for item in items {
             context.delete(item)
         }
-        guard commitDeletion(files: files, context: context) else { return }
+        guard commitDeletion(files: files, operation: .delete, context: context, retry: { [weak self] in
+            self?.deletePermanently(LaqtaStore.items(withIDs: ids, context: context), context: context)
+        }) else { return }
         LibraryWriter.noteChange()
         trashVersion += 1
     }
@@ -217,7 +245,11 @@ final class LibraryModel {
             }
             if !holdsSomethingLive { context.delete(gone) }
         }
-        guard commitDeletion(files: files, context: context) else { return }
+        let folderID = folder.id
+        guard commitDeletion(files: files, operation: .delete, context: context, retry: { [weak self] in
+            guard let self, let folder = LaqtaStore.folder(with: folderID, context: context) else { return }
+            self.deletePermanently(folder: folder, context: context)
+        }) else { return }
         LibraryWriter.noteChange()
         trashVersion += 1
     }
@@ -234,7 +266,9 @@ final class LibraryModel {
             let remaining = (try? context.fetchCount(FetchDescriptor<Shot>(predicate: #Predicate<Shot> { $0.folderID == target }))) ?? 0
             if remaining == 0 { context.delete(folder) }
         }
-        guard commitDeletion(files: files, context: context) else { return }
+        guard commitDeletion(files: files, operation: .emptyTrash, context: context, retry: { [weak self] in
+            self?.emptyTrash(context: context)
+        }) else { return }
         LibraryWriter.noteChange()
         trashVersion += 1
     }
@@ -263,7 +297,8 @@ final class LibraryModel {
             }
         }
         if !expired.isEmpty || removedFolders > 0 {
-            guard commitDeletion(files: files, context: context) else { return 0 }
+            // No retry: the next launch, or the next six hours, comes back to it anyway.
+            guard commitDeletion(files: files, operation: .purge, context: context, retry: nil) else { return 0 }
             trashVersion += 1
         }
         AppGroup.defaults.set(now.timeIntervalSince1970, forKey: SettingsKey.lastPurgeAt)
@@ -274,15 +309,13 @@ final class LibraryModel {
         (try? context.fetchCount(FetchDescriptor<Shot>(predicate: #Predicate<Shot> { $0.deletedAt != nil }))) ?? 0
     }
 
-    private func commitDeletion(files: [StoredFiles], context: ModelContext) -> Bool {
-        do {
-            try context.save()
-            storageError = nil
-        } catch {
-            context.rollback()
-            storageError = error.localizedDescription
-            return false
-        }
+    private func commitDeletion(
+        files: [StoredFiles],
+        operation: SaveOperation,
+        context: ModelContext,
+        retry: (@MainActor () -> Void)?
+    ) -> Bool {
+        guard context.commit(operation, retry: retry) else { return false }
         // Bytes are deleted only after the record deletion is durable. A duplicate
         // CloudKit record may still reference the same file, so retain that copy.
         guard let remaining = try? context.fetch(FetchDescriptor<Shot>()) else { return true }
@@ -322,7 +355,9 @@ final class LibraryModel {
         for item in LaqtaStore.items(withIDs: ids, context: context) {
             item.libraryStatus = .pendingDeletion
         }
-        try? context.save()
+        guard context.commit(.photoCleanup, retry: { [weak self] in
+            Task { await self?.queueForDeletion(ids, context: context) }
+        }) else { return }
         await runPhotoCleanup(context: context, userInitiated: true)
     }
 
@@ -367,7 +402,9 @@ final class LibraryModel {
 
         let identifiers = Array(Set(matches.values))
         guard !identifiers.isEmpty else {
-            try? context.save()
+            // Nothing was deleted from Photos, so a failed save here loses only a
+            // "not in Photos any more" note that the next pass writes again.
+            context.commit(.photoCleanup)
             if userInitiated { lastCleanupMessage = "The originals are no longer in Photos." }
             return
         }
@@ -393,6 +430,8 @@ final class LibraryModel {
                 lastCleanupMessage = "Photos couldn't delete the originals: \(error.localizedDescription)"
             }
         }
-        try? context.save()
+        // The originals are already gone from Photos: this save is the only record of
+        // it, so its failure has to be said out loud rather than swallowed.
+        context.commit(.photoCleanup)
     }
 }

@@ -35,7 +35,7 @@ enum LibraryDeduplicator {
             }
         }
         if removed > 0 {
-            try? context.save()
+            guard context.commit(.deduplicate) else { return 0 }
             DebugLog.write("dedupe: removed \(removed)")
         }
         return removed

@@ -93,7 +93,7 @@ private struct AppRoot: View {
             ReopeningView()
                 .transition(.opacity)
         } else {
-            LaunchErrorView(message: store.launchError ?? "")
+            LaunchRecoveryView(store: store)
         }
     }
 }
@@ -118,26 +118,66 @@ private struct ReopeningView: View {
     }
 }
 
-private struct LaunchErrorView: View {
-    let message: String
+/// The library wouldn't open.
+///
+/// This used to be the end of the app: a sentence, and no way forward. Now it offers
+/// the two things that actually work — open it again (the reason is often temporary:
+/// a full device, an iCloud account mid-sign-in), or set the library aside and start a
+/// new one, which the app fills from the newest iCloud backup by itself. The old files
+/// are never deleted.
+private struct LaunchRecoveryView: View {
+    let store: LibraryStore
+
     @Environment(\.laqta) private var palette
 
     var body: some View {
         ZStack {
             LaqtaBackground()
-            VStack(spacing: 14) {
-                Text(verbatim: "Laqta")
-                    .laqtaDisplayFont(50, maxScale: 1.1)
-                    .foregroundStyle(palette.goldHi)
-                Text("Laqta couldn't open your library.")
-                    .laqtaFont(17, weight: .semibold)
-                    .foregroundStyle(palette.ink)
-                Text(verbatim: message)
-                    .laqtaFont(13)
-                    .foregroundStyle(palette.ink2)
-                    .multilineTextAlignment(.center)
+            ScrollView {
+                VStack(spacing: 14) {
+                    Text(verbatim: "Laqta")
+                        .laqtaDisplayFont(50, maxScale: 1.1)
+                        .foregroundStyle(palette.goldHi)
+                    Text("Laqta couldn't open your library.")
+                        .laqtaFont(17, weight: .semibold)
+                        .foregroundStyle(palette.ink)
+                        .multilineTextAlignment(.center)
+                    Text(verbatim: store.launchError ?? "")
+                        .laqtaFont(13)
+                        .foregroundStyle(palette.ink2)
+                        .multilineTextAlignment(.center)
+                        .fixedSize(horizontal: false, vertical: true)
+                    if store.isRecovering {
+                        ProgressView()
+                            .tint(palette.goldHi)
+                            .padding(.top, 8)
+                    } else {
+                        VStack(spacing: 10) {
+                            Button {
+                                store.tryAgain()
+                            } label: {
+                                LaqtaButtonLabel("Open It Again", systemImage: "arrow.clockwise", fullWidth: true)
+                            }
+                            .buttonStyle(.pressable)
+                            Button {
+                                store.recoverFromDamagedLibrary()
+                            } label: {
+                                LaqtaButtonLabel("Start a New Library", systemImage: "clock.arrow.circlepath", kind: .line, fullWidth: true)
+                            }
+                            .buttonStyle(.pressable)
+                        }
+                        .padding(.top, 10)
+                        Text("Starting a new library keeps the old one on this device, untouched, and puts your newest iCloud backup into the new one straight away.")
+                            .laqtaFont(12)
+                            .foregroundStyle(palette.ink3)
+                            .multilineTextAlignment(.center)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .frame(maxWidth: 420)
+                .padding(32)
+                .frame(maxWidth: .infinity)
             }
-            .padding(32)
         }
     }
 }

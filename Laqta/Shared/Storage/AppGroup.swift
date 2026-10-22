@@ -153,6 +153,8 @@ nonisolated enum SettingsKey {
     /// Same-name folders the user chose to keep apart, so the offer isn't made twice.
     static let declinedFolderMerges = "cloudDeclinedFolderMerges"
     static let lastLibraryChange = "libraryLastChange"
+    /// A damaged library was set aside: the app puts the newest backup into the new one.
+    static let needsBackupAfterRecovery = "libraryNeedsBackupAfterRecovery"
     static let lastPurgeAt = "trashLastPurge"
     static let lastYouTubeRefresh = "youTubeLastRefresh"
     // Trial and purchase

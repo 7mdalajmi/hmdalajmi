@@ -70,7 +70,7 @@ enum YouTubeRefresher {
             guard let url = item.url else { continue }
             update(item, with: await YouTubeReader.read(url), now: now)
         }
-        try? context.save()
+        guard context.commit(.linkDetails) else { return }
         LibraryWriter.noteChange()
     }
 
