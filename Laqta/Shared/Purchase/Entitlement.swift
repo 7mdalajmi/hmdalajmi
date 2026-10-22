@@ -10,18 +10,28 @@
 //  Extension only reads it, because an extension has a second to draw and no business
 //  talking to the store.
 //
+//  The thirty days are counted from `AppTransaction.originalPurchaseDate` — the day
+//  this Apple Account first got Laqta. It survives deleting the app, a restore and a
+//  new phone, it costs the user nothing, and it needs no in-app purchase to exist.
+//  Until the App Store answers, the first launch's own date stands in; the earliest
+//  date always wins, so the real one can only shorten what the stand-in gave.
+//
 
 import Foundation
 
-/// The two things Laqta sells: a free stamp that starts the clock, and the app itself.
+/// The one thing Laqta sells.
 nonisolated enum LaqtaProduct {
-    /// Free. Bought silently the first time Laqta opens, so the thirty days survive
-    /// a reinstall and a new phone — the App Store remembers the date, not the device.
-    static let trial = "Hmdalajmi.Laqta.trial30"
     /// One payment. No subscription, no second charge, every future update included.
     static let unlock = "Hmdalajmi.Laqta.unlock"
 
-    static let all: [String] = [trial, unlock]
+    static let all: [String] = [unlock]
+
+    /// Earlier builds anchored the thirty days by "buying" a free non-consumable.
+    /// That is gone — StoreKit always puts a purchase sheet in front of a purchase,
+    /// free or not, and a $0.00 product in the listing is a question App Review
+    /// shouldn't have to ask. The date is still honoured wherever the App Store
+    /// still reports it, so nobody who tried an early build loses days.
+    static let legacyTrial = "Hmdalajmi.Laqta.trial30"
 }
 
 /// What Laqta may do right now.
@@ -85,7 +95,9 @@ nonisolated enum Entitlement {
     // MARK: What's stored
 
     /// When the thirty days began. The earliest date anything has claimed wins, so
-    /// deleting the app and installing it again doesn't hand out a second month.
+    /// deleting the app and installing it again doesn't hand out a second month —
+    /// and a date that can only move the start earlier is safe to take from an
+    /// unverified receipt as well as a verified one.
     static var trialStartedAt: Date? {
         let stamp = AppGroup.defaults.double(forKey: SettingsKey.trialStartedAt)
         return stamp > 0 ? Date(timeIntervalSince1970: stamp) : nil

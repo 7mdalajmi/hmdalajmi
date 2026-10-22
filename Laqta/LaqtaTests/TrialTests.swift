@@ -74,8 +74,16 @@ struct TrialTests {
     }
 
     @Test func theProductsAreTheOnesTheStoreLists() {
-        #expect(LaqtaProduct.all == ["Hmdalajmi.Laqta.trial30", "Hmdalajmi.Laqta.unlock"])
+        // One product. The thirty days are not sold, they are counted from the day
+        // the Apple Account first got Laqta.
+        #expect(LaqtaProduct.all == ["Hmdalajmi.Laqta.unlock"])
         #expect(Entitlement.trialDays == 30)
+    }
+
+    @Test func anEarlyBuildsTrialPurchaseIsStillRead() {
+        // Kept so nobody who tried a TestFlight build is handed thirty fresh days.
+        #expect(LaqtaProduct.legacyTrial == "Hmdalajmi.Laqta.trial30")
+        #expect(!LaqtaProduct.all.contains(LaqtaProduct.legacyTrial))
     }
 }
 

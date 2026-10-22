@@ -2,9 +2,13 @@
 //  Purchases.swift
 //  Laqta
 //
-//  The App Store side of the thirty days. Two products, both bought once and kept
-//  for good: a free one that starts the clock, and the app itself for the price on
-//  the button. There is no subscription here and nothing renews.
+//  The App Store side of the thirty days. One product, bought once and kept for good:
+//  the app itself, for the price on the button. There is no subscription here and
+//  nothing renews.
+//
+//  The trial is not a product. It is counted from the day this Apple Account first
+//  downloaded Laqta (`AppTransaction.originalPurchaseDate`), which no reinstall can
+//  reset and no purchase sheet has to interrupt.
 //
 
 import Foundation
@@ -24,7 +28,6 @@ final class PurchaseCenter {
     /// Set from Settings to watch the opening sequence again.
     var replayFirstRun = false
 
-    private var trial: Product?
     private var updates: Task<Void, Never>?
     private var didStart = false
 
@@ -58,19 +61,38 @@ final class PurchaseCenter {
         }
         Task {
             await loadProducts()
+            // The anchor, as early as possible: a reinstall must not look like a
+            // fresh thirty days for even a moment.
+            await noteStoreTrialStart()
             await refresh()
+        }
+    }
+
+    /// Takes the day this Apple Account first got Laqta as the start of the thirty days.
+    ///
+    /// An unverified receipt is honoured too: `noteTrialStart` keeps the earliest date
+    /// anything has claimed, so a tampered one can only shorten the trial, never
+    /// stretch it. A build with no receipt at all (Xcode, no StoreKit configuration)
+    /// simply keeps the stand-in date from its first launch.
+    private func noteStoreTrialStart() async {
+        do {
+            switch try await AppTransaction.shared {
+            case let .verified(appTransaction):
+                Entitlement.noteTrialStart(appTransaction.originalPurchaseDate)
+            case let .unverified(appTransaction, error):
+                DebugLog.write("purchase: unverified app transaction — \(error.localizedDescription)")
+                Entitlement.noteTrialStart(appTransaction.originalPurchaseDate)
+            }
+        } catch {
+            DebugLog.write("purchase: no app transaction — \(error.localizedDescription)")
         }
     }
 
     private func loadProducts() async {
         do {
             let products = try await Product.products(for: LaqtaProduct.all)
-            for product in products {
-                switch product.id {
-                case LaqtaProduct.unlock: unlock = product
-                case LaqtaProduct.trial: trial = product
-                default: break
-                }
+            for product in products where product.id == LaqtaProduct.unlock {
+                unlock = product
             }
         } catch {
             DebugLog.write("purchase: products unavailable — \(error.localizedDescription)")
@@ -87,7 +109,8 @@ final class PurchaseCenter {
             switch transaction.productID {
             case LaqtaProduct.unlock:
                 if transaction.revocationDate == nil { bought = true } else { revoked = true }
-            case LaqtaProduct.trial:
+            case LaqtaProduct.legacyTrial:
+                // An early build's free trial purchase. Still read, never asked for.
                 trialDate = transaction.purchaseDate
             default:
                 break
@@ -114,35 +137,27 @@ final class PurchaseCenter {
 
     // MARK: Buying
 
-    /// The free stamp, bought once from the welcome card. It costs nothing and asks
-    /// for nothing; it exists so the thirty days belong to the Apple ID rather than to
-    /// this phone — a reinstall or a new device carries the same date.
+    /// Starts the thirty days from the welcome card's own button.
+    ///
+    /// Nothing is bought. The card is the whole ceremony: it says what the thirty days
+    /// are, the button says "Start My 30 Free Days", and tapping it starts them. The
+    /// earlier build asked StoreKit to sell a free product here, which meant a system
+    /// purchase sheet over a trial nobody was paying for — and if that product was
+    /// missing from the store, the thirty days fell back to a counter on this phone
+    /// that a reinstall wiped.
     @discardableResult
     func startTrial() async -> Bool {
-        guard !Entitlement.isBought else { return true }
-        Entitlement.beginTrialIfNeeded()
         Welcome.markShown()
-        guard let trial else {
-            refreshAccess()
-            return false
-        }
+        guard !Entitlement.isBought else { return true }
         isWorking = true
         defer { isWorking = false }
-        if await ownsTrial() {
-            await refresh()
-            return true
-        }
-        guard let result = try? await trial.purchase() else {
-            refreshAccess()
-            return false
-        }
-        await finish(result)
-        return Entitlement.trialStartedAt != nil
-    }
-
-    private func ownsTrial() async -> Bool {
-        guard let result = await Transaction.latest(for: LaqtaProduct.trial) else { return false }
-        return verified(result) != nil
+        // Starts now, with or without a network.
+        Entitlement.beginTrialIfNeeded()
+        // And moves back to the day this Apple Account first got Laqta, if the App
+        // Store says that was earlier.
+        await noteStoreTrialStart()
+        refreshAccess()
+        return true
     }
 
     /// The one-time card that starts the thirty days.

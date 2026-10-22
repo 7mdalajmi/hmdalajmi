@@ -93,25 +93,28 @@ https://7mdalajmi.github.io/laqta/support.html
 
 ‫ويُنصح بالتسجيل في ⁦App Store Small Business Program⁩ (حصتك ⁦85%⁩ بدل ⁦70%⁩).‬
 
-‫**أُنشئ المنتجان في ⁦2026-09-20⁩** من ⁦Apps → The Laqta → Distribution → Monetization → In-App Purchases⁩، وحالتهما ⁦Prepare for Submission⁩:‬
+‫**المنتج المطلوب واحد فقط** (⁦Apps → The Laqta → Distribution → Monetization → In-App Purchases⁩):‬
 
 | ‫المعرّف‬ | ‫الاسم المرجعي‬ | ‫السعر‬ |
 |---|---|---|
-| ⁦Hmdalajmi.Laqta.trial30⁩ | ⁦30-day Trial⁩ | ⁦$0.00⁩ |
 | ⁦Hmdalajmi.Laqta.unlock⁩ | ⁦Laqta (full app)⁩ | ⁦$0.99⁩ |
 
-‫المُدخل لكل منتج: التوفّر (⁦175⁩ دولة)، والسعر، و⁦Display Name⁩ و⁦Description⁩ بالإنجليزية، و⁦Review Notes⁩ تشرح نموذج التجربة. الأول ⁦30-Day Free Trial — “Thirty days of Laqta, free.”⁩، والثاني ⁦Laqta, Yours for Good — “One payment. Keep saving, forever.”⁩.‬
+‫منتج التجربة ⁦Hmdalajmi.Laqta.trial30⁩ لم يعد مستخدمًا ولا يُرسل للمراجعة: الثلاثون يومًا تُحسب الآن من ⁦AppTransaction.originalPurchaseDate⁩، أي يوم أول تنزيل للتطبيق على حساب ⁦Apple⁩ نفسه، فلا نافذة شراء على تجربة مجانية ولا منتج بـ⁦$0.00⁩ في القائمة. إن كان المنتج موجودًا في ⁦App Store Connect⁩ فاتركه ⁦Prepare for Submission⁩ بلا إرسال، أو احذفه؛ والتطبيق يقرأ تاريخه إن وُجد لمن جرّب نسخة ⁦TestFlight⁩ سابقة.‬
 
-‫**الناقص:** ⁦Review Screenshot⁩ لكل منتج — لقطة لشاشة الشراء داخل التطبيق، تُؤخذ بعد أول تشغيل للنسخة الجديدة. بدونها لا يقبل الموقع الإرسال.‬
+‫المُدخل للمنتج: التوفّر (⁦175⁩ دولة)، والسعر، و⁦Display Name⁩ و⁦Description⁩ بالإنجليزية (⁦Laqta, Yours for Good — “One payment. Keep saving, forever.”⁩)، و⁦Review Notes⁩ تشرح نموذج التجربة.‬
 
-‫الاثنان يُرسلان مع أول ⁦Build⁩ من صفحة الإصدار (⁦In-App Purchases and Subscriptions → Select⁩) وإلا رُفضا.‬
+‫**الناقص:** ⁦Review Screenshot⁩ للمنتج — لقطة لشاشة الشراء داخل التطبيق، تُؤخذ بعد أول تشغيل للنسخة الجديدة. بدونها لا يقبل الموقع الإرسال.‬
+
+‫يُرسل مع أول ⁦Build⁩ من صفحة الإصدار (⁦In-App Purchases and Subscriptions → Select⁩) وإلا رُفض.‬
 
 ### ‫ملاحظات المراجعة (تُضاف إلى ⁦App Review Information⁩)‬
 
 ```
 Laqta is free to download and fully functional for 30 days.
-The trial starts on first launch (a free non-consumable, "30-day Trial",
-anchors it to the Apple Account so a reinstall does not restart it).
+The 30 days are counted from the date this Apple Account first downloaded
+the app (StoreKit's AppTransaction.originalPurchaseDate), so deleting and
+reinstalling the app does not restart them. There is no trial in-app
+purchase and nothing is charged during the trial.
 After 30 days nothing is deleted: browsing, search, viewing and export all
 keep working. Only adding new items pauses until the one-time $0.99
 purchase. Restore Purchase is in Settings > Laqta and on the purchase screen.
@@ -120,7 +123,7 @@ purchase. Restore Purchase is in Settings > Laqta and on the purchase screen.
 ### ‫الاختبار قبل الرفع‬
 
 - ‫في المحاكي: ملف ⁦Config/Laqta.storekit⁩ مربوط بالمخطط (⁦Edit Scheme → Run → Options → StoreKit Configuration⁩). إن لم يظهر مربوطًا، اختره مرة واحدة من القائمة.‬
-- ‫لتجربة انتهاء المدة: ⁦Debug → StoreKit → Manage Transactions⁩ لحذف معاملة التجربة، أو غيّر تاريخ المحاكي.‬
+- ‫لتجربة انتهاء المدة: ⁦Debug → StoreKit → Manage Transactions⁩ لتغيير تاريخ ⁦App Transaction⁩، أو غيّر تاريخ المحاكي.‬
 - ‫على جهاز حقيقي قبل النشر: ⁦Sandbox Apple Account⁩ من ⁦Users and Access → Sandbox Testers⁩.‬
 
 ### ‫ما زال مطلوبًا من حمد‬
