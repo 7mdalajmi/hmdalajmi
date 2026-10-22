@@ -7,6 +7,7 @@
 //  backup and restores from either kind, adding what's missing without replacing anything.
 //
 
+import CryptoKit
 import Foundation
 import SwiftData
 #if canImport(UIKit)
@@ -61,6 +62,8 @@ nonisolated struct RestoreSummary: Sendable, Equatable {
     var recoveredFolders = 0
     var alreadyThere = 0
     var missingFiles = 0
+    /// Files from a locked folder this device has no key for.
+    var sealedWithoutKey = 0
 
     var message: String {
         var parts: [String] = []
@@ -76,6 +79,9 @@ nonisolated struct RestoreSummary: Sendable, Equatable {
         if missingFiles > 0 {
             text += " \(LaqtaFormat.count(missingFiles, "item", "items")) couldn't be restored because the file is missing."
         }
+        if sealedWithoutKey > 0 {
+            text += " \(LaqtaFormat.count(sealedWithoutKey, "item", "items")) from your locked folders stayed in the backup: this device doesn't have the key. Turn on iCloud Keychain on both devices and restore again."
+        }
         return text
     }
 }
@@ -83,11 +89,67 @@ nonisolated struct RestoreSummary: Sendable, Equatable {
 nonisolated enum BackupEngine {
     typealias Progress = @Sendable (Double, String) -> Void
 
+    // MARK: Locked folders
+
+    /// The key for this backup, or nil when it holds nothing from a locked folder.
+    ///
+    /// Every caller in the app leaves `key` out and gets the one from the Keychain;
+    /// the tests pass their own, so sealing can be exercised without one.
+    static func sealingKey(for items: [ItemRecord]) throws -> SymmetricKey? {
+        guard items.contains(where: { $0.isSealed && ($0.hasMedia || $0.hasThumbnail) }) else { return nil }
+        guard let key = try BackupKey.key(creating: true) else { throw BackupError.keyUnavailable }
+        return key
+    }
+
+    /// The file to put in the backup: the original, or a sealed copy of it.
+    static func prepared(_ source: URL, name: String, sealed: Bool, key: SymmetricKey?, in folder: URL) throws -> URL {
+        guard sealed else { return source }
+        guard let key else { throw BackupError.keyUnavailable }
+        return try sealedCopy(of: source, name: name, in: folder, key: key)
+    }
+
+    /// Seals one file into `folder` and returns the sealed copy to put in the backup.
+    static func sealedCopy(of source: URL, name: String, in folder: URL, key: SymmetricKey) throws -> URL {
+        let sealedFolder = folder.appending(path: "Sealed", directoryHint: .isDirectory)
+        try FileManager.default.createDirectory(at: sealedFolder, withIntermediateDirectories: true)
+        let destination = sealedFolder.appending(path: BackupCrypto.sealedName(name))
+        try BackupCrypto.seal(source, to: destination, name: name, key: key, isCancelled: { Task.isCancelled })
+        return destination
+    }
+
+    /// Data protection for what a backup leaves on disk.
+    nonisolated enum Protection {
+        /// Unreadable while the device is locked. For a locked folder's files once a
+        /// restore has unsealed them.
+        case complete
+        /// Can be created and written while the device is locked. The archive takes
+        /// this one, because a scheduled backup runs with the phone in a pocket and
+        /// `complete` would stop it from writing the file at all.
+        case completeUnlessOpen
+    }
+
+    /// iOS only; on a Mac the disk's own encryption is what there is.
+    static func protect(_ url: URL, with level: Protection) {
+        #if os(iOS)
+        let value: FileProtectionType = level == .complete ? .complete : .completeUnlessOpen
+        try? FileManager.default.setAttributes(
+            [.protectionKey: value],
+            ofItemAtPath: url.path(percentEncoded: false)
+        )
+        #endif
+    }
+
     // MARK: iCloud backups
 
     /// Writes a new iCloud backup. Only files the pool doesn't have yet are uploaded.
     @concurrent
-    static func backUp(_ snapshot: LibrarySnapshot, info: BackupInfo, keep: Int, progress: Progress) async throws -> BackupInfo {
+    static func backUp(
+        _ snapshot: LibrarySnapshot,
+        info: BackupInfo,
+        keep: Int,
+        key sealingKeyOverride: SymmetricKey? = nil,
+        progress: Progress
+    ) async throws -> BackupInfo {
         guard CloudContainer.rootURL != nil,
               let root = BackupPlace.root, let snapshots = BackupPlace.snapshots,
               let mediaPool = BackupPlace.media, let thumbnailPool = BackupPlace.thumbnails else {
@@ -104,16 +166,26 @@ nonisolated enum BackupEngine {
         let existingThumbnails = CloudFiles.names(in: thumbnailPool)
 
         var items = snapshot.items
+        // Locked folders are sealed before they leave the app (see BackupCrypto).
+        let key = try sealingKeyOverride ?? sealingKey(for: items)
+        let scratch = AppGroup.cacheURL.appending(path: "Sealing-\(UUID().uuidString)", directoryHint: .isDirectory)
+        defer { try? FileManager.default.removeItem(at: scratch) }
+        if key != nil {
+            try FileManager.default.createDirectory(at: scratch, withIntermediateDirectories: true)
+            protect(scratch, with: .complete)
+        }
         var bytes: Int64 = 0
         let total = max(items.count, 1)
         for index in items.indices {
             try Task.checkCancellation()
             let record = items[index]
             if record.hasMedia {
-                if !existingMedia.contains(record.fileName) {
+                if !existingMedia.contains(record.mediaEntryName) {
                     if let source = snapshot.mediaSources[record.fileName], CloudFiles.isAvailable(source) {
                         do {
-                            try CloudFiles.copy(from: source, to: mediaPool.appending(path: record.fileName))
+                            let upload = try prepared(source, name: record.fileName, sealed: record.isSealed, key: key, in: scratch)
+                            try CloudFiles.copy(from: upload, to: mediaPool.appending(path: record.mediaEntryName))
+                            if upload != source { try? FileManager.default.removeItem(at: upload) }
                         } catch {
                             DebugLog.write("backup: copy failed \(record.fileName) \(error)")
                             items[index].hasMedia = false
@@ -128,10 +200,12 @@ nonisolated enum BackupEngine {
                 }
                 if items[index].hasMedia { bytes += Int64(record.byteCount) }
             }
-            if record.hasThumbnail, !existingThumbnails.contains(record.thumbnailName) {
+            if record.hasThumbnail, !existingThumbnails.contains(record.thumbnailEntryName) {
                 if let source = snapshot.thumbnailSources[record.thumbnailName], CloudFiles.isAvailable(source) {
                     do {
-                        try CloudFiles.copy(from: source, to: thumbnailPool.appending(path: record.thumbnailName))
+                        let upload = try prepared(source, name: record.thumbnailName, sealed: record.isSealed, key: key, in: scratch)
+                        try CloudFiles.copy(from: upload, to: thumbnailPool.appending(path: record.thumbnailEntryName))
+                        if upload != source { try? FileManager.default.removeItem(at: upload) }
                     } catch {
                         items[index].hasThumbnail = false
                     }
@@ -148,6 +222,9 @@ nonisolated enum BackupEngine {
         finished.folderCount = snapshot.folders.count
         finished.itemCount = items.count
         finished.mediaBytes = bytes
+        // A backup with nothing sealed in it stays readable by a Laqta that knows
+        // nothing about sealing.
+        finished.format = items.contains(where: \.isSealed) ? BackupInfo.sealedFormat : BackupInfo.plainFormat
         let manifest = BackupManifest(info: finished, folders: snapshot.folders, items: items)
         guard let manifestURL = BackupPlace.manifestURL(id: finished.id), let infoURL = BackupPlace.infoURL(id: finished.id) else {
             throw BackupError.iCloudUnavailable
@@ -271,7 +348,12 @@ nonisolated enum BackupEngine {
 
     /// Writes a single-file backup and returns its URL (in a temporary folder).
     @concurrent
-    static func export(_ snapshot: LibrarySnapshot, info: BackupInfo, progress: Progress) async throws -> URL {
+    static func export(
+        _ snapshot: LibrarySnapshot,
+        info: BackupInfo,
+        key sealingKeyOverride: SymmetricKey? = nil,
+        progress: Progress
+    ) async throws -> URL {
         let manager = FileManager.default
         try? manager.removeItem(at: exportFolder)
         let folder = exportFolder.appending(path: UUID().uuidString, directoryHint: .isDirectory)
@@ -283,6 +365,9 @@ nonisolated enum BackupEngine {
         }
 
         var items = snapshot.items
+        // A `.laqtabackup` goes wherever the user sends it — Files, mail, a Mac — so a
+        // locked folder's photos are sealed inside it before it is written.
+        let key = try sealingKeyOverride ?? sealingKey(for: items)
         var entries: [BackupArchive.Entry] = []
         var bytes: Int64 = 0
         var seenMedia = Set<String>()
@@ -292,8 +377,9 @@ nonisolated enum BackupEngine {
             let record = items[index]
             if record.hasMedia {
                 if let source = snapshot.mediaSources[record.fileName], CloudFiles.isAvailable(source) {
-                    if seenMedia.insert(record.fileName).inserted {
-                        entries.append(.init(path: "Media/\(record.fileName)", source: source))
+                    if seenMedia.insert(record.mediaEntryName).inserted {
+                        let file = try prepared(source, name: record.fileName, sealed: record.isSealed, key: key, in: folder)
+                        entries.append(.init(path: "Media/\(record.mediaEntryName)", source: file))
                         bytes += Int64(record.byteCount)
                     }
                 } else {
@@ -303,8 +389,9 @@ nonisolated enum BackupEngine {
             }
             if record.hasThumbnail {
                 if let source = snapshot.thumbnailSources[record.thumbnailName], CloudFiles.isAvailable(source) {
-                    if seenThumbnails.insert(record.thumbnailName).inserted {
-                        entries.append(.init(path: "Thumbnails/\(record.thumbnailName)", source: source))
+                    if seenThumbnails.insert(record.thumbnailEntryName).inserted {
+                        let file = try prepared(source, name: record.thumbnailName, sealed: record.isSealed, key: key, in: folder)
+                        entries.append(.init(path: "Thumbnails/\(record.thumbnailEntryName)", source: file))
                     }
                 } else {
                     items[index].hasThumbnail = false
@@ -317,6 +404,7 @@ nonisolated enum BackupEngine {
         finished.folderCount = snapshot.folders.count
         finished.itemCount = items.count
         finished.mediaBytes = bytes
+        finished.format = items.contains(where: \.isSealed) ? BackupInfo.sealedFormat : BackupInfo.plainFormat
         let manifest = BackupManifest(info: finished, folders: snapshot.folders, items: items)
         let manifestURL = folder.appending(path: BackupArchive.manifestPath)
         try manifest.encoded().write(to: manifestURL, options: .atomic)
@@ -330,7 +418,10 @@ nonisolated enum BackupEngine {
         try BackupArchive.write(entries: entries, to: archive, isCancelled: { Task.isCancelled }) { written in
             progress(min(0.99, Double(written) / Double(totalBytes)), "Preparing \(LaqtaFormat.bytes(written)) of \(LaqtaFormat.bytes(totalBytes))")
         }
+        protect(archive, with: .completeUnlessOpen)
         try? manager.removeItem(at: manifestURL)
+        // The sealed copies were only there to be written into the archive.
+        try? manager.removeItem(at: folder.appending(path: "Sealed", directoryHint: .isDirectory))
         progress(1, "Ready")
         completed = true
         return archive
@@ -349,6 +440,9 @@ nonisolated enum BackupEngine {
         try AppGroup.prepareDirectories()
         let folder = AppGroup.stagingURL.appending(path: "Restore-\(UUID().uuidString)", directoryHint: .isDirectory)
         try manager.createDirectory(at: folder, withIntermediateDirectories: true)
+        // A locked folder's files pass through here in the clear on their way into the
+        // library, so this folder is unreadable while the device is locked.
+        protect(folder, with: .complete)
         do {
             // A file in iCloud Drive or another provider may need downloading first.
             var coordinationError: NSError?
@@ -381,9 +475,17 @@ nonisolated enum BackupEngine {
         }
     }
 
-    /// Copies (or moves) one file from a backup into the library.
+    /// Copies (or moves) one file from a backup into the library, opening it on the
+    /// way when the backup holds it sealed.
     @concurrent
-    static func bring(_ name: String, from folder: URL, to destinationFolder: URL, move: Bool) async -> Bool {
+    static func bring(
+        _ name: String,
+        from folder: URL,
+        to destinationFolder: URL,
+        move: Bool,
+        sealed: Bool = false,
+        key: SymmetricKey? = nil
+    ) async -> Bool {
         // The name comes out of the backup's own manifest, and a `.laqtabackup` is a
         // file anyone can write and send — the app is its declared Owner, one Restore
         // tap away. Anything but a plain file name could resolve outside Media/:
@@ -392,7 +494,23 @@ nonisolated enum BackupEngine {
         let manager = FileManager.default
         let destination = destinationFolder.appending(path: name)
         if manager.fileExists(atPath: destination.path(percentEncoded: false)) { return true }
-        let source = folder.appending(path: name)
+        let source = folder.appending(path: sealed ? BackupCrypto.sealedName(name) : name)
+        if sealed {
+            // Without the key the file stays in the backup, and the restore says so
+            // rather than dropping the item without a word.
+            guard let key, CloudFiles.exists(source) else { return false }
+            if !CloudFiles.isAvailable(source), !(await CloudFiles.waitUntilAvailable(source, timeout: .seconds(300))) {
+                return false
+            }
+            do {
+                try BackupCrypto.open(source, to: destination, name: name, key: key, isCancelled: { Task.isCancelled })
+                if move { try? manager.removeItem(at: source) }
+                return true
+            } catch {
+                DebugLog.write("restore: couldn't open \(name) — \(error)")
+                return false
+            }
+        }
         if move {
             guard manager.fileExists(atPath: source.path(percentEncoded: false)) else { return false }
             return (try? manager.moveItem(at: source, to: destination)) != nil
@@ -419,6 +537,7 @@ enum BackupRestorer {
     static func restore(
         _ prepared: PreparedRestore,
         context: ModelContext,
+        key openingKeyOverride: SymmetricKey? = nil,
         progress: (Double, String) -> Void
     ) async throws -> RestoreSummary {
         var summary = RestoreSummary()
@@ -426,6 +545,13 @@ enum BackupRestorer {
         try AppGroup.prepareDirectories()
         let neededBytes = prepared.canMoveFiles ? 0 : manifest.items.reduce(Int64(0)) { $0 + ($1.hasMedia ? Int64($1.byteCount) : 0) }
         try MediaStore.ensureSpace(for: neededBytes)
+
+        // Files from locked folders are sealed, and the key comes from this device's
+        // Keychain (shared through the user's own iCloud Keychain). Without it those
+        // items are left in the backup and counted, never half-restored.
+        let key: SymmetricKey? = openingKeyOverride ?? (manifest.items.contains(where: \.isSealed)
+            ? (try? BackupKey.key(creating: false))
+            : nil)
 
         let folders = (try? context.fetch(FetchDescriptor<Folder>())) ?? []
         var foldersByID = Dictionary(folders.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
@@ -471,12 +597,24 @@ enum BackupRestorer {
                 continue
             }
             let isLink = record.kindRaw == ItemKind.link.rawValue
+            if record.isSealed, record.hasMedia, key == nil, !isLink {
+                // This device has no key for the user's locked folders.
+                summary.sealedWithoutKey += 1
+                continue
+            }
             var fileName = ""
             if record.hasMedia {
-                if await BackupEngine.bring(record.fileName, from: prepared.mediaFolder, to: AppGroup.mediaURL, move: prepared.canMoveFiles) {
+                if await BackupEngine.bring(
+                    record.fileName,
+                    from: prepared.mediaFolder,
+                    to: AppGroup.mediaURL,
+                    move: prepared.canMoveFiles,
+                    sealed: record.isSealed,
+                    key: key
+                ) {
                     fileName = record.fileName
                 } else if !isLink {
-                    summary.missingFiles += 1
+                    if record.isSealed { summary.sealedWithoutKey += 1 } else { summary.missingFiles += 1 }
                     continue
                 }
             } else if !isLink {
@@ -486,7 +624,14 @@ enum BackupRestorer {
             }
             var thumbnailName = ""
             if record.hasThumbnail,
-               await BackupEngine.bring(record.thumbnailName, from: prepared.thumbnailsFolder, to: AppGroup.thumbnailsURL, move: prepared.canMoveFiles) {
+               await BackupEngine.bring(
+                   record.thumbnailName,
+                   from: prepared.thumbnailsFolder,
+                   to: AppGroup.thumbnailsURL,
+                   move: prepared.canMoveFiles,
+                   sealed: record.isSealed,
+                   key: key
+               ) {
                 thumbnailName = record.thumbnailName
             }
             var itemRecord = record

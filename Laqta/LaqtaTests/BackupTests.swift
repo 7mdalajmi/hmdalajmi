@@ -6,6 +6,7 @@
 //  come back, trashed ones are recovered.
 //
 
+import CryptoKit
 import Foundation
 import SwiftData
 import Testing
@@ -203,6 +204,101 @@ struct BackupArchiveTests {
     }
 }
 
+@Suite("Sealed backup files")
+struct BackupCryptoTests {
+    private let key = SymmetricKey(size: .bits256)
+
+    private func temporaryFolder() throws -> URL {
+        let folder = URL.temporaryDirectory.appending(path: "LaqtaSealed-\(UUID().uuidString)", directoryHint: .isDirectory)
+        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        return folder
+    }
+
+    private func randomData(_ count: Int) -> Data {
+        var generator = SystemRandomNumberGenerator()
+        return Data((0..<count).map { _ in UInt8.random(in: .min ... .max, using: &generator) })
+    }
+
+    @Test func roundTripAcrossSeveralChunks() throws {
+        let folder = try temporaryFolder()
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let original = randomData(BackupCrypto.chunkSize * 2 + 1_234)
+        let source = folder.appending(path: "photo.heic")
+        try original.write(to: source)
+        let sealed = folder.appending(path: BackupCrypto.sealedName("photo.heic"))
+        try BackupCrypto.seal(source, to: sealed, name: "photo.heic", key: key)
+
+        // Nothing of the photo is readable in the sealed copy.
+        let sealedBytes = try Data(contentsOf: sealed)
+        #expect(sealedBytes.count > original.count)
+        #expect(sealedBytes.range(of: original.prefix(64)) == nil)
+
+        let opened = folder.appending(path: "opened.heic")
+        try BackupCrypto.open(sealed, to: opened, name: "photo.heic", key: key)
+        #expect(try Data(contentsOf: opened) == original)
+    }
+
+    @Test func anEmptyFileSurvives() throws {
+        let folder = try temporaryFolder()
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let source = folder.appending(path: "empty.pdf")
+        try Data().write(to: source)
+        let sealed = folder.appending(path: BackupCrypto.sealedName("empty.pdf"))
+        try BackupCrypto.seal(source, to: sealed, name: "empty.pdf", key: key)
+        let opened = folder.appending(path: "opened.pdf")
+        try BackupCrypto.open(sealed, to: opened, name: "empty.pdf", key: key)
+        #expect(try Data(contentsOf: opened).isEmpty)
+    }
+
+    @Test func anotherKeyOpensNothing() throws {
+        let folder = try temporaryFolder()
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let source = folder.appending(path: "photo.heic")
+        try randomData(5_000).write(to: source)
+        let sealed = folder.appending(path: BackupCrypto.sealedName("photo.heic"))
+        try BackupCrypto.seal(source, to: sealed, name: "photo.heic", key: key)
+        let opened = folder.appending(path: "opened.heic")
+        #expect(throws: (any Error).self) {
+            try BackupCrypto.open(sealed, to: opened, name: "photo.heic", key: SymmetricKey(size: .bits256))
+        }
+        // Nothing half-written is left behind.
+        #expect(!FileManager.default.fileExists(atPath: opened.path(percentEncoded: false)))
+    }
+
+    @Test func aChunkCannotBeMovedOrEdited() throws {
+        let folder = try temporaryFolder()
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let source = folder.appending(path: "photo.heic")
+        try randomData(3_000).write(to: source)
+        let sealed = folder.appending(path: BackupCrypto.sealedName("photo.heic"))
+        try BackupCrypto.seal(source, to: sealed, name: "photo.heic", key: key)
+
+        // The file's name is sealed in with its bytes, so a sealed file renamed onto
+        // another item doesn't open.
+        #expect(throws: (any Error).self) {
+            try BackupCrypto.open(sealed, to: folder.appending(path: "a"), name: "other.heic", key: key)
+        }
+
+        var bytes = try Data(contentsOf: sealed)
+        bytes[bytes.count - 1] ^= 0xFF
+        let tampered = folder.appending(path: "tampered")
+        try bytes.write(to: tampered)
+        #expect(throws: (any Error).self) {
+            try BackupCrypto.open(tampered, to: folder.appending(path: "b"), name: "photo.heic", key: key)
+        }
+    }
+
+    @Test func somethingElseIsNotASealedFile() throws {
+        let folder = try temporaryFolder()
+        defer { try? FileManager.default.removeItem(at: folder) }
+        let plain = folder.appending(path: "plain")
+        try Data(repeating: 0x42, count: 100).write(to: plain)
+        #expect(throws: BackupError.damaged) {
+            try BackupCrypto.open(plain, to: folder.appending(path: "out"), name: "plain", key: key)
+        }
+    }
+}
+
 extension LibraryTests {
     @Suite("Backup and restore")
     @MainActor
@@ -214,7 +310,11 @@ extension LibraryTests {
             )
         }
 
-        /// A backup folder like the one a file restore extracts.
+        /// The key the tests seal with, standing in for the one in the Keychain.
+        private static let key = SymmetricKey(size: .bits256)
+
+        /// A backup folder like the one a file restore extracts. Files from a locked
+        /// folder are sealed, under the name the real exporter gives them.
         private func prepared(from library: TestLibrary, dropping dropped: Set<String> = []) throws -> PreparedRestore {
             let manager = FileManager.default
             let snapshot = LibrarySnapshotter.snapshot(context: library.context)
@@ -223,18 +323,32 @@ extension LibraryTests {
             let thumbnails = folder.appending(path: "Thumbnails", directoryHint: .isDirectory)
             try manager.createDirectory(at: media, withIntermediateDirectories: true)
             try manager.createDirectory(at: thumbnails, withIntermediateDirectories: true)
+            let sealedMedia = Set(snapshot.items.filter(\.isSealed).map(\.fileName))
+            let sealedThumbnails = Set(snapshot.items.filter(\.isSealed).map(\.thumbnailName))
             for (name, source) in snapshot.mediaSources where !dropped.contains(name) {
-                try manager.copyItem(at: source, to: media.appending(path: name))
+                if sealedMedia.contains(name) {
+                    try BackupCrypto.seal(source, to: media.appending(path: BackupCrypto.sealedName(name)), name: name, key: Self.key)
+                } else {
+                    try manager.copyItem(at: source, to: media.appending(path: name))
+                }
             }
             for (name, source) in snapshot.thumbnailSources where !dropped.contains(name) {
-                try manager.copyItem(at: source, to: thumbnails.appending(path: name))
+                if sealedThumbnails.contains(name) {
+                    try BackupCrypto.seal(source, to: thumbnails.appending(path: BackupCrypto.sealedName(name)), name: name, key: Self.key)
+                } else {
+                    try manager.copyItem(at: source, to: thumbnails.appending(path: name))
+                }
             }
             let manifest = BackupManifest(info: info(), folders: snapshot.folders, items: snapshot.items)
             return PreparedRestore(manifest: manifest, mediaFolder: media, thumbnailsFolder: thumbnails, canMoveFiles: true, temporaryFolder: folder)
         }
 
-        private func restore(_ prepared: PreparedRestore, into library: TestLibrary) async throws -> RestoreSummary {
-            try await BackupRestorer.restore(prepared, context: library.context) { _, _ in }
+        private func restore(
+            _ prepared: PreparedRestore,
+            into library: TestLibrary,
+            key: SymmetricKey? = key
+        ) async throws -> RestoreSummary {
+            try await BackupRestorer.restore(prepared, context: library.context, key: key) { _, _ in }
         }
 
         @Test func snapshotLeavesOutTrashAndYouTubeFiles() throws {
@@ -343,6 +457,69 @@ extension LibraryTests {
             #expect(items.count == 2)
             let restoredNote = items.first { $0.isLink }?.note
             #expect(restoredNote == "Read before the trip")
+        }
+
+        @Test func aLockedFoldersFilesAreSealed() throws {
+            let library = try TestLibrary()
+            let locked = library.folder("Private", locked: true)
+            let inside = library.child("Receipts", of: locked)
+            let open = library.folder("Trips")
+            let hidden = try library.photo(in: locked)
+            let nested = try library.photo(in: inside)
+            let shown = try library.photo(in: open)
+
+            let snapshot = LibrarySnapshotter.snapshot(context: library.context)
+            let sealed = Set(snapshot.items.filter(\.isSealed).map(\.id))
+            #expect(sealed == [hidden.id, nested.id], "A locked folder and everything under it")
+            #expect(!sealed.contains(shown.id))
+
+            // The names the backup stores, so the pruner keeps the sealed copies.
+            let manifest = BackupManifest(info: info(), folders: snapshot.folders, items: snapshot.items)
+            let names = manifest.fileNames
+            #expect(names.media.contains(BackupCrypto.sealedName(hidden.fileName)))
+            #expect(names.media.contains(shown.fileName))
+            #expect(manifest.sealedCount == 2)
+        }
+
+        @Test func aSealedBackupRestoresWithItsKey() async throws {
+            let library = try TestLibrary()
+            let locked = library.folder("Private", locked: true)
+            let photo = try library.photo(in: locked)
+            let fileName = photo.fileName
+            let original = try Data(contentsOf: AppGroup.mediaURL.appending(path: fileName))
+            let backup = try prepared(from: library)
+
+            let model = LibraryModel()
+            model.trash(folder: locked, context: library.context)
+            model.emptyTrash(context: library.context)
+            #expect(!library.fileExists(fileName))
+
+            let summary = try await restore(backup, into: library)
+            #expect(summary.sealedWithoutKey == 0)
+            #expect(summary.addedItems == 1)
+            #expect(try Data(contentsOf: AppGroup.mediaURL.appending(path: fileName)) == original)
+        }
+
+        @Test func aSealedBackupWithoutItsKeySaysSo() async throws {
+            // A device that never had the key — iCloud Keychain off, or another Apple
+            // Account. The item stays in the backup and is counted, instead of coming
+            // back as an empty photo or not being mentioned at all.
+            let library = try TestLibrary()
+            let locked = library.folder("Private", locked: true)
+            let photo = try library.photo(in: locked)
+            let fileName = photo.fileName
+            let backup = try prepared(from: library)
+
+            let model = LibraryModel()
+            model.trash(folder: locked, context: library.context)
+            model.emptyTrash(context: library.context)
+
+            let summary = try await restore(backup, into: library, key: nil)
+            #expect(summary.sealedWithoutKey == 1)
+            #expect(summary.addedItems == 0)
+            #expect(summary.addedFolders == 1, "The folder comes back; only its files are missing")
+            #expect(!library.fileExists(fileName))
+            #expect(summary.message.contains("locked folders"))
         }
 
         @Test func itemsWithoutFilesAreReported() async throws {

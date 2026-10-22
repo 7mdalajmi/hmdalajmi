@@ -16,7 +16,14 @@ extension UTType {
 }
 
 nonisolated struct BackupInfo: Codable, Sendable, Hashable, Identifiable {
-    static let currentFormat = 1
+    /// The newest format this build can read.
+    static let currentFormat = 2
+    /// Nothing sealed inside: any build of Laqta can read it.
+    static let plainFormat = 1
+    /// Holds files from locked folders, sealed (see BackupCrypto). A build that
+    /// doesn't know how to open them must not pretend it restored them, which is
+    /// what the format number is for.
+    static let sealedFormat = 2
 
     var id: String
     var format: Int
@@ -103,6 +110,21 @@ nonisolated struct ItemRecord: Codable, Sendable, Hashable {
     var hasMedia: Bool
     /// The thumbnail is in the backup.
     var hasThumbnail: Bool
+    /// This item sits in a locked folder (or under one), so its files are sealed
+    /// inside the backup. Absent in backups made before Laqta sealed anything.
+    var mediaEncrypted: Bool?
+
+    var isSealed: Bool { mediaEncrypted == true }
+
+    /// What the backup stores the media under. A sealed copy carries a different name
+    /// so it can never be read, or replaced, as if it were a plain file.
+    var mediaEntryName: String {
+        isSealed ? BackupCrypto.sealedName(fileName) : fileName
+    }
+
+    var thumbnailEntryName: String {
+        isSealed ? BackupCrypto.sealedName(thumbnailName) : thumbnailName
+    }
 }
 
 nonisolated struct BackupManifest: Codable, Sendable {
@@ -152,15 +174,21 @@ nonisolated struct BackupManifest: Codable, Sendable {
         return manifest
     }
 
-    /// Media and thumbnail file names the backup needs.
+    /// Media and thumbnail file names the backup needs, as it stores them — sealed
+    /// names included, or the pruner would delete every sealed file in the pool.
     var fileNames: (media: Set<String>, thumbnails: Set<String>) {
         var media = Set<String>()
         var thumbnails = Set<String>()
         for item in items {
-            if item.hasMedia, !item.fileName.isEmpty { media.insert(item.fileName) }
-            if item.hasThumbnail, !item.thumbnailName.isEmpty { thumbnails.insert(item.thumbnailName) }
+            if item.hasMedia, !item.fileName.isEmpty { media.insert(item.mediaEntryName) }
+            if item.hasThumbnail, !item.thumbnailName.isEmpty { thumbnails.insert(item.thumbnailEntryName) }
         }
         return (media, thumbnails)
+    }
+
+    /// Items whose files are sealed.
+    var sealedCount: Int {
+        items.filter { $0.isSealed && $0.hasMedia }.count
     }
 }
 
@@ -173,6 +201,8 @@ nonisolated enum BackupError: LocalizedError, Equatable {
     case cancelled
     case nothingToBackUp
     case mediaUnavailable
+    /// A locked folder's files can't be sealed or opened: this device has no key.
+    case keyUnavailable
 
     var errorDescription: String? {
         switch self {
@@ -184,6 +214,7 @@ nonisolated enum BackupError: LocalizedError, Equatable {
         case .cancelled: "Stopped."
         case .nothingToBackUp: "There's nothing to back up yet."
         case .mediaUnavailable: "Some original files aren't available on this device yet. Download them from iCloud, then try backing up again. Your earlier backups are kept."
+        case .keyUnavailable: "Laqta can't reach the key that locks your private folders. Turn on iCloud Keychain, or unlock this device once, and try again."
         }
     }
 }
@@ -205,6 +236,15 @@ enum LibrarySnapshotter {
     static func snapshot(context: ModelContext) -> LibrarySnapshot {
         let folders = LaqtaStore.foldersByUpdate(context)
         let liveFolderIDs = Set(folders.map(\.id))
+        // Locked folders, and every folder under one: their files are sealed in the
+        // backup. The whole path is walked, because a child inherits the lock — and a
+        // parent that is itself in Recently Deleted still locks its children, so the
+        // path is read from every folder there is, not only the live ones.
+        let everyFolder = (try? context.fetch(FetchDescriptor<Folder>())) ?? []
+        var privateFolderIDs = Set<UUID>()
+        for folder in folders where LaqtaStore.path(to: folder.id, in: everyFolder).contains(where: \.isLocked) {
+            privateFolderIDs.insert(folder.id)
+        }
         let descriptor = FetchDescriptor<Shot>(
             predicate: #Predicate<Shot> { $0.deletedAt == nil },
             sortBy: [SortDescriptor(\.addedAt)]
@@ -224,7 +264,8 @@ enum LibrarySnapshotter {
             if keepsFiles, item.hasThumbnail {
                 thumbnailSources[item.thumbnailName] = item.thumbnailURL
             }
-            records.append(record(for: item, keepsFiles: keepsFiles))
+            let isPrivate = item.folderID.map(privateFolderIDs.contains) ?? false
+            records.append(record(for: item, keepsFiles: keepsFiles, isPrivate: isPrivate))
         }
         return LibrarySnapshot(
             folders: folders.map(record(for:)),
@@ -250,7 +291,7 @@ enum LibrarySnapshotter {
         )
     }
 
-    static func record(for item: Shot, keepsFiles: Bool) -> ItemRecord {
+    static func record(for item: Shot, keepsFiles: Bool, isPrivate: Bool = false) -> ItemRecord {
         ItemRecord(
             id: item.id,
             folderID: item.folderID,
@@ -298,7 +339,8 @@ enum LibrarySnapshotter {
             noteUpdatedAt: item.noteUpdatedAt,
             linkImageURL: item.linkImageURL,
             hasMedia: keepsFiles && item.hasMediaFile,
-            hasThumbnail: keepsFiles && item.hasThumbnail
+            hasThumbnail: keepsFiles && item.hasThumbnail,
+            mediaEncrypted: isPrivate && keepsFiles ? true : nil
         )
     }
 

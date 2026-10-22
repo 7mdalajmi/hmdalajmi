@@ -30,7 +30,7 @@ struct MacFolderSheet: View {
                     }
                 }
                 Toggle("مجلد خاص", isOn: $locked)
-                Text("يفتح المجلد الخاص باستخدام Touch ID أو كلمة مرور الماك، ويختفي محتواه من البحث حتى تفتحه. القفل يحمي الوصول داخل التطبيق؛ النسخ الاحتياطية غير مشفرة.").font(.caption).foregroundStyle(.secondary)
+                Text("يفتح المجلد الخاص باستخدام Touch ID أو كلمة مرور الماك، ويختفي محتواه من البحث حتى تفتحه. وملفات المجلد المقفول تُشفَّر داخل النسخة الاحتياطية بمفتاح في Keychain ينتقل عبر iCloud Keychain إلى أجهزتك وحدها.").font(.caption).foregroundStyle(.secondary)
             }
             HStack {
                 Button("إلغاء") { dismiss() }.keyboardShortcut(.cancelAction)
@@ -107,7 +107,7 @@ struct MacSettingsView: View {
                     }
                 }
                 Button("قفل المجلدات الخاصة") { library.lockAll() }
-                Text("تعمل النسخ بصيغة .laqtabackup المشتركة مع تطبيق iPhone، وتشمل الملفات والمجلدات والملاحظات. احفظ النسخة في مكان خاص لأنها غير مشفرة.").font(.caption).foregroundStyle(.secondary)
+                Text("تعمل النسخ بصيغة .laqtabackup المشتركة مع تطبيق iPhone، وتشمل الملفات والمجلدات والملاحظات. ملفات المجلدات المقفولة مشفَّرة داخلها؛ أما بقية الملفات فتُحفظ كما هي، فاحفظ النسخة في مكان تثق به.").font(.caption).foregroundStyle(.secondary)
             }
         }.formStyle(.grouped)
         .alert("لقطة", isPresented: Binding(get: { library.message != nil }, set: { if !$0 { library.message = nil } })) {
