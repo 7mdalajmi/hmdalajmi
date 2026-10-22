@@ -124,32 +124,57 @@ nonisolated enum ItemProviderLoader {
         // is tried that way before anything that loads bytes — one sender refusing the
         // best type used to drop a whole image to the in-memory path.
         for candidate in fileRepresentationTypes(provider, kind: kind, first: typeIdentifier) {
-            do {
-                let copy = try await copyFileRepresentation(provider, typeIdentifier: candidate, kind: kind)
-                return try await describeCopy(copy, kind: kind, name: suggestedName)
-            } catch {
-                // "Too large for the share sheet" is an answer, not a reason to try
-                // the same item another way.
-                if MediaError.isTooLargeToShare(error) { throw error }
-            }
+            guard let copy = try await staged(from: candidate, provider: provider, kind: kind) else { continue }
+            // Past the copy the file is Laqta's: one it can't read is an error to
+            // report, not a reason to ask the sender for another type.
+            return try await describeCopy(copy, kind: kind, name: suggestedName)
         }
         // Only photos are ever taken as bytes, and only up to a limit that leaves the
         // extension alive. Videos and PDFs never are.
         if kind == .photo {
-            do {
-                let copy = try await copyDataRepresentation(provider, typeIdentifier: typeIdentifier)
+            if let copy = try await bytes(from: typeIdentifier, provider: provider) {
                 return try await describeCopy(copy, kind: kind, name: suggestedName)
-            } catch {
-                if MediaError.isTooLargeToShare(error) { throw error }
             }
-            do {
-                let copy = try await copyLoadedImage(provider)
+            if let copy = try await loadedImage(provider) {
                 return try await describeCopy(copy, kind: kind, name: suggestedName)
-            } catch {
-                if MediaError.isTooLargeToShare(error) { throw error }
             }
         }
         return try await stageFileURLObject(provider, name: suggestedName)
+    }
+
+    /// A file the sender wrote to disk, or nil when it won't offer this type.
+    ///
+    /// "Too large for the share sheet" is an answer rather than a reason to try the
+    /// same item another way, so it is the one failure that stops the search.
+    private static func staged(
+        from typeIdentifier: String,
+        provider: NSItemProvider,
+        kind: MediaKind
+    ) async throws -> (id: UUID, url: URL)? {
+        do {
+            return try await copyFileRepresentation(provider, typeIdentifier: typeIdentifier, kind: kind)
+        } catch {
+            if MediaError.isTooLargeToShare(error) { throw error }
+            return nil
+        }
+    }
+
+    private static func bytes(from typeIdentifier: String, provider: NSItemProvider) async throws -> (id: UUID, url: URL)? {
+        do {
+            return try await copyDataRepresentation(provider, typeIdentifier: typeIdentifier)
+        } catch {
+            if MediaError.isTooLargeToShare(error) { throw error }
+            return nil
+        }
+    }
+
+    private static func loadedImage(_ provider: NSItemProvider) async throws -> (id: UUID, url: URL)? {
+        do {
+            return try await copyLoadedImage(provider)
+        } catch {
+            if MediaError.isTooLargeToShare(error) { throw error }
+            return nil
+        }
     }
 
     /// The best type first, then every other type the sender registered for this kind.
