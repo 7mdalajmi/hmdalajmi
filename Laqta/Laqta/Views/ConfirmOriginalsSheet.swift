@@ -15,6 +15,7 @@
 import Photos
 import SwiftData
 import SwiftUI
+import UIKit
 
 struct ConfirmOriginalsSheet: View {
     @AppObject(LibraryModel.self) private var library

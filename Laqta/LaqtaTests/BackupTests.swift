@@ -346,7 +346,7 @@ extension LibraryTests {
         private func restore(
             _ prepared: PreparedRestore,
             into library: TestLibrary,
-            key: SymmetricKey? = key
+            key: SymmetricKey? = Self.key
         ) async throws -> RestoreSummary {
             try await BackupRestorer.restore(prepared, context: library.context, key: key) { _, _ in }
         }

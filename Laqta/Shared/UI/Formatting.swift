@@ -42,7 +42,7 @@ nonisolated enum LaqtaFormat {
     /// `count` is in Localizable.xcstrings by hand. A word that isn't comes back as
     /// itself, which is exactly what it used to do everywhere.
     static func localizedWord(_ word: String) -> String {
-        String(localized: String.LocalizationValue(word))
+        String(localized: String.LocalizationValue(stringLiteral: word))
     }
 
     static func number(_ value: Int) -> String {
