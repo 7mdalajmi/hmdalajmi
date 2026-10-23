@@ -1,0 +1,7 @@
+# Xcode
+DerivedData/
+DerivedData.nosync/
+*.xcuserstate
+xcuserdata/
+build/
+.DS_Store

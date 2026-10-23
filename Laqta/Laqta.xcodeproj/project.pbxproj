@@ -1,0 +1,872 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4C51A7E00000000000000014 /* LaqtaShare.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000005 /* LaqtaShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		4C51A7E000000000000000201 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000200; };
+		4C51A7E000000000000000203 /* Analysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000202; };
+		4C51A7E000000000000000205 /* ComingUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000204; };
+		4C51A7E000000000000000207 /* Cleanup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000206; };
+		4C51A7E000000000000000209 /* LibraryWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000208; };
+		4C51A7E00000000000000020B /* AppGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000020A; };
+		4C51A7E00000000000000020D /* DebugLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000020C; };
+		4C51A7E00000000000000020F /* ImageTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000020E; };
+		4C51A7E000000000000000211 /* MediaError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000210; };
+		4C51A7E000000000000000213 /* MediaInspector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000212; };
+		4C51A7E000000000000000215 /* MediaLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000214; };
+		4C51A7E000000000000000217 /* MediaStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000216; };
+		4C51A7E000000000000000219 /* StagedMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000218; };
+		4C51A7E00000000000000021B /* CloudConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000021A; };
+		4C51A7E00000000000000021D /* CloudFiles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000021C; };
+		4C51A7E00000000000000021F /* CloudMediaStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000021E; };
+		4C51A7E000000000000000221 /* HTMLText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000220; };
+		4C51A7E000000000000000223 /* LinkReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000222; };
+		4C51A7E000000000000000225 /* LinkTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000224; };
+		4C51A7E000000000000000227 /* YouTubeLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000226; };
+		4C51A7E000000000000000229 /* YouTubeOEmbed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000228; };
+		4C51A7E00000000000000022B /* YouTubeReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000022A; };
+		4C51A7E00000000000000022D /* TextIntelligence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000022C; };
+		4C51A7E00000000000000022F /* FolderSuggester.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000022E; };
+		4C51A7E000000000000000231 /* FolderPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000230; };
+		4C51A7E000000000000000233 /* PlaceResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000232; };
+		4C51A7E000000000000000235 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000234; };
+		4C51A7E000000000000000237 /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000236; };
+		4C51A7E000000000000000239 /* FolderMoods.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000238; };
+		4C51A7E00000000000000023B /* BackupFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000023A; };
+		4C51A7E00000000000000023D /* BackupEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000023C; };
+		4C51A7E00000000000000023F /* CloudMediaMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E00000000000000023E; };
+		4C51A7E000000000000000241 /* LibrarySave.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000240; };
+		4C51A7E000000000000000243 /* BackupCrypto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000242; };
+		4C51A7E000000000000000245 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000244; };
+		4C51A7E000000000000000247 /* Suggestions.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 4C51A7E000000000000000246; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4C51A7E00000000000000015 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C51A7E00000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C51A7E0000000000000000C;
+			remoteInfo = LaqtaShare;
+		};
+		4C51A7E00000000000000026 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4C51A7E00000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4C51A7E0000000000000000B;
+			remoteInfo = Laqta;
+		};
+		4C51A7E000000000000000119 = {isa = PBXContainerItemProxy; containerPortal = 4C51A7E00000000000000001; proxyType = 1; remoteGlobalIDString = 4C51A7E000000000000000100; remoteInfo = LaqtaMac; };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4C51A7E00000000000000010 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				4C51A7E00000000000000014 /* LaqtaShare.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4C51A7E00000000000000004 /* Laqta.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Laqta.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C51A7E00000000000000005 /* LaqtaShare.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = LaqtaShare.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C51A7E00000000000000020 /* LaqtaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LaqtaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C51A7E0000000000000002C /* Laqta.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Laqta.xcconfig; sourceTree = "<group>"; };
+		4C51A7E000000000000000200 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Models/Models.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000202 /* Analysis.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Models/Analysis.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000204 /* ComingUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Models/ComingUp.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000206 /* Cleanup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Models/Cleanup.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000208 /* LibraryWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Models/LibraryWriter.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E00000000000000020A /* AppGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Storage/AppGroup.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E00000000000000020C /* DebugLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Storage/DebugLog.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E00000000000000020E /* ImageTools.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Storage/ImageTools.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000210 /* MediaError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Storage/MediaError.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000212 /* MediaInspector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Storage/MediaInspector.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000214 /* MediaLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Storage/MediaLocation.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000216 /* MediaStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Storage/MediaStore.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000218 /* StagedMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Storage/StagedMedia.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E00000000000000021A /* CloudConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Cloud/CloudConfig.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E00000000000000021C /* CloudFiles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Cloud/CloudFiles.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E00000000000000021E /* CloudMediaStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Cloud/CloudMediaStore.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000220 /* HTMLText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Links/HTMLText.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000222 /* LinkReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Links/LinkReader.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000224 /* LinkTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Links/LinkTypes.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000226 /* YouTubeLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Links/YouTubeLink.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000228 /* YouTubeOEmbed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Links/YouTubeOEmbed.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E00000000000000022A /* YouTubeReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Links/YouTubeReader.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E00000000000000022C /* TextIntelligence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Intelligence/TextIntelligence.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E00000000000000022E /* FolderSuggester.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Intelligence/FolderSuggester.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000230 /* FolderPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Intelligence/FolderPalette.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000232 /* PlaceResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Intelligence/PlaceResolver.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000234 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/UI/Theme.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000236 /* Formatting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/UI/Formatting.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000238 /* FolderMoods.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/UI/FolderMoods.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E00000000000000023A /* BackupFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Laqta/Cloud/BackupFormat.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E00000000000000023C /* BackupEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Laqta/Cloud/BackupEngine.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E00000000000000023E /* CloudMediaMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Laqta/Cloud/CloudMediaMover.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000240 /* LibrarySave.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Shared/Models/LibrarySave.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000242 /* BackupCrypto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Laqta/Cloud/BackupCrypto.swift"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000244 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "Shared/Localizable.xcstrings"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000246 /* Suggestions.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "Shared/Suggestions.xcstrings"; sourceTree = SOURCE_ROOT; };
+		4C51A7E000000000000000102 /* LaqtaMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = LaqtaMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C51A7E000000000000000112 /* LaqtaMacTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = LaqtaMacTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4C51A7E00000000000000010A /* LaqtaMac.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = LaqtaMac.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		4C51A7E00000000000000009 /* Exceptions for "Laqta" folder in "Laqta" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4C51A7E0000000000000000B /* Laqta */;
+		};
+		4C51A7E0000000000000000A /* Exceptions for "LaqtaShare" folder in "LaqtaShare" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 4C51A7E0000000000000000C /* LaqtaShare */;
+		};
+		4C51A7E000000000000000109 = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (Info.plist, LaqtaMac.entitlements, LaqtaMacLocal.entitlements, );
+			target = 4C51A7E000000000000000100;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		4C51A7E00000000000000006 /* Laqta */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4C51A7E00000000000000009 /* Exceptions for "Laqta" folder in "Laqta" target */,
+			);
+			path = Laqta;
+			sourceTree = "<group>";
+		};
+		4C51A7E00000000000000007 /* LaqtaShare */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				4C51A7E0000000000000000A /* Exceptions for "LaqtaShare" folder in "LaqtaShare" target */,
+			);
+			path = LaqtaShare;
+			sourceTree = "<group>";
+		};
+		4C51A7E00000000000000008 /* Shared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		4C51A7E00000000000000021 /* LaqtaTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = LaqtaTests;
+			sourceTree = "<group>";
+		};
+		4C51A7E000000000000000101 /* LaqtaMac */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (4C51A7E000000000000000109, ); path = LaqtaMac; sourceTree = "<group>"; };
+		4C51A7E000000000000000111 /* LaqtaMacTests */ = {isa = PBXFileSystemSynchronizedRootGroup; path = LaqtaMacTests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4C51A7E0000000000000000E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C51A7E00000000000000012 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C51A7E00000000000000024 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C51A7E000000000000000104 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (
+
+			); runOnlyForDeploymentPostprocessing = 0; };
+		4C51A7E000000000000000114 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (
+
+			); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4C51A7E00000000000000002 = {
+			isa = PBXGroup;
+			children = (
+				4C51A7E00000000000000006 /* Laqta */,
+				4C51A7E00000000000000007 /* LaqtaShare */,
+				4C51A7E00000000000000008 /* Shared */,
+				4C51A7E00000000000000021 /* LaqtaTests */,
+				4C51A7E000000000000000101 /* LaqtaMac */,
+				4C51A7E000000000000000300 /* Mac Shared Sources */,
+				4C51A7E000000000000000111 /* LaqtaMacTests */,
+				4C51A7E0000000000000002B /* Config */,
+				4C51A7E00000000000000003 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4C51A7E00000000000000003 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4C51A7E00000000000000004 /* Laqta.app */,
+				4C51A7E00000000000000005 /* LaqtaShare.appex */,
+				4C51A7E00000000000000020 /* LaqtaTests.xctest */,
+				4C51A7E000000000000000102 /* LaqtaMac.app */,
+				4C51A7E000000000000000112 /* LaqtaMacTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4C51A7E0000000000000002B /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				4C51A7E0000000000000002C /* Laqta.xcconfig */,
+				4C51A7E00000000000000010A /* LaqtaMac.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		4C51A7E000000000000000300 /* Mac Shared Sources */ = {isa = PBXGroup; children = (4C51A7E000000000000000200, 4C51A7E000000000000000202, 4C51A7E000000000000000204, 4C51A7E000000000000000206, 4C51A7E000000000000000208, 4C51A7E00000000000000020A, 4C51A7E00000000000000020C, 4C51A7E00000000000000020E, 4C51A7E000000000000000210, 4C51A7E000000000000000212, 4C51A7E000000000000000214, 4C51A7E000000000000000216, 4C51A7E000000000000000218, 4C51A7E00000000000000021A, 4C51A7E00000000000000021C, 4C51A7E00000000000000021E, 4C51A7E000000000000000220, 4C51A7E000000000000000222, 4C51A7E000000000000000224, 4C51A7E000000000000000226, 4C51A7E000000000000000228, 4C51A7E00000000000000022A, 4C51A7E00000000000000022C, 4C51A7E00000000000000022E, 4C51A7E000000000000000230, 4C51A7E000000000000000232, 4C51A7E000000000000000234, 4C51A7E000000000000000236, 4C51A7E000000000000000238, 4C51A7E00000000000000023A, 4C51A7E00000000000000023C, 4C51A7E00000000000000023E, 4C51A7E000000000000000240, 4C51A7E000000000000000242, 4C51A7E000000000000000244, 4C51A7E000000000000000246, ); name = "Mac Shared Sources"; sourceTree = "<group>"; };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4C51A7E0000000000000000B /* Laqta */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C51A7E00000000000000018 /* Build configuration list for PBXNativeTarget "Laqta" */;
+			buildPhases = (
+				4C51A7E0000000000000000D /* Sources */,
+				4C51A7E0000000000000000E /* Frameworks */,
+				4C51A7E0000000000000000F /* Resources */,
+				4C51A7E00000000000000010 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C51A7E00000000000000016 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4C51A7E00000000000000006 /* Laqta */,
+				4C51A7E00000000000000008 /* Shared */,
+			);
+			name = Laqta;
+			packageProductDependencies = (
+			);
+			productName = Laqta;
+			productReference = 4C51A7E00000000000000004 /* Laqta.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4C51A7E0000000000000000C /* LaqtaShare */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C51A7E00000000000000019 /* Build configuration list for PBXNativeTarget "LaqtaShare" */;
+			buildPhases = (
+				4C51A7E00000000000000011 /* Sources */,
+				4C51A7E00000000000000012 /* Frameworks */,
+				4C51A7E00000000000000013 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				4C51A7E00000000000000007 /* LaqtaShare */,
+				4C51A7E00000000000000008 /* Shared */,
+			);
+			name = LaqtaShare;
+			packageProductDependencies = (
+			);
+			productName = LaqtaShare;
+			productReference = 4C51A7E00000000000000005 /* LaqtaShare.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		4C51A7E00000000000000022 /* LaqtaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C51A7E00000000000000028 /* Build configuration list for PBXNativeTarget "LaqtaTests" */;
+			buildPhases = (
+				4C51A7E00000000000000023 /* Sources */,
+				4C51A7E00000000000000024 /* Frameworks */,
+				4C51A7E00000000000000025 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4C51A7E00000000000000027 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				4C51A7E00000000000000021 /* LaqtaTests */,
+			);
+			name = LaqtaTests;
+			packageProductDependencies = (
+			);
+			productName = LaqtaTests;
+			productReference = 4C51A7E00000000000000020 /* LaqtaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		4C51A7E000000000000000100 /* LaqtaMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C51A7E000000000000000106;
+			buildPhases = (4C51A7E000000000000000103, 4C51A7E000000000000000104, 4C51A7E000000000000000105, );
+			buildRules = (); dependencies = (); fileSystemSynchronizedGroups = (4C51A7E000000000000000101, );
+			name = LaqtaMac; productName = LaqtaMac; productReference = 4C51A7E000000000000000102; productType = "com.apple.product-type.application";
+		};
+		4C51A7E000000000000000110 /* LaqtaMacTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4C51A7E000000000000000116;
+			buildPhases = (4C51A7E000000000000000113, 4C51A7E000000000000000114, 4C51A7E000000000000000115, );
+			buildRules = (); dependencies = (4C51A7E00000000000000011A, ); fileSystemSynchronizedGroups = (4C51A7E000000000000000111, );
+			name = LaqtaMacTests; productName = LaqtaMacTests; productReference = 4C51A7E000000000000000112; productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4C51A7E00000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2700;
+				LastUpgradeCheck = 2710;
+				TargetAttributes = {
+					4C51A7E0000000000000000B = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					4C51A7E0000000000000000C = {
+						CreatedOnToolsVersion = 27.0;
+					};
+					4C51A7E00000000000000022 = {
+						CreatedOnToolsVersion = 27.0;
+						TestTargetID = 4C51A7E0000000000000000B;
+					};
+				};
+			};
+			buildConfigurationList = 4C51A7E00000000000000017 /* Build configuration list for PBXProject "Laqta" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				ar,
+				Base,
+			);
+			mainGroup = 4C51A7E00000000000000002;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 4C51A7E00000000000000003 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4C51A7E0000000000000000B /* Laqta */,
+				4C51A7E0000000000000000C /* LaqtaShare */,
+				4C51A7E00000000000000022 /* LaqtaTests */,
+				4C51A7E000000000000000100 /* LaqtaMac */,
+				4C51A7E000000000000000110 /* LaqtaMacTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4C51A7E0000000000000000F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C51A7E00000000000000013 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C51A7E00000000000000025 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C51A7E000000000000000105 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (
+				4C51A7E000000000000000245 /* Localizable.xcstrings in Resources */,
+				4C51A7E000000000000000247 /* Suggestions.xcstrings in Resources */,
+			); runOnlyForDeploymentPostprocessing = 0; };
+		4C51A7E000000000000000115 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (
+
+			); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4C51A7E0000000000000000D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C51A7E00000000000000011 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C51A7E00000000000000023 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4C51A7E000000000000000103 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
+				4C51A7E000000000000000201 /* Models.swift in Sources */,
+				4C51A7E000000000000000203 /* Analysis.swift in Sources */,
+				4C51A7E000000000000000205 /* ComingUp.swift in Sources */,
+				4C51A7E000000000000000207 /* Cleanup.swift in Sources */,
+				4C51A7E000000000000000209 /* LibraryWriter.swift in Sources */,
+				4C51A7E00000000000000020B /* AppGroup.swift in Sources */,
+				4C51A7E00000000000000020D /* DebugLog.swift in Sources */,
+				4C51A7E00000000000000020F /* ImageTools.swift in Sources */,
+				4C51A7E000000000000000211 /* MediaError.swift in Sources */,
+				4C51A7E000000000000000213 /* MediaInspector.swift in Sources */,
+				4C51A7E000000000000000215 /* MediaLocation.swift in Sources */,
+				4C51A7E000000000000000217 /* MediaStore.swift in Sources */,
+				4C51A7E000000000000000219 /* StagedMedia.swift in Sources */,
+				4C51A7E00000000000000021B /* CloudConfig.swift in Sources */,
+				4C51A7E00000000000000021D /* CloudFiles.swift in Sources */,
+				4C51A7E00000000000000021F /* CloudMediaStore.swift in Sources */,
+				4C51A7E000000000000000221 /* HTMLText.swift in Sources */,
+				4C51A7E000000000000000223 /* LinkReader.swift in Sources */,
+				4C51A7E000000000000000225 /* LinkTypes.swift in Sources */,
+				4C51A7E000000000000000227 /* YouTubeLink.swift in Sources */,
+				4C51A7E000000000000000229 /* YouTubeOEmbed.swift in Sources */,
+				4C51A7E00000000000000022B /* YouTubeReader.swift in Sources */,
+				4C51A7E00000000000000022D /* TextIntelligence.swift in Sources */,
+				4C51A7E00000000000000022F /* FolderSuggester.swift in Sources */,
+				4C51A7E000000000000000231 /* FolderPalette.swift in Sources */,
+				4C51A7E000000000000000233 /* PlaceResolver.swift in Sources */,
+				4C51A7E000000000000000235 /* Theme.swift in Sources */,
+				4C51A7E000000000000000237 /* Formatting.swift in Sources */,
+				4C51A7E000000000000000239 /* FolderMoods.swift in Sources */,
+				4C51A7E00000000000000023B /* BackupFormat.swift in Sources */,
+				4C51A7E00000000000000023D /* BackupEngine.swift in Sources */,
+				4C51A7E00000000000000023F /* CloudMediaMover.swift in Sources */,
+				4C51A7E000000000000000241 /* LibrarySave.swift in Sources */,
+				4C51A7E000000000000000243 /* BackupCrypto.swift in Sources */,
+			); runOnlyForDeploymentPostprocessing = 0; };
+		4C51A7E000000000000000113 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (
+
+			); runOnlyForDeploymentPostprocessing = 0; };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4C51A7E00000000000000016 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C51A7E0000000000000000C /* LaqtaShare */;
+			targetProxy = 4C51A7E00000000000000015 /* PBXContainerItemProxy */;
+		};
+		4C51A7E00000000000000027 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4C51A7E0000000000000000B /* Laqta */;
+			targetProxy = 4C51A7E00000000000000026 /* PBXContainerItemProxy */;
+		};
+		4C51A7E00000000000000011A = {isa = PBXTargetDependency; target = 4C51A7E000000000000000100; targetProxy = 4C51A7E000000000000000119; };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4C51A7E0000000000000001A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4C51A7E0000000000000002C /* Laqta.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_GROUP_ID = group.Hmdalajmi.Laqta;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = Y9947WYZ9L;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		4C51A7E0000000000000001B /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4C51A7E0000000000000002C /* Laqta.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				APP_GROUP_ID = group.Hmdalajmi.Laqta;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = Y9947WYZ9L;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 27.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4C51A7E0000000000000001C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Laqta/Laqta.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = Y9947WYZ9L;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Laqta/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Laqta;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "Laqta adds dates it finds in your shots and links to your calendar when you ask it to.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Laqta uses the camera to scan documents into PDFs and to take a shot straight into one of your folders.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Laqta uses Face ID to open your private folders.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Laqta shows the travel time to places found in your shots and links.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Laqta adds photos and videos from your library and, when you turn it on, removes the original after keeping its own copy.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Laqta transcribes the speech in your videos on this device, so you can read and search it.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Hmdalajmi.Laqta;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4C51A7E0000000000000001D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Laqta/Laqta.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = Y9947WYZ9L;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Laqta/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Laqta;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
+				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "Laqta adds dates it finds in your shots and links to your calendar when you ask it to.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Laqta uses the camera to scan documents into PDFs and to take a shot straight into one of your folders.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "Laqta uses Face ID to open your private folders.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Laqta shows the travel time to places found in your shots and links.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Laqta adds photos and videos from your library and, when you turn it on, removes the original after keeping its own copy.";
+				INFOPLIST_KEY_NSSpeechRecognitionUsageDescription = "Laqta transcribes the speech in your videos on this device, so you can read and search it.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Hmdalajmi.Laqta;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4C51A7E0000000000000001E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = LaqtaShare/LaqtaShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = Y9947WYZ9L;
+				ENABLE_DEBUG_DYLIB = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LaqtaShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Laqta;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Hmdalajmi.Laqta.Share;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		4C51A7E0000000000000001F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = LaqtaShare/LaqtaShare.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = Y9947WYZ9L;
+				ENABLE_DEBUG_DYLIB = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = LaqtaShare/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Laqta;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Hmdalajmi.Laqta.Share;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		4C51A7E00000000000000029 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = Y9947WYZ9L;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Hmdalajmi.LaqtaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Laqta.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Laqta";
+			};
+			name = Debug;
+		};
+		4C51A7E0000000000000002A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 8;
+				DEVELOPMENT_TEAM = Y9947WYZ9L;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = Hmdalajmi.LaqtaTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 6.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Laqta.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Laqta";
+			};
+			name = Release;
+		};
+		4C51A7E000000000000000107 = {isa = XCBuildConfiguration; baseConfigurationReference = 4C51A7E00000000000000010A; buildSettings = {}; name = Debug; };
+		4C51A7E000000000000000117 = {isa = XCBuildConfiguration; buildSettings = {
+SDKROOT = macosx; SUPPORTED_PLATFORMS = macosx; MACOSX_DEPLOYMENT_TARGET = 26.0; GENERATE_INFOPLIST_FILE = YES;
+PRODUCT_BUNDLE_IDENTIFIER = Hmdalajmi.Laqta.MacTests; PRODUCT_NAME = "$(TARGET_NAME)";
+SWIFT_VERSION = 6.0; SWIFT_APPROACHABLE_CONCURRENCY = YES;
+CODE_SIGN_STYLE = Automatic; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LaqtaMac.app/Contents/MacOS/LaqtaMac"; BUNDLE_LOADER = "$(TEST_HOST)";
+}; name = Debug; };
+		4C51A7E000000000000000108 = {isa = XCBuildConfiguration; baseConfigurationReference = 4C51A7E00000000000000010A; buildSettings = {}; name = Release; };
+		4C51A7E000000000000000118 = {isa = XCBuildConfiguration; buildSettings = {
+SDKROOT = macosx; SUPPORTED_PLATFORMS = macosx; MACOSX_DEPLOYMENT_TARGET = 26.0; GENERATE_INFOPLIST_FILE = YES;
+PRODUCT_BUNDLE_IDENTIFIER = Hmdalajmi.Laqta.MacTests; PRODUCT_NAME = "$(TARGET_NAME)";
+SWIFT_VERSION = 6.0; SWIFT_APPROACHABLE_CONCURRENCY = YES;
+CODE_SIGN_STYLE = Automatic; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/LaqtaMac.app/Contents/MacOS/LaqtaMac"; BUNDLE_LOADER = "$(TEST_HOST)";
+}; name = Release; };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4C51A7E00000000000000017 /* Build configuration list for PBXProject "Laqta" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C51A7E0000000000000001A /* Debug */,
+				4C51A7E0000000000000001B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C51A7E00000000000000018 /* Build configuration list for PBXNativeTarget "Laqta" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C51A7E0000000000000001C /* Debug */,
+				4C51A7E0000000000000001D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C51A7E00000000000000019 /* Build configuration list for PBXNativeTarget "LaqtaShare" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C51A7E0000000000000001E /* Debug */,
+				4C51A7E0000000000000001F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C51A7E00000000000000028 /* Build configuration list for PBXNativeTarget "LaqtaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4C51A7E00000000000000029 /* Debug */,
+				4C51A7E0000000000000002A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4C51A7E000000000000000106 = {isa = XCConfigurationList; buildConfigurations = (4C51A7E000000000000000107, 4C51A7E000000000000000108, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		4C51A7E000000000000000116 = {isa = XCConfigurationList; buildConfigurations = (4C51A7E000000000000000117, 4C51A7E000000000000000118, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+/* End XCConfigurationList section */
+	};
+	rootObject = 4C51A7E00000000000000001 /* Project object */;
+}

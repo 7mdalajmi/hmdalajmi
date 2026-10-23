@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).maintenance</string>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER).continued.*</string>
+	</array>
+	<key>CFBundleDocumentTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeName</key>
+			<string>Laqta Backup</string>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>Hmdalajmi.Laqta.backup</string>
+			</array>
+		</dict>
+	</array>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>en</string>
+		<string>ar</string>
+	</array>
+	<key>LaqtaAppGroupID</key>
+	<string>$(APP_GROUP_ID)</string>
+	<key>LaqtaPrivacyPolicyURL</key>
+	<string>$(LAQTA_PRIVACY_POLICY_URL)</string>
+	<key>LaqtaSupportURL</key>
+	<string>$(LAQTA_SUPPORT_URL)</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>CormorantGaramond-SemiBold.ttf</string>
+		<string>CormorantGaramond-Bold.ttf</string>
+		<string>Amiri-Bold.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>processing</string>
+		<string>remote-notification</string>
+	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Laqta Item</string>
+			<key>UTTypeIdentifier</key>
+			<string>Hmdalajmi.Laqta.item</string>
+			<key>UTTypeTagSpecification</key>
+			<dict/>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Laqta Backup</string>
+			<key>UTTypeIdentifier</key>
+			<string>Hmdalajmi.Laqta.backup</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>laqtabackup</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-laqta-backup</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
+</dict>
+</plist>

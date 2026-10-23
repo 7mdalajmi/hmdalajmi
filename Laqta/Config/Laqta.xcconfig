@@ -1,0 +1,20 @@
+//
+//  Laqta.xcconfig
+//  Build settings shared by Laqta's targets.
+//
+//  The web pages for the App Store (privacy policy and support) are published with
+//  GitHub Pages from AppStore/web. Settings and the Privacy Policy screen link to them.
+//
+//  xcconfig files treat "//" as a comment, so URLs are written as "https:/$()/".
+//
+
+// CloudKit's push environment. A Release build (TestFlight and the App Store) has to
+// say "production": a shipped app with `aps-environment = development` gets no silent
+// pushes from CloudKit, so other devices' changes only arrive when the app is opened
+// and asks — and an entitlement that doesn't match the signing profile is also how an
+// upload gets rejected.
+APS_ENVIRONMENT = development
+APS_ENVIRONMENT[config=Release] = production
+
+LAQTA_PRIVACY_POLICY_URL = https:/$()/7mdalajmi.github.io/laqta/privacy.html
+LAQTA_SUPPORT_URL = https:/$()/7mdalajmi.github.io/laqta/support.html
