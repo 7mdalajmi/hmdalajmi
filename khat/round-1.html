@@ -1,0 +1,281 @@
+<title>مسودات الخط الأولى</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap">
+<style>
+/* Layout: one long drafting sheet; each direction is a plate (specimen on top, verdict below), ending with the proposed direction for round 2 */
+:root{
+  --bg:#E9ECEF;        /* drafting paper, cool */
+  --surface:#F7F8F9;   /* plate */
+  --ink:#14161A;       /* letterforms */
+  --muted:#5E6570;
+  --line:#CDD3DA;
+  --accent:#2446C8;    /* skeleton / blue pencil */
+  --warn:#B4361F;      /* the red pen of the critique */
+  --f-body:"IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111317;--surface:#191C21;--ink:#ECEEF1;--muted:#99A1AD;--line:#2B3038;--accent:#7D97FF;--warn:#FF8A70;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--surface:#191C21;--ink:#ECEEF1;--muted:#99A1AD;--line:#2B3038;--accent:#7D97FF;--warn:#FF8A70;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.75;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:40px 80px}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:28px}
+header{display:grid;gap:10px;padding-bottom:8px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--muted);direction:ltr;text-align:right}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.2;margin:0;font-weight:700;text-wrap:balance}
+h2{font-size:24px;margin:0;line-height:1.3;text-wrap:balance}
+h3{font-size:15px;margin:0;color:var(--muted);font-weight:500}
+p{margin:0;max-width:65ch}
+.lede{color:var(--muted)}
+
+.plate{background:var(--surface);border:1px solid var(--line);border-radius:6px;display:grid;overflow:hidden}
+.plate-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 16px;padding:20px 22px 0}
+.tag{font-family:var(--f-mono);font-size:12px;color:var(--accent);border:1px solid currentColor;border-radius:3px;padding:0 6px}
+.spirit{color:var(--muted);flex-basis:100%}
+.specimen{padding:16px 22px 8px;color:var(--ink)}
+.specimen svg{display:block;width:100%;height:auto;max-height:190px}
+.specimen .skel{display:none}
+.plate.show-skel .specimen .skel{display:inline}
+.tools{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;padding:0 22px 16px;border-bottom:1px dashed var(--line)}
+.small-test{display:flex;align-items:center;gap:14px;color:var(--ink)}
+.small-test svg{display:block;height:20px;width:auto}
+.small-test svg.s2{height:13px}
+.small-test span{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.params{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);direction:ltr;margin-inline-start:auto}
+button.skel-btn{font:inherit;font-size:13px;background:none;border:1px solid var(--line);color:var(--ink);border-radius:4px;padding:2px 10px;cursor:pointer}
+button.skel-btn[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.verdict{display:grid;grid-template-columns:minmax(0,1fr) 220px;gap:22px;padding:18px 22px 22px}
+@media (max-width:680px){.verdict{grid-template-columns:minmax(0,1fr)}}
+.verdict ul{margin:0;padding-inline-start:18px;display:grid;gap:6px}
+.verdict li::marker{color:var(--warn)}
+.verdict .keep{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.verdict .keep b{color:var(--accent);font-weight:500}
+.scores{display:grid;gap:8px;align-content:start}
+.score{display:grid;grid-template-columns:1fr auto;gap:2px 8px;font-size:13px}
+.meter{grid-column:1/-1;display:flex;gap:3px}
+.meter i{flex:1;height:6px;background:var(--line);border-radius:1px}
+.meter i.on{background:var(--ink)}
+.score b{font-family:var(--f-mono);font-weight:400;font-size:12px;color:var(--muted)}
+
+.note{background:transparent;border:1px solid var(--line);border-radius:6px;padding:20px 22px;display:grid;gap:12px}
+.note ol{margin:0;padding-inline-start:20px;display:grid;gap:8px;max-width:72ch}
+.next{border-color:var(--accent)}
+.next .specimen{padding-inline:0}
+.ask{display:grid;gap:6px}
+.ask li b{font-weight:500}
+footer{color:var(--muted);font-size:13px}
+@media (prefers-reduced-motion:no-preference){button{transition:color .15s,border-color .15s}}
+</style>
+
+<div class="wrap" dir="rtl" lang="ar">
+  <header>
+    <div class="eyebrow">ROUND 01 · 5 DIRECTIONS · 10 GLYPH FORMS</div>
+    <h1>خط يشبه الدارج، بروح مختلفة</h1>
+    <p class="lede">خمسة اتجاهات أولية مرسومة بالكود على نفس الكلمات: «سلام حمد بيت». الرسم مبسّط عمداً: عشرة أشكال حروف فقط (أول ووسط وآخر)، والهدف نختبر الروح قبل ما نصرف وقت على الحروف كلها. تحت كل اتجاه نقدي له بدون مجاملة، وفي الآخر الاتجاه اللي أقترح نتعمق فيه.</p>
+    <p class="lede">اضغط «الهيكل» تحت أي عينة لترى خط المنتصف الأزرق اللي بُني عليه الحرف. السطر الصغير اختبار للقراءة بحجم نص عادي.</p>
+  </header>
+
+  <div id="plates" class="wrap" style="gap:28px"></div>
+
+  <section class="note">
+    <h2>نقد عام على الجولة كلها</h2>
+    <ol>
+      <li><b>أكبر خطأ في الجولة:</b> الحاء الأولى تُقرأ كافاً في كل النسخ. «حمد» تُقرأ «كمد». الرأس الأفقي مع الوتر المائل هو بالضبط شكل الكاف المبسطة. هذا ليس عيباً في الروح، هو خطأ في الهيكل، ويجب أن يُحل قبل أي شيء آخر: الحاء تحتاج رأساً يرتفع من اليمين وينحني، لا خطاً مستقيماً.</li>
+      <li>أربعة من الخمسة مبنية على نفس الهيكل، والفرق بينها في «القلم» فقط (سماكة، تباين، ميل، قطع). هذا يختبر الملمس لكن لا يختبر الروح فعلاً. الروح الحقيقية تسكن في الهيكل: طول الأسنان، حجم العيون، زاوية الحاء، شكل الكأس.</li>
+      <li>الأسنان (س، ب، ي) بنفس الارتفاع في كل الاتجاهات. في الخطوط الجيدة السن الأول أطول قليلاً حتى تتميز البداية. هذا يجعل «سـ» و«بيـ» تشبه المشط.</li>
+      <li>العيّنة صغيرة جداً لتحكم على الإيقاع. ما عندنا ألف لام، ولا عين، ولا حروف نازلة مثل الراء والواو، وهي اللي تفضح الخط عادة.</li>
+      <li>الميم الوسطية صغيرة جداً، وفي الأوزان الثقيلة (ب، هـ) تصير كتلة بدون عين. والدال تشبه خطافاً أكثر من دال.</li>
+      <li>مسافة ما بعد الألف (قبل الميم في «سلام») ضيقة. الكلمة تُقرأ «سلا م» تقريباً لكن بصرياً تلتصق.</li>
+    </ol>
+  </section>
+
+  <section class="note next">
+    <h2>الاتجاه المقترح للجولة الثانية</h2>
+    <p>أقوى فكرة هنا روح «ب» (التباين المعكوس: العمودي ثقيل والأفقي خفيف)، لكنها في صورتها الحالية تقتل القراءة. الحل: نأخذ هيكل «أ» المقروء المألوف، ونطبق عليه تبايناً معكوساً معتدلاً (٢ إلى ١ بدل ١٠ إلى ١). النتيجة تبقى قريبة من الخطوط الدارجة في الشكل العام، لكن ملمسها مختلف: الحروف «واقفة» بدل ما تكون «ممدودة».</p>
+    <div class="plate" id="proposal" style="border:0;background:transparent"></div>
+    <div class="ask">
+      <h3>قبل الجولة الثانية، أحتاج منك:</h3>
+      <ul>
+        <li><b>الاتجاه:</b> توافق على المقترح، أو تختار اتجاهاً آخر من الخمسة؟</li>
+        <li><b>الاستخدام:</b> عناوين وشعارات، أم نص طويل؟ هذا يحسم التباين.</li>
+        <li><b>الوزن:</b> خفيف، عادي، أو ثقيل كبداية.</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>الجولة القادمة: هيكل جديد للحروف بدل تغيير القلم فقط، ٢٨ حرفاً بأشكالها، وعينة نص حقيقية بدل ثلاث كلمات.</footer>
+</div>
+
+<script>
+(()=>{
+// ---------- geometry helpers ----------
+const C = (cx,cy,r)=>{const k=0.5523*r;return `M${cx+r},${cy} C${cx+r},${cy+k} ${cx+k},${cy+r} ${cx},${cy+r} C${cx-k},${cy+r} ${cx-r},${cy+k} ${cx-r},${cy} C${cx-r},${cy-k} ${cx-k},${cy-r} ${cx},${cy-r} C${cx+k},${cy-r} ${cx+r},${cy-k} ${cx+r},${cy} Z`;};
+const r3 = n => Math.round(n*1000)/1000;
+function tPath(d, f){ // transform every absolute point in an M/L/Q/C/Z path
+  const tok = d.match(/[MLQCZ]|-?\d*\.?\d+/g); let out=[], buf=[];
+  for(const t of tok){ if(/[MLQCZ]/.test(t)){out.push(t);} else {buf.push(+t); if(buf.length===2){const [x,y]=f(buf[0],buf[1]);out.push(r3(x)+','+r3(y));buf=[];}}}
+  return out.join(' ');
+}
+
+// ---------- skeleton A: rounded naskh-geometric (y up, baseline 0, tooth ≈1, alef 2.9) ----------
+const A = {
+ 'sin.init':{w:2.6,d:'M2.5,0.9 L2.5,0.3 Q2.5,0 2.15,0 Q1.8,0 1.8,0.3 L1.8,0.75 M1.8,0.3 Q1.8,0 1.45,0 Q1.1,0 1.1,0.3 L1.1,0.75 M1.1,0.3 Q1.1,0 0.75,0 L0,0'},
+ 'lam.med':{w:0.8,d:'M0.8,0 Q0.4,0 0.4,0.4 L0.4,2.9 M0.4,0.4 Q0.4,0 0,0'},
+ 'alef.fin':{w:0.7,d:'M0.7,0 Q0.3,0 0.3,0.4 L0.3,2.9'},
+ 'mim.iso':{w:1.6,d:C(1.0,0.45,0.45)+' M0.58,0.3 Q0.5,-0.3 0.5,-1.4'},
+ 'hah.init':{w:1.9,d:'M1.75,1.3 Q1.6,1.08 1.3,1.08 L0.4,1.08 Q0.25,1.08 0.35,0.92 L0.95,0.12 Q1.05,0 0.85,0 L0,0'},
+ 'mim.med':{w:1.1,d:'M1.1,0 L0,0 '+C(0.55,0.32,0.3)},
+ 'dal.fin':{w:1.25,d:'M0.35,1.15 Q0.5,1.05 0.85,0.45 Q1.0,0.05 0.55,0 L0.05,0 M1.25,0 L0.6,0'},
+ 'beh.init':{w:0.7,d:'M0.55,0.8 L0.55,0.3 Q0.55,0 0.25,0 L0,0',dots:[[0.4,-0.45]]},
+ 'yeh.med':{w:0.7,d:'M0.7,0 Q0.4,0 0.4,0.3 L0.4,0.8 M0.4,0.3 Q0.4,0 0.1,0 L0,0',dots:[[0.2,-0.45],[0.6,-0.45]]},
+ 'teh.fin':{w:1.95,d:'M1.95,0 Q1.6,0 1.6,0.35 L1.6,0.75 M1.6,0.35 Q1.6,-0.05 1.1,-0.05 L0.55,-0.05 Q0.1,-0.05 0.1,0.6',dots:[[0.7,0.75],[1.05,0.75]]},
+};
+// ---------- skeleton K: square kufic, orthogonal + 45° ----------
+const K = {
+ 'sin.init':{w:2.6,d:'M2.5,0.9 L2.5,0 L0,0 M1.8,0 L1.8,0.75 M1.1,0 L1.1,0.75'},
+ 'lam.med':{w:0.8,d:'M0.8,0 L0,0 M0.4,0 L0.4,2.9'},
+ 'alef.fin':{w:0.7,d:'M0.7,0 L0.3,0 L0.3,2.9'},
+ 'mim.iso':{w:1.6,d:'M1.45,0 L0.55,0 L0.55,0.8 L1.45,0.8 Z M0.55,0 L0.55,-1.4'},
+ 'hah.init':{w:1.9,d:'M1.7,1.1 L0.4,1.1 L1.05,0.45 L1.05,0 M1.05,0 L0,0'},
+ 'mim.med':{w:1.1,d:'M1.1,0 L0,0 M0.85,0 L0.85,0.6 L0.25,0.6 L0.25,0'},
+ 'dal.fin':{w:1.25,d:'M1.25,0 L0.1,0 M0.9,0 L0.9,1.1 L0.4,1.1'},
+ 'beh.init':{w:0.7,d:'M0.55,0.8 L0.55,0 L0,0',dots:[[0.35,-0.5]]},
+ 'yeh.med':{w:0.7,d:'M0.7,0 L0,0 M0.4,0 L0.4,0.8',dots:[[0.15,-0.5],[0.6,-0.5]]},
+ 'teh.fin':{w:1.95,d:'M1.95,0 L0.1,0 L0.1,0.7 M1.6,0 L1.6,0.75',dots:[[0.65,0.75],[1.05,0.75]]},
+};
+
+const WORDS = [['sin.init','lam.med','alef.fin','|','mim.iso'],['hah.init','mim.med','dal.fin'],['beh.init','yeh.med','teh.fin']];
+const joinsLeft = n => /\.(init|med)$/.test(n);
+
+// ---------- the five directions + proposal ----------
+const CONCEPTS = [
+ {id:'a',tag:'أ',name:'رَمل',spirit:'هندسي هادئ، خط واحد بسماكة ثابتة ونهايات مستديرة. الأقرب للخطوط الدارجة في الواجهات.',
+  sk:A,pen:{type:'mono',w:0.17,cap:'round'},dot:{type:'round',r:0.13},xs:1,k:0,kash:0,
+  params:'monoline 0.17 · round caps · skeleton A',
+  crit:['الأقرب للدارج إلى درجة الخطر. لو حذفت الاسم، لن يفرّقه أحد عن عشرات الخطوط الهندسية الموجودة. «الروح المختلفة» غير موجودة أصلاً.',
+        'رأس الميم دائرة كاملة مغلقة، يبدو أثقل من باقي الحروف بصرياً رغم أن السماكة واحدة. الدوائر الكاملة دائماً تحتاج تصغيراً بصرياً.',
+        'الحاء بزاويتها الحادة تكسر منطق الانحناءات الناعمة. حرف واحد من خارج العائلة.',
+        'النقاط كبيرة ومستديرة، تلفت الانتباه أكثر من الحروف نفسها.'],
+  keep:'مقروء جداً في الحجم الصغير. الهيكل يصلح أساساً لأي اتجاه آخر.',
+  scores:{'القراءة':5,'التفرد':1,'الانسجام':3,'قابلية التوسع':4}},
+ {id:'b',tag:'ب',name:'قلم مقلوب',spirit:'تباين معكوس: القلم مقلوب ٩٠ درجة، فالعمودي ثقيل والأفقي شعرة. عكس عادة القلم العربي تماماً.',
+  sk:A,pen:{type:'nib',angle:0,len:0.42,thin:0.035},dot:{type:'nib'},xs:1,k:0,kash:0,
+  params:'broad nib 0° · contrast ≈ 12:1 · skeleton A',
+  crit:['الخطوط الأفقية هي عمود الخط العربي، وهنا صارت شعرات. في السطر الصغير تختفي الوصلات وتتفكك الكلمة إلى أعمدة متفرقة.',
+        'الكأس في «ت» والقاعدة في «د» تتلاشى تقريباً، فيصعب التمييز بين الحروف الأخيرة.',
+        'التنفيذ الحالي (محاكاة القلم بنسخ متكررة) يعطي حوافاً متدرجة في المنحنيات. هذا عيب في الرسم وليس في الفكرة، لكن يجب أن يُذكر.',
+        'يصلح للعناوين الكبيرة فقط. لا يمكن أن يكون خط نصوص بهذه النسبة.'],
+  keep:'أقوى روح بين الخمسة. هذا هو «المختلف» اللي طلبته: شكل مألوف بملمس غير متوقع.',
+  scores:{'القراءة':2,'التفرد':5,'الانسجام':4,'قابلية التوسع':2}},
+ {id:'c',tag:'ج',name:'طابوق',spirit:'كوفي مربع بزوايا قائمة وسماكة ثقيلة. روح معمارية تذكّر بالطين والطابوق في البيوت القديمة.',
+  sk:K,pen:{type:'mono',w:0.3,cap:'square',join:'miter'},dot:{type:'square',s:0.3},xs:1,k:0,kash:0,
+  params:'monoline 0.30 · square caps · skeleton K (orthogonal)',
+  crit:['خرج عن الطلب. الكوفي المربع ليس «دارجاً»، هو أسلوب زخرفي معروف بحد ذاته، فلا يحقق «يشبه الدارج».',
+        'الحاء غير مقروءة تقريباً خارج سياق الكلمة. والدال صارت زاوية تشبه أي حرف.',
+        'الميم المعزولة مربع بذيل، تشبه الفاء الكوفية. الحروف المربعة تتشابه بسرعة كلما زاد عددها.',
+        'ثقيل جداً في السطر الصغير: عين الميم الوسطية تنسد.'],
+  keep:'هوية بصرية واضحة وقوية. مكانه الشعارات واللافتات، لا خط عام.',
+  scores:{'القراءة':2,'التفرد':3,'الانسجام':4,'قابلية التوسع':2}},
+ {id:'d',tag:'د',name:'شراع',spirit:'مائل لليسار مع كشيدة ممدودة بين الحروف وقلم تقليدي الزاوية. حركة وسرعة مثل شراع في الريح.',
+  sk:A,pen:{type:'nib',angle:70,len:0.3,thin:0.045},dot:{type:'nib'},xs:1.22,k:-0.2,kash:0.55,
+  params:'broad nib 70° · slant −11° · kashida 0.55 · width 122%',
+  crit:['الكشيدة ثابتة بين كل حرفين. هذا ميكانيكي: الكشيدة في الخط الحقيقي قرار موزون في مكان واحد من الكلمة، لا في كل وصلة.',
+        'الكلمات صارت أطول بنحو ٦٠٪. في أي تطبيق فعلي هذا يأكل المساحة ويجبر على تصغير الخط.',
+        'الميل يكسر عمودية الألف واللام بطريقة تبدو خطأ وليس قراراً، لأن باقي الحروف لا تميل بنفس المنطق.',
+        'القلم بزاوية ٧٠ هو القلم التقليدي بالضبط. يعني الروح جاءت من الميل فقط، وهذا سطحي.'],
+  keep:'فيه حركة حقيقية. فكرة «الكشيدة كأداة إيقاع» تستحق أن تعود لاحقاً بشكل موزون.',
+  scores:{'القراءة':3,'التفرد':3,'الانسجام':2,'قابلية التوسع':2}},
+ {id:'e',tag:'هـ',name:'ميناء',spirit:'ستنسل ثقيل بقطوع عند المفاصل، كأنه مطبوع على صناديق الشحن في الميناء.',
+  sk:A,pen:{type:'mono',w:0.36,cap:'butt',join:'miter'},dot:{type:'square',s:0.32},xs:1,k:0,kash:0,
+  cuts:{'sin.init':[[1.8,0.45,0],[1.1,0.45,0]],'lam.med':[[0.4,0.75,0]],'alef.fin':[[0.3,0.75,0]],'mim.iso':[[1.0,0.9,90]],'hah.init':[[0.85,1.08,90]],'mim.med':[[0.55,0.62,90]],'beh.init':[[0.55,0.45,0]],'yeh.med':[[0.4,0.45,0]],'teh.fin':[[1.0,-0.05,90]],'dal.fin':[[0.9,0.33,-25]]},
+  params:'monoline 0.36 · butt caps · stencil cuts · skeleton A',
+  crit:['الستنسل فكرة مستعارة من الخطوط اللاتينية ومستهلكة جداً. الروح هنا من «المؤثر» لا من الحرف.',
+        'القطوع موضوعة يدوياً بلا نظام. قطع رأس الميم وقطع وتر الحاء يضران القراءة بدل ما يخدمانها.',
+        'الوزن الثقيل مع هيكل صُمّم لوزن خفيف: الأسنان تلتحم ببعض، وعين الميم الوسطية تكاد تُغلق.',
+        'في السطر الصغير القطوع تختفي، فيصبح مجرد خط ثقيل عادي.'],
+  keep:'الثقل يعطي حضوراً. لو قررنا وزناً ثقيلاً لاحقاً، نعرف الآن أن الهيكل يحتاج عيوناً أكبر.',
+  scores:{'القراءة':3,'التفرد':2,'الانسجام':2,'قابلية التوسع':3}},
+];
+const PROPOSAL = {id:'p',tag:'مقترح',name:'واقف',spirit:'هيكل «أ» + تباين معكوس معتدل من «ب». مسودة اتجاه، ليست تصميماً نهائياً.',
+  sk:A,pen:{type:'nib',angle:14,len:0.27,thin:0.1},dot:{type:'nib'},xs:1,k:0,kash:0,
+  params:'broad nib 14° · contrast ≈ 2:1 · skeleton A'};
+
+// ---------- renderer ----------
+const NS='http://www.w3.org/2000/svg';
+function build(c){
+  const sk=c.sk, xs=c.xs, k=c.k;
+  let cursor=0, strokes=[], dots=[], cuts=[];
+  const place = (ox)=>(x,y)=>[ox + x*xs + k*y, y];
+  WORDS.forEach((word,wi)=>{
+    word.forEach((t,i)=>{
+      if(t==='|'){cursor-=0.4;return;}
+      const g=sk[t], ox=cursor-g.w*xs, f=place(ox);
+      strokes.push(tPath(g.d,f));
+      (g.dots||[]).forEach(([x,y])=>dots.push(f(x,y)));
+      ((c.cuts||{})[t]||[]).forEach(([x,y,a])=>{const [X,Y]=f(x,y);cuts.push([X,Y,a]);});
+      cursor=ox;
+      const nx=word[i+1];
+      if(c.kash && joinsLeft(t) && nx && nx!=='|'){strokes.push(`M${r3(cursor)},0 L${r3(cursor-c.kash)},0`);cursor-=c.kash;}
+    });
+    if(wi<WORDS.length-1) cursor-=1.3;
+  });
+  // nib dots become short strokes perpendicular to the nib, so the pen draws them as rhombi
+  if(c.dot.type==='nib'){
+    const a=(c.pen.angle+90)*Math.PI/180, L=0.09;
+    dots.forEach(([x,y])=>strokes.push(`M${r3(x-Math.cos(a)*L)},${r3(y-Math.sin(a)*L)} L${r3(x+Math.cos(a)*L)},${r3(y+Math.sin(a)*L)}`));
+  }
+  const m=0.7, minX=cursor-m, W=-cursor+2*m;
+  return {d:strokes.join(' '),dots,cuts,vb:`${r3(minX)} -3.4 ${r3(W)} 5.25`};
+}
+function svg(c, cls){
+  const b=build(c), s=document.createElementNS(NS,'svg');
+  s.setAttribute('viewBox',b.vb); s.setAttribute('role','img'); s.setAttribute('aria-label','سلام حمد بيت — '+c.name);
+  if(cls) s.setAttribute('class',cls);
+  let h=`<g transform="scale(1,-1)" fill="none" stroke="currentColor" stroke-linejoin="${c.pen.join||'round'}">`;
+  if(c.pen.type==='mono'){
+    h+=`<path d="${b.d}" stroke-width="${c.pen.w}" stroke-linecap="${c.pen.cap}"/>`;
+  } else {
+    const N=22, a=c.pen.angle*Math.PI/180, L=c.pen.len;
+    h+=`<path id="p${c.id}${cls||''}" d="${b.d}" stroke-width="${c.pen.thin}" stroke-linecap="round"/>`;
+    for(let i=0;i<N;i++){const t=i/(N-1)-0.5;h+=`<use href="#p${c.id}${cls||''}" transform="translate(${r3(Math.cos(a)*L*t)},${r3(Math.sin(a)*L*t)})"/>`;}
+  }
+  h+='</g><g transform="scale(1,-1)" fill="currentColor" stroke="none">';
+  if(c.dot.type==='round') b.dots.forEach(([x,y])=>h+=`<circle cx="${x}" cy="${y}" r="${c.dot.r}"/>`);
+  if(c.dot.type==='square') b.dots.forEach(([x,y])=>{const s=c.dot.s;h+=`<rect x="${r3(x-s/2)}" y="${r3(y-s/2)}" width="${s}" height="${s}"/>`;});
+  h+='</g>';
+  if(b.cuts.length){
+    h+='<g transform="scale(1,-1)" stroke="var(--surface)" stroke-width="0.075" stroke-linecap="butt">';
+    b.cuts.forEach(([x,y,a])=>{const r=a*Math.PI/180,L=0.36;h+=`<line x1="${r3(x-Math.cos(r)*L)}" y1="${r3(y-Math.sin(r)*L)}" x2="${r3(x+Math.cos(r)*L)}" y2="${r3(y+Math.sin(r)*L)}"/>`;});
+    h+='</g>';
+  }
+  h+=`<g class="skel" transform="scale(1,-1)" fill="none" stroke="var(--accent)" stroke-width="0.025"><path d="${b.d}"/></g>`;
+  s.innerHTML=h; return s;
+}
+function meter(n){return '<div class="meter">'+[1,2,3,4,5].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')+'</div>';}
+
+function plate(c, el, withVerdict){
+  el.classList.add('plate');
+  el.innerHTML=`<div class="plate-head"><span class="tag">${c.tag}</span><h2>${c.name}</h2><p class="spirit">${c.spirit}</p></div>
+   <div class="specimen"></div>
+   <div class="tools"><div class="small-test"><span>نص</span></div>
+     <button class="skel-btn" type="button" id="skel-${c.id}" aria-pressed="false">الهيكل</button>
+     <span class="params">${c.params}</span></div>`+
+   (withVerdict?`<div class="verdict"><div><h3>النقد</h3><ul>${c.crit.map(x=>`<li>${x}</li>`).join('')}</ul>
+      <p class="keep"><b>ما يستحق البقاء:</b> ${c.keep}</p></div>
+      <div class="scores"><h3>تقييمي</h3>${Object.entries(c.scores).map(([k,v])=>`<div class="score"><span>${k}</span><b>${v}/5</b>${meter(v)}</div>`).join('')}</div></div>`:'');
+  el.querySelector('.specimen').appendChild(svg(c));
+  const st=el.querySelector('.small-test');
+  st.appendChild(svg(c,'s1')); st.appendChild(svg(c,'s2'));
+  const btn=el.querySelector('.skel-btn');
+  btn.addEventListener('click',()=>{const on=el.classList.toggle('show-skel');btn.setAttribute('aria-pressed',on);});
+}
+const host=document.getElementById('plates');
+CONCEPTS.forEach(c=>{const s=document.createElement('section');host.appendChild(s);plate(c,s,true);});
+plate(PROPOSAL, document.getElementById('proposal'), false);
+})();
+</script>
