@@ -75,226 +75,325 @@ footer{color:var(--muted);font-size:13px}
 <style>
 .from{font-size:13px;color:var(--muted)}
 .from b{color:var(--ink);font-weight:500}
+.specimen svg{max-width:880px}
+.small-test svg{height:34px}
+.small-test svg.s2{height:20px}
+.small-test .skel{display:none}
 </style>
 <div class="wrap" dir="rtl" lang="ar">
   <header>
-    <div class="eyebrow">ROUND 01 · 5 CLASSIC SCRIPTS · 10 GLYPH FORMS</div>
-    <h1>من الخطوط المشهورة، بروح مختلفة</h1>
-    <p class="lede">خمسة تصاميم أولية، كل واحد مستوحى من خط عربي مشهور: النسخ، الرقعة، الثلث، الديواني، الكوفي. أخذت من كل خط هيكله وأهم سماته، وغيّرت فيه شيئاً واحداً يعطيه الروح المختلفة. كلها مرسومة على نفس الكلمات «سلام حمد بيت».</p>
-    <p class="lede">الرسم مبسّط عمداً: عشرة أشكال حروف فقط. اضغط «الهيكل» لترى خط المنتصف الأزرق. السطر الصغير اختبار للقراءة بحجم نص عادي.</p>
+    <div class="eyebrow">ROUND 02 · 5 DIRECTIONS · REBUILT ENGINE</div>
+    <h1>خمسة خطوط عرض، من مراجعك</h1>
+    <p class="lede">كلامك صحيح: النسخة السابقة كانت خطوطاً مرسومة بقلم، وليست حروفاً. أعدت بناء طريقة الرسم من الصفر. كل حرف الآن شكل مصمت، وسماكته تتغير حسب اتجاه الضربة، ونهاياته مقطوعة أو مدببة أو مستديرة حسب التصميم. كل تصميم مبني على مجموعة من المراجع اللي أرسلتها.</p>
+    <p class="lede">الحروف المرسومة حتى الآن ١٣ شكلاً فقط، تكفي لكتابة «سلام حمد بيت نور». اضغط «الهيكل» لترى خط المنتصف اللي بُني عليه الحرف. السطر الصغير اختبار للقراءة بحجم صغير.</p>
   </header>
 
   <div id="plates" class="wrap" style="gap:28px"></div>
 
   <section class="note">
-    <h2>نقد عام على الجولة كلها</h2>
+    <h2>نقد عام على الجولة</h2>
     <ol id="general"></ol>
   </section>
 
   <section class="note next">
-    <h2>اقتراحي للجولة الثانية</h2>
+    <h2>اقتراحي للجولة القادمة</h2>
     <p id="pick"></p>
     <div class="ask">
-      <h3>قبل الجولة الثانية، أحتاج منك:</h3>
+      <h3>أحتاج منك:</h3>
       <ul>
-        <li><b>الاتجاه:</b> أي تصميم (أو تصميمين) نكمل فيه؟</li>
-        <li><b>الاستخدام:</b> عناوين وشعارات، أم نص طويل؟</li>
-        <li><b>الوزن:</b> خفيف، عادي، أو ثقيل كبداية.</li>
+        <li><b>الاتجاه:</b> أي تصميم نكمل فيه؟ (أو تصميمين نمزج بينهم)</li>
+        <li><b>الاستخدام:</b> شعارات وعناوين، أم خط كامل يُكتب فيه نص؟</li>
+        <li><b>الكلمات:</b> أعطني كلمات حقيقية تبي تشوفها بالخط (اسم مشروع، شعار)، عشان أرسم حروفها بالضبط.</li>
       </ul>
     </div>
   </section>
 
-  <footer>الجولة القادمة: نرسم الهيكل بدقة أعلى، ونضيف باقي الحروف بأشكالها، وعينة نص حقيقية.</footer>
+  <footer>الجولة القادمة: باقي الحروف (العين، الكاف، القاف، الهاء، لام ألف)، وكلماتك أنت بدل الكلمات التجريبية.</footer>
 </div>
 
 <script>
-(()=>{
-const C=(cx,cy,r)=>{const k=0.5523*r;return `M${cx+r},${cy} C${cx+r},${cy+k} ${cx+k},${cy+r} ${cx},${cy+r} C${cx-k},${cy+r} ${cx-r},${cy+k} ${cx-r},${cy} C${cx-r},${cy-k} ${cx-k},${cy-r} ${cx},${cy-r} C${cx+k},${cy-r} ${cx+r},${cy-k} ${cx+r},${cy} Z`;};
-const r3=n=>Math.round(n*1000)/1000;
-function tPath(d,f){const tok=d.match(/[MLQCZ]|-?\d*\.?\d+/g);let out=[],buf=[];
-  for(const t of tok){if(/[MLQCZ]/.test(t))out.push(t);else{buf.push(+t);if(buf.length===2){const[x,y]=f(buf[0],buf[1]);out.push(r3(x)+','+r3(y));buf=[];}}}return out.join(' ');}
+// Khat engine: centerline skeletons -> filled outlines with direction-based contrast.
+// Units: y up, baseline 0. Glyph spans x 0..w; joins sit on the baseline at x=0 and x=w.
+const KHAT = (() => {
+const r3 = n => Math.round(n * 1000) / 1000;
+const circ = (cx, cy, rx, ry) => { ry = ry ?? rx; const kx = 0.5523 * rx, ky = 0.5523 * ry;
+  return `M${cx},${cy - ry} C${cx + kx},${cy - ry} ${cx + rx},${cy - ky} ${cx + rx},${cy} C${cx + rx},${cy + ky} ${cx + kx},${cy + ry} ${cx},${cy + ry} C${cx - kx},${cy + ry} ${cx - rx},${cy + ky} ${cx - rx},${cy} C${cx - rx},${cy - ky} ${cx - kx},${cy - ry} ${cx},${cy - ry} Z`; };
 
-// Coordinates: y up, baseline 0, glyph spans x 0..w, joins at x=0 (left) and x=w (right).
-// ---- النسخ ----
-const N={
- 'sin.init':{w:2.6,d:'M2.5,1.0 L2.5,0.3 Q2.5,0 2.15,0 Q1.8,0 1.8,0.3 L1.8,0.7 M1.8,0.3 Q1.8,0 1.45,0 Q1.1,0 1.1,0.3 L1.1,0.7 M1.1,0.3 Q1.1,0 0.75,0 L0,0'},
- 'lam.med':{w:0.8,d:'M0.8,0 Q0.4,0 0.4,0.4 L0.44,3.0 M0.4,0.4 Q0.4,0 0,0'},
- 'alef.fin':{w:0.7,d:'M0.7,0 Q0.32,0 0.32,0.4 L0.36,3.0'},
- 'mim.iso':{w:1.6,d:C(1.0,0.42,0.4)+' M0.62,0.3 Q0.5,-0.3 0.52,-1.4'},
- 'hah.init':{w:1.8,d:'M0.5,1.1 Q0.85,0.98 1.3,1.02 Q1.75,1.05 1.5,0.7 L1.0,0.15 Q0.85,0 0.5,0 L0,0'},
- 'mim.med':{w:1.2,d:'M1.2,0 L0,0 '+C(0.6,0.24,0.33)},
- 'dal.fin':{w:1.3,d:'M0.35,1.2 Q0.6,1.0 0.95,0.35 Q1.05,0.05 0.7,0.02 L0.05,0.05 M1.3,0 L0.8,0'},
- 'beh.init':{w:0.7,d:'M0.55,0.85 L0.55,0.3 Q0.55,0 0.25,0 L0,0',dots:[[0.4,-0.45]]},
- 'yeh.med':{w:0.7,d:'M0.7,0 Q0.4,0 0.4,0.3 L0.4,0.8 M0.4,0.3 Q0.4,0 0.1,0 L0,0',dots:[[0.2,-0.45],[0.6,-0.45]]},
- 'teh.fin':{w:1.95,d:'M1.95,0 Q1.6,0 1.6,0.35 L1.6,0.75 M1.6,0.35 Q1.6,-0.05 1.1,-0.05 L0.55,-0.05 Q0.1,-0.05 0.1,0.6',dots:[[0.7,0.75],[1.05,0.75]]},
-};
-// ---- الرقعة: سين بلا أسنان، ألف قصيرة، النقطتان شَرطة ----
-const R={
- 'sin.init':{w:2.0,d:'M2.0,0.4 Q1.9,0 1.5,0 L0,0'},
- 'lam.med':{w:0.7,d:'M0.7,0 Q0.35,0 0.35,0.35 L0.38,2.3 M0.35,0.35 Q0.35,0 0,0'},
- 'alef.fin':{w:0.6,d:'M0.6,0 Q0.28,0 0.28,0.35 L0.3,2.3'},
- 'mim.iso':{w:1.4,d:C(0.95,0.32,0.3)+' M0.66,0.24 Q0.4,-0.1 0.42,-1.1'},
- 'hah.init':{w:1.5,d:'M0.42,0.88 Q0.72,0.78 1.08,0.82 Q1.42,0.84 1.22,0.56 L0.8,0.12 Q0.68,0 0.4,0 L0,0'},
- 'mim.med':{w:0.9,d:'M0.9,0 L0,0 '+C(0.45,0.12,0.24)},
- 'dal.fin':{w:1.05,d:'M0.3,0.95 Q0.6,0.75 0.8,0.3 Q0.85,0.03 0.55,0.02 L0.05,0.05 M1.05,0 L0.6,0'},
- 'beh.init':{w:0.6,d:'M0.48,0.6 L0.48,0.25 Q0.48,0 0.22,0 L0,0',dots:[[0.32,-0.42]]},
- 'yeh.med':{w:0.65,d:'M0.65,0 Q0.35,0 0.35,0.25 L0.35,0.6 M0.35,0.25 Q0.35,0 0.1,0 L0,0 M0.12,-0.45 L0.6,-0.45'},
- 'teh.fin':{w:1.6,d:'M1.6,0 Q1.3,0 1.3,0.3 L1.3,0.6 M1.3,0.3 Q1.3,-0.05 0.8,-0.05 L0.5,-0.05 Q0.1,-0.05 0.1,0.5 M0.5,0.62 L0.95,0.72'},
-};
-// ---- الثلث: ألف طويلة بترويسة، أسنان مدببة، كأس عميق ----
-const T={
- 'sin.init':{w:2.6,d:'M2.6,1.2 L2.5,0.3 Q2.45,0 2.15,0 Q1.85,0 1.82,0.3 L1.8,0.85 M1.82,0.3 Q1.8,0 1.48,0 Q1.15,0 1.12,0.3 L1.1,0.85 M1.12,0.3 Q1.1,0 0.75,0 L0,0'},
- 'lam.med':{w:0.8,d:'M0.8,0 Q0.4,0 0.4,0.4 L0.42,3.8 M0.4,0.4 Q0.4,0 0,0',fill:'M0.42,3.82 L0.82,3.98 L0.42,3.5 Z'},
- 'alef.fin':{w:0.75,d:'M0.75,0 Q0.3,0 0.3,0.4 L0.34,3.8',fill:'M0.34,3.82 L0.74,3.98 L0.34,3.5 Z'},
- 'mim.iso':{w:1.6,d:C(1.0,0.5,0.42)+' M0.6,0.35 Q0.3,-0.5 0.75,-1.5'},
- 'hah.init':{w:2.0,d:'M0.4,1.3 Q0.48,1.1 0.9,1.1 L1.5,1.12 Q2.0,1.15 1.7,0.75 L1.1,0.15 Q0.95,0 0.55,0 L0,0'},
- 'mim.med':{w:1.2,d:'M1.2,0 L0,0 '+C(0.6,0.3,0.34)},
- 'dal.fin':{w:1.35,d:'M0.2,1.3 Q0.45,1.5 0.62,1.2 L1.0,0.4 Q1.1,0.05 0.7,0.02 L0.05,0.05 M1.35,0 L0.8,0'},
- 'beh.init':{w:0.7,d:'M0.6,1.05 L0.55,0.3 Q0.55,0 0.25,0 L0,0',dots:[[0.4,-0.45]]},
- 'yeh.med':{w:0.75,d:'M0.75,0 Q0.42,0 0.42,0.3 L0.44,1.05 M0.42,0.3 Q0.42,0 0.1,0 L0,0',dots:[[0.2,-0.45],[0.62,-0.45]]},
- 'teh.fin':{w:2.2,d:'M2.2,0 Q1.8,0 1.8,0.35 L1.82,0.95 M1.8,0.35 Q1.75,-0.5 1.0,-0.5 Q0.15,-0.5 0.1,0.8',dots:[[0.8,0.6],[1.2,0.6]]},
-};
-// ---- الديواني: أسنان متموجة، ذيول ملتفة (والسطر يصعد عند الرسم) ----
-const D=Object.assign({},N,{
- 'sin.init':{w:2.6,d:'M2.5,0.85 Q2.5,0 2.15,0.08 Q1.8,0.18 1.8,0.6 Q1.8,0 1.45,0.08 Q1.1,0.18 1.1,0.6 Q1.1,0 0.7,0 L0,0'},
- 'mim.iso':{w:1.6,d:C(1.1,0.42,0.38)+' M0.74,0.3 Q0.3,-0.45 -0.5,-0.25'},
- 'teh.fin':{w:1.95,d:'M1.95,0 Q1.6,0 1.6,0.35 L1.6,0.7 M1.6,0.35 Q1.5,-0.3 0.8,-0.25 Q0.1,-0.2 0.15,0.5 Q0.2,0.9 0.45,0.72',dots:[[0.8,0.6],[1.15,0.6]]},
- 'dal.fin':{w:1.3,d:'M0.25,1.0 Q0.4,1.35 0.7,1.0 Q1.05,0.5 0.95,0.2 Q0.85,0 0.5,0.02 L0.05,0.05 M1.3,0 L0.8,0'},
-});
-// ---- الكوفي: أفقي، زوايا، ألف عالية وأسنان قصيرة ----
-const K={
- 'sin.init':{w:2.6,d:'M2.5,0.75 L2.5,0 L0,0 M1.8,0 L1.8,0.6 M1.1,0 L1.1,0.6'},
- 'lam.med':{w:0.8,d:'M0.8,0 L0,0 M0.4,0 L0.4,3.0'},
- 'alef.fin':{w:0.7,d:'M0.7,0 L0.3,0 L0.3,3.0'},
- 'mim.iso':{w:1.6,d:'M1.45,0 L0.6,0 L0.6,0.75 L1.45,0.75 Z M0.6,0 L0.6,-1.2'},
- 'hah.init':{w:1.8,d:'M0.45,1.1 L1.55,1.1 L1.55,0.75 L0.8,0 L0,0'},
- 'mim.med':{w:1.1,d:'M1.1,0 L0,0 M0.85,0 L0.85,0.6 L0.25,0.6 L0.25,0'},
- 'dal.fin':{w:1.3,d:'M1.3,0 L0.1,0 M0.95,0 L0.95,0.9 L0.45,1.15'},
- 'beh.init':{w:0.7,d:'M0.55,0.7 L0.55,0 L0,0',dots:[[0.35,-0.5]]},
- 'yeh.med':{w:0.7,d:'M0.7,0 L0,0 M0.4,0 L0.4,0.7',dots:[[0.12,-0.5],[0.62,-0.5]]},
- 'teh.fin':{w:1.95,d:'M1.95,0 L0.1,0 L0.1,0.7 M1.6,0 L1.6,0.7',dots:[[0.65,0.75],[1.1,0.75]]},
-};
+// ---------- path -> polyline ----------
+function flatten(d, f) {
+  const tok = d.match(/[MLQCZ]|-?\d*\.?\d+(?:e-?\d+)?/g); let i = 0, cmd = null, pts = [], closed = false, cur = null;
+  const num = () => +tok[i++]; const pt = () => f(num(), num());
+  const push = p => { const l = pts[pts.length - 1]; if (!l || Math.hypot(p[0] - l[0], p[1] - l[1]) > 1e-4) pts.push(p); };
+  const line = (a, b) => { const L = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.max(1, Math.ceil(L / 0.06));
+    for (let k = 1; k <= n; k++) push([a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n]); };
+  while (i < tok.length) {
+    if (/[MLQCZ]/.test(tok[i])) cmd = tok[i++];
+    if (cmd === 'M') { cur = pt(); push(cur); cmd = 'L'; }
+    else if (cmd === 'L') { const p = pt(); line(cur, p); cur = p; }
+    else if (cmd === 'Q') { const c = pt(), p = pt(), n = 24;
+      for (let k = 1; k <= n; k++) { const t = k / n, u = 1 - t; push([u*u*cur[0] + 2*u*t*c[0] + t*t*p[0], u*u*cur[1] + 2*u*t*c[1] + t*t*p[1]]); } cur = p; }
+    else if (cmd === 'C') { const c1 = pt(), c2 = pt(), p = pt(), n = 32;
+      for (let k = 1; k <= n; k++) { const t = k / n, u = 1 - t;
+        push([u*u*u*cur[0] + 3*u*u*t*c1[0] + 3*u*t*t*c2[0] + t*t*t*p[0], u*u*u*cur[1] + 3*u*u*t*c1[1] + 3*u*t*t*c2[1] + t*t*t*p[1]]); } cur = p; }
+    else if (cmd === 'Z') { closed = true; i++; }
+  }
+  if (closed) { const a = pts[0], b = pts[pts.length - 1]; if (Math.hypot(a[0] - b[0], a[1] - b[1]) < 1e-3) pts.pop(); }
+  return { pts, closed };
+}
 
-const WORDS=[['sin.init','lam.med','alef.fin','|','mim.iso'],['hah.init','mim.med','dal.fin'],['beh.init','yeh.med','teh.fin']];
-const joinsLeft=n=>/\.(init|med)$/.test(n);
+// ---------- stroke expansion ----------
+function expand(poly, pen, ta, tb) {
+  const { pts, closed } = poly, n = pts.length, segN = closed ? n : n - 1;
+  const segs = [];
+  let total = 0;
+  for (let i = 0; i < segN; i++) { const a = pts[i], b = pts[(i + 1) % n], dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy);
+    segs.push({ t: [dx / L, dy / L], L, s0: total }); total += L; }
+  const ax = (pen.ax || 0) * Math.PI / 180;
+  const taperA = ta === 'taper' ? pen.tl : 0, taperB = tb === 'taper' ? pen.tl : 0;
+  segs.forEach(s => { const phi = Math.atan2(s.t[1], s.t[0]) - ax, c = Math.cos(phi), sn = Math.sin(phi);
+    let w = Math.sqrt((pen.H * c) ** 2 + (pen.V * sn) ** 2);
+    const mid = s.s0 + s.L / 2; let k = 1;
+    if (!closed && taperA && mid < taperA) k = Math.min(k, 0.02 + 0.98 * Math.pow(mid / taperA, 0.7));
+    if (!closed && taperB && total - mid < taperB) k = Math.min(k, 0.02 + 0.98 * Math.pow((total - mid) / taperB, 0.7));
+    s.h = w * k / 2; s.n = [-s.t[1], s.t[0]]; });
+  const off = (i, side) => { // offset point at vertex i
+    const p = pts[i % n];
+    const prev = closed ? segs[(i - 1 + segN) % segN] : segs[i - 1], next = closed ? segs[i % segN] : segs[i];
+    if (!prev) return [p[0] + side * next.h * next.n[0], p[1] + side * next.h * next.n[1]];
+    if (!next) return [p[0] + side * prev.h * prev.n[0], p[1] + side * prev.h * prev.n[1]];
+    const A = [p[0] + side * prev.h * prev.n[0], p[1] + side * prev.h * prev.n[1]], B = [p[0] + side * next.h * next.n[0], p[1] + side * next.h * next.n[1]];
+    const cr = prev.t[0] * next.t[1] - prev.t[1] * next.t[0];
+    if (Math.abs(cr) < 0.02) return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
+    const s = ((B[0] - A[0]) * next.t[1] - (B[1] - A[1]) * next.t[0]) / cr;
+    const X = [A[0] + prev.t[0] * s, A[1] + prev.t[1] * s];
+    const lim = 4 * Math.max(prev.h, next.h);
+    if (Math.hypot(X[0] - p[0], X[1] - p[1]) > lim) return [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2];
+    return X;
+  };
+  const L = [], R = [];
+  for (let i = 0; i < n; i++) { L.push(off(i, 1)); R.push(off(i, -1)); }
+  const shapes = [];
+  if (closed) { const o = orient(L), i = orient(R); const outer = Math.abs(area(o)) > Math.abs(area(i)) ? o : i, inner = outer === o ? i : o;
+    shapes.push({ d: ring(outer) + ' ' + ring(inner.slice().reverse()) }); return shapes; }
+  // terminals
+  const term = (end, kind) => {
+    const i = end ? n - 1 : 0, s = end ? segs[segN - 1] : segs[0], dir = end ? s.t : [-s.t[0], -s.t[1]], E = pts[i];
+    if (!kind || kind === 'flat' || kind === 'taper' || kind === 'in') return;
+    if (kind === 'ext') { [L, R].forEach(a => { a[i] = [a[i][0] + dir[0] * s.h, a[i][1] + dir[1] * s.h]; }); return; }
+    if (kind === 'round') { shapes.push({ d: disc(E[0], E[1], s.h) }); return; }
+    if (kind.startsWith('cut:')) { const a = +kind.slice(4) * Math.PI / 180, c = [Math.cos(a), Math.sin(a)], nc = [-c[1], c[0]];
+      const dn = dir[0] * nc[0] + dir[1] * nc[1]; if (Math.abs(dn) < 0.25) return;
+      [L, R].forEach(arr => { const Q = arr[i], k = -((Q[0] - E[0]) * nc[0] + (Q[1] - E[1]) * nc[1]) / dn; arr[i] = [Q[0] + dir[0] * k, Q[1] + dir[1] * k]; }); }
+  };
+  term(false, ta); term(true, tb);
+  shapes.unshift({ d: ring(orient(L.concat(R.reverse()))) });
+  return shapes;
+}
+const ring = a => 'M' + a.map(p => r3(p[0]) + ',' + r3(p[1])).join(' L') + ' Z';
+const disc = (x, y, r) => ring(Array.from({ length: 28 }, (_, i) => [x + r * Math.cos(i / 28 * 2 * Math.PI), y + r * Math.sin(i / 28 * 2 * Math.PI)]));
+const area = a => { let s = 0; for (let i = 0; i < a.length; i++) { const p = a[i], q = a[(i + 1) % a.length]; s += p[0] * q[1] - q[0] * p[1]; } return s / 2; };
+const orient = a => area(a) < 0 ? a.slice().reverse() : a;
 
-const CONCEPTS=[
- {id:'a',tag:'أ',name:'نسخ واقف',from:'النسخ',twist:'القلم مقلوب: العمودي ثقيل والأفقي أخف، بنسبة معتدلة. هيكل النسخ المألوف بملمس جديد.',
-  sk:N,pen:{type:'nib',angle:14,len:0.27,thin:0.09},dot:{type:'nib'},xs:1,k:0,kash:0,rise:0,
-  params:'naskh skeleton · nib 14° · reverse contrast ≈ 2:1'},
- {id:'b',tag:'ب',name:'رقعة كتلة',from:'الرقعة',twist:'الرقعة سريعة ونحيفة عادةً. هنا صارت كتلة ثقيلة مستديرة للعناوين، مع الإبقاء على سينها المسطحة ونقاطها المدمجة في شَرطة.',
-  sk:R,pen:{type:'mono',w:0.28,cap:'round'},dot:{type:'round',r:0.17},xs:1,k:0,kash:0,rise:0,
-  params:'ruq\'ah skeleton · monoline 0.28 · round'},
- {id:'c',tag:'ج',name:'ثلث سلكي',from:'الثلث',twist:'الثلث خط فخم بقلم عريض. هنا مرسوم بخط رفيع كالسلك، مع الإبقاء على الألف الطويلة وترويستها والكأس العميق.',
-  sk:T,pen:{type:'mono',w:0.065,cap:'round'},dot:{type:'round',r:0.09},xs:1,k:0,kash:0,rise:0,
-  params:'thuluth skeleton · hairline 0.065 · wedge serifs'},
- {id:'d',tag:'د',name:'ديواني مسطرة',from:'الديواني',twist:'الديواني مزخرف ومتداخل. هنا جُرّد إلى خط هندسي بسماكة ثابتة، وبقي منه السطر الصاعد والذيول الملتفة.',
-  sk:D,pen:{type:'mono',w:0.13,cap:'round'},dot:{type:'round',r:0.1},xs:1,k:0,kash:0,rise:0.15,
-  params:'diwani skeleton · monoline 0.13 · rising baseline 8.5°'},
- {id:'e',tag:'هـ',name:'كوفي ناعم',from:'الكوفي',twist:'الكوفي حاد الزوايا. هنا ثقيل بزوايا مستديرة ومُمدّد أفقياً، كأنه مصبوب لا مرسوم.',
-  sk:K,pen:{type:'mono',w:0.32,cap:'round',join:'round'},dot:{type:'round',r:0.17},xs:1.2,k:0,kash:0,rise:0,
-  params:'kufic skeleton · monoline 0.32 · round joins · width 120%'},
+// ---------- skeletons ----------
+// Curved family (modern naskh-sans). P = proportions.
+const CURVED = {
+  'beh.init': P => { const s = P.st, r = P.r; return { w: s + P.sb, s: [{ d: `M${s},${P.T} L${s},${r} Q${s},0 ${s - r},0 L0,0`, a: 'top', b: 'join' }], dots: [[s - 0.06, -P.dd]] }; },
+  'noon.init': P => { const s = P.st, r = P.r; return { w: s + P.sb, s: [{ d: `M${s},${P.T} L${s},${r} Q${s},0 ${s - r},0 L0,0`, a: 'top', b: 'join' }], dots: [[s, P.T + P.du]] }; },
+  'yeh.med': P => { const s = P.st + 0.06, r = P.r, w = s + P.st; return { w, s: [
+      { d: `M${w},0 L${s + r},0 Q${s},0 ${s},${r} L${s},${P.T}`, a: 'join', b: 'top' },
+      { d: `M${s},${r} Q${s},0 ${s - r},0 L0,0`, a: 'in', b: 'join' }], dots: [[s - P.dg, -P.dd], [s + P.dg, -P.dd]] }; },
+  'lam.med': P => { const s = P.st + 0.06, r = P.r, w = s + P.st; return { w, s: [
+      { d: `M${w},0 L${s + r},0 Q${s},0 ${s},${r} L${s},${P.A}`, a: 'join', b: 'top' },
+      { d: `M${s},${r} Q${s},0 ${s - r},0 L0,0`, a: 'in', b: 'join' }] }; },
+  'alef.fin': P => { const s = P.st, r = P.r, w = s + P.sb + 0.2; return { w, s: [{ d: `M${w},0 L${s + r},0 Q${s},0 ${s},${r} L${s},${P.A}`, a: 'join', b: 'top' }] }; },
+  'sin.init': P => { const r = P.r * 0.8, x3 = P.st, x2 = x3 + P.tg, x1 = x2 + P.tg, Ts = P.T * P.ts; return { w: x1 + P.sb, s: [
+      { d: `M${x1},${Ts} L${x1},${r} Q${x1},0 ${x1 - r},0 L${x2 + r},0 Q${x2},0 ${x2},${r} L${x2},${Ts}`, a: 'top', b: 'top' },
+      { d: `M${x2},${r} Q${x2},0 ${x2 - r},0 L${x3 + r},0 Q${x3},0 ${x3},${r} L${x3},${Ts}`, a: 'in', b: 'top' },
+      { d: `M${x3},${r} Q${x3},0 ${x3 - r},0 L0,0`, a: 'in', b: 'join' }] }; },
+  'mim.iso': P => { const r = P.r, m = P.mr, xt = 0.3, xc = xt + 0.3 + m, w = xc + m + P.sb; return { w, s: [
+      { d: circ(xc, m, m * P.mx, m), closed: true },
+      { d: `M${xc},0 L${xt + r},0 Q${xt},0 ${xt},${-r} L${xt},${-P.D}`, a: 'in', b: 'tail' }] }; },
+  'mim.med': P => { const m = P.mr, xc = m * P.mx + 0.32, w = 2 * xc; return { w, s: [
+      { d: `M${w},0 L0,0`, a: 'join', b: 'join' }, { d: circ(xc, m * 0.9, m * P.mx, m), closed: true }] }; },
+  'dal.fin': P => { const r = P.r, xc = P.dw, w = xc + 0.42, hd = P.hd; return { w, s: [
+      { d: `M0.28,${hd} C${0.7},${hd * 0.98} ${xc},${hd * 0.6} ${xc},${r + 0.05} Q${xc},0 ${xc - r},0 L0.1,0`, a: 'dhead', b: 'end' },
+      { d: `M${w},0 L${xc - 0.1},0`, a: 'join', b: 'in' }] }; },
+  'hah.init': P => { const w = P.hw, hh = P.hh; return { w, s: [
+      { d: `M0.3,${hh} L${w - 0.8},${hh} C${w - 0.08},${hh} ${w - 0.06},${hh * 0.26} ${w - 0.8},0.04 Q${w - 1.0},0 ${w - 1.25},0 L0,0`, a: 'head', b: 'join' }] }; },
+  'teh.fin': P => { const w = P.bw, xs = w - 0.42, xl = 0.14, r = P.r; return { w, s: [
+      { d: `M${w},0 L${xs + r},0 Q${xs},0 ${xs},${r} L${xs},${P.T}`, a: 'join', b: 'top' },
+      { d: `M${xs},${r + 0.1} C${xs},${-P.bd} ${xl},${-P.bd} ${xl},${P.T * 0.72}`, a: 'in', b: 'top' }],
+      dots: [[(xs + xl) / 2 - P.dg, P.T * 0.62], [(xs + xl) / 2 + P.dg, P.T * 0.62]] }; },
+  'waw.fin': P => { const m = P.wr, xc = 0.3 + m, w = xc + m + 0.42; return { w, s: [
+      { d: circ(xc, m, m * P.mx, m), closed: true },
+      { d: `M${w},0 L${xc + 0.05},0`, a: 'join', b: 'in' },
+      { d: `M${xc + m * P.mx * 0.92},${m * 0.6} C${xc + m * P.mx * 1.1},${-P.D * 0.45} ${xc - 0.05},${-P.D * 0.98} 0.02,${-P.D}`, a: 'in', b: 'tail' }] }; },
+  'reh.iso': P => ({ w: 0.95, s: [{ d: `M0.74,${P.T * 0.5} C0.78,-0.15 0.58,${-P.D * 0.88} 0.02,${-P.D}`, a: 'top', b: 'tail' }] }),
+};
+// Angular family (modern kufi).
+const ANGULAR = {
+  'beh.init': P => { const s = P.st; return { w: s + P.sb, s: [{ d: `M${s},${P.T} L${s},0 L0,0`, a: 'top', b: 'join' }], dots: [[s - 0.06, -P.dd]] }; },
+  'noon.init': P => { const s = P.st; return { w: s + P.sb, s: [{ d: `M${s},${P.T} L${s},0 L0,0`, a: 'top', b: 'join' }], dots: [[s, P.T + P.du]] }; },
+  'yeh.med': P => { const s = P.st + 0.06, w = s + P.st; return { w, s: [{ d: `M${w},0 L0,0`, a: 'join', b: 'join' }, { d: `M${s},0 L${s},${P.T}`, a: 'in', b: 'top' }], dots: [[s - P.dg, -P.dd], [s + P.dg, -P.dd]] }; },
+  'lam.med': P => { const s = P.st + 0.06, w = s + P.st; return { w, s: [{ d: `M${w},0 L0,0`, a: 'join', b: 'join' }, { d: `M${s},0 L${s},${P.A}`, a: 'in', b: 'top' }] }; },
+  'alef.fin': P => { const s = P.st, w = s + P.sb + 0.2; return { w, s: [{ d: `M${w},0 L${s},0 L${s},${P.A}`, a: 'join', b: 'top' }] }; },
+  'sin.init': P => { const x3 = P.st, x2 = x3 + P.tg, x1 = x2 + P.tg, Ts = P.T * P.ts; return { w: x1 + P.sb, s: [
+      { d: `M${x1},${Ts} L${x1},0 L0,0`, a: 'top', b: 'join' }, { d: `M${x2},0 L${x2},${Ts}`, a: 'in', b: 'top' }, { d: `M${x3},0 L${x3},${Ts}`, a: 'in', b: 'top' }] }; },
+  'mim.iso': P => { const m = P.mr, xt = 0.3, x0 = xt + 0.5, x1 = x0 + 2 * m * P.mx, w = x1 + P.sb; return { w, s: [
+      { d: `M${x0},0 L${x1},0 L${x1},${2 * m} L${x0},${2 * m} Z`, closed: true }, { d: `M${x0},0 L${xt},0 L${xt},${-P.D}`, a: 'in', b: 'tail' }] }; },
+  'mim.med': P => { const m = P.mr, x0 = 0.3, x1 = x0 + 2 * m * P.mx, w = x1 + 0.3; return { w, s: [
+      { d: `M${w},0 L0,0`, a: 'join', b: 'join' }, { d: `M${x0},0 L${x1},0 L${x1},${2 * m} L${x0},${2 * m} Z`, closed: true }] }; },
+  'dal.fin': P => { const xc = P.dw, w = xc + 0.42, hd = P.hd; return { w, s: [
+      { d: `M0.3,${hd} L${xc},${hd * 0.62} L${xc},0 L0.1,0`, a: 'dhead', b: 'end' }, { d: `M${w},0 L${xc},0`, a: 'join', b: 'in' }] }; },
+  'hah.init': P => { const w = P.hw, hh = P.hh; return { w, s: [{ d: `M0.3,${hh} L${w - 0.3},${hh} L${w - 0.95},0 L0,0`, a: 'head', b: 'join' }] }; },
+  'teh.fin': P => { const w = P.bw, xs = w - 0.42, xl = 0.14; return { w, s: [
+      { d: `M${w},0 L${xs},0 L${xs},${P.T}`, a: 'join', b: 'top' }, { d: `M${xs},0 L${xl},0 L${xl},${P.T * 0.72}`, a: 'in', b: 'top' }],
+      dots: [[(xs + xl) / 2 - P.dg, P.T * 0.62], [(xs + xl) / 2 + P.dg, P.T * 0.62]] }; },
+  'waw.fin': P => { const m = P.wr, x0 = 0.35, x1 = x0 + 2 * m * P.mx, w = x1 + 0.4; return { w, s: [
+      { d: `M${x0},0 L${x1},0 L${x1},${2 * m} L${x0},${2 * m} Z`, closed: true }, { d: `M${w},0 L${x1},0`, a: 'join', b: 'in' },
+      { d: `M${x1},${2 * m} L${x1},${-P.D * 0.2} L0.02,${-P.D}`, a: 'in', b: 'tail' }] }; },
+  'reh.iso': P => ({ w: 0.95, s: [{ d: `M0.72,${P.T * 0.5} L0.72,-0.1 L0.04,${-P.D}`, a: 'top', b: 'tail' }] }),
+};
+const BASE = { T: 0.9, A: 2.5, D: 1.0, r: 0.22, st: 0.42, sb: 0.3, mr: 0.36, mx: 1, wr: 0.34, bd: 0.5, tg: 0.6, ts: 0.8, hh: 1.1, hw: 1.9, hd: 1.2, dw: 0.85, bw: 2.0, dd: 0.55, du: 0.5, dg: 0.22, sx: 1, K: 0, gap: 1.3, nj: 0.38 };
+
+const WORDS = { 'سلام': ['sin.init', 'lam.med', 'alef.fin', '|', 'mim.iso'], 'حمد': ['hah.init', 'mim.med', 'dal.fin'], 'بيت': ['beh.init', 'yeh.med', 'teh.fin'], 'نور': ['noon.init', 'waw.fin', '|', 'reh.iso'] };
+const joinsLeft = g => /\.(init|med)$/.test(g);
+
+function dot(x, y, d) {
+  if (d.type === 'round') return disc(x, y, d.s);
+  if (d.type === 'square') return ring([[x - d.s, y - d.s], [x + d.s, y - d.s], [x + d.s, y + d.s], [x - d.s, y + d.s]]);
+  if (d.type === 'diamond') { const k = d.k || 1; return ring([[x, y - d.s], [x + d.s * k, y], [x, y + d.s], [x - d.s * k, y]]); }
+  if (d.type === 'pen') { const a = (d.a || 30) * Math.PI / 180, c = Math.cos(a) * d.s, s = Math.sin(a) * d.s, h = d.s * 0.55;
+    return ring(orient([[x - c, y - s + h], [x + c, y + s + h], [x + c, y + s - h], [x - c, y - s - h]])); }
+}
+
+// Lay out a line of words right-to-left; returns svg inner markup + viewBox.
+function line(text, design) {
+  const P = Object.assign({}, BASE, design.P), fam = design.family === 'angular' ? ANGULAR : CURVED, pen = design.pen;
+  const T = role => role === 'join' ? 'cut:90' : role === 'in' ? 'flat' : (design.term[role] || (role === 'dhead' && design.term.head) || 'flat');
+  let cursor = 0; const paths = [], skel = [];
+  const words = text.split(' ');
+  words.forEach((wd, wi) => {
+    const seq = WORDS[wd];
+    const kIdx = (() => { let last = -1; seq.forEach((g, i) => { if (g !== '|' && joinsLeft(g) && seq[i + 1] && seq[i + 1] !== '|') last = i; }); return last; })();
+    seq.forEach((g, i) => {
+      if (g === '|') { cursor -= P.nj; return; }
+      const G = fam[g](P), ox = cursor - G.w * P.sx, f = (x, y) => [ox + x * P.sx, y];
+      G.s.forEach(st => { const poly = flatten(st.d, f); skel.push(poly);
+        expand(poly, pen, st.closed ? null : T(st.a), st.closed ? null : T(st.b)).forEach(sh => paths.push(sh)); });
+      (G.dots || []).forEach(([x, y]) => { const [X, Y] = f(x, y); paths.push({ d: dot(X, Y, design.dot) }); });
+      cursor = ox;
+      if (P.K && i === kIdx) { const poly = flatten(`M${cursor},0 L${cursor - P.K},0`, (x, y) => [x, y]);
+        expand(poly, pen, 'cut:90', 'cut:90').forEach(sh => paths.push(sh)); cursor -= P.K; }
+    });
+    if (wi < words.length - 1) cursor -= P.gap;
+  });
+  const m = 0.6, top = Math.max(P.A, P.T + P.du + 0.4) + 0.55, bot = P.D + 0.5;
+  const inner = `<path d="${paths.map(p => p.d).join(' ')}"/>`;
+  const sk = skel.map(p => `<path d="M${p.pts.map(q => r3(q[0]) + ',' + r3(q[1])).join(' L')}${p.closed ? ' Z' : ''}"/>`).join('');
+  return { vb: `${r3(cursor - m)} ${r3(-top)} ${r3(-cursor + 2 * m)} ${r3(top + bot)}`, inner, sk };
+}
+function svg(text, design, opts = {}) {
+  const L = line(text, design);
+  return `<svg viewBox="${L.vb}" role="img" aria-label="${text}"${opts.cls ? ` class="${opts.cls}"` : ''}><g transform="scale(1,-1)" fill="currentColor">${L.inner}</g>` +
+    `<g class="skel" transform="scale(1,-1)" fill="none" stroke="var(--accent)" stroke-width="0.02">${L.sk}</g></svg>`;
+}
+return { svg, line };
+})();
+
+
+const DESIGNS = [
+ { id: 'madar', family: 'curved', pen: { H: 0.13, V: 0.13 },
+   term: { top: 'flat', tail: 'flat', head: 'flat', end: 'flat' }, dot: { type: 'round', s: 0.1 },
+   P: { T: 0.85, A: 2.5, D: 1.0, r: 0.3, mr: 0.4, wr: 0.36, bd: 0.45, sx: 1.08, K: 0.45, tg: 0.62 } },
+ { id: 'hadd', family: 'curved', pen: { H: 0.44, V: 0.12, tl: 0.7 },
+   term: { top: 'cut:35', tail: 'cut:70', head: 'cut:35', dhead: 'cut:100', end: 'cut:115' }, dot: { type: 'diamond', s: 0.2 },
+   P: { T: 0.8, A: 2.9, D: 1.0, r: 0.32, mr: 0.42, wr: 0.4, bd: 0.55, tg: 0.7, st: 0.42, K: 0.3, dd: 0.62, du: 0.55 } },
+ { id: 'qalab', family: 'angular', pen: { H: 0.42, V: 0.36 },
+   term: { top: 'cut:45', tail: 'cut:45', head: 'ext', end: 'cut:45' }, dot: { type: 'diamond', s: 0.21 },
+   P: { T: 0.95, A: 2.5, D: 0.9, mr: 0.34, wr: 0.32, tg: 0.75, st: 0.45, K: 0.5, dd: 0.62, du: 0.55, dg: 0.26 } },
+ { id: 'harir', family: 'curved', pen: { H: 0.26, V: 0.065, ax: -12, tl: 0.9 },
+   term: { top: 'cut:20', tail: 'taper', head: 'taper', end: 'taper' }, dot: { type: 'diamond', s: 0.16, k: 0.8 },
+   P: { T: 0.75, A: 2.9, D: 1.1, r: 0.32, mr: 0.32, wr: 0.3, bd: 0.6, tg: 0.6, K: 0.7 } },
+ { id: 'tabe', family: 'curved', pen: { H: 0.4, V: 0.37 },
+   term: { top: 'round', tail: 'round', head: 'round', end: 'round' }, dot: { type: 'round', s: 0.19 },
+   P: { T: 0.85, A: 2.2, D: 0.85, r: 0.22, mr: 0.42, wr: 0.4, bd: 0.35, tg: 0.72, st: 0.45, sx: 0.95, dd: 0.62, du: 0.6, dg: 0.25 } },
 ];
 
-const NS='http://www.w3.org/2000/svg';
-function build(c){
-  const sk=c.sk,xs=c.xs,k=c.k,rise=c.rise||0;
-  let cursor=0,strokes=[],fills=[],dots=[];
-  WORDS.forEach((word,wi)=>{
-    const ws=cursor;
-    const W=(X,y)=>[X,y+rise*(ws-X)];
-    word.forEach((t,i)=>{
-      if(t==='|'){cursor-=0.4;return;}
-      const g=sk[t],ox=cursor-g.w*xs,f=(x,y)=>W(ox+x*xs+k*y,y);
-      strokes.push(tPath(g.d,f));
-      if(g.fill) fills.push(tPath(g.fill,f));
-      (g.dots||[]).forEach(([x,y])=>dots.push(f(x,y)));
-      cursor=ox;
-    });
-    if(wi<WORDS.length-1) cursor-=1.4;
-  });
-  if(c.dot.type==='nib'){const a=(c.pen.angle+90)*Math.PI/180,L=0.09;
-    dots.forEach(([x,y])=>strokes.push(`M${r3(x-Math.cos(a)*L)},${r3(y-Math.sin(a)*L)} L${r3(x+Math.cos(a)*L)},${r3(y+Math.sin(a)*L)}`));}
-  const m=0.9;
-  return {d:strokes.join(' '),fills,dots,vb:`${r3(cursor-m)} -4.4 ${r3(-cursor+2*m)} 6.3`};
-}
-function svg(c,cls){
-  const b=build(c),s=document.createElementNS(NS,'svg'),id='p'+c.id+(cls||'');
-  s.setAttribute('viewBox',b.vb);s.setAttribute('role','img');s.setAttribute('aria-label','سلام حمد بيت، '+c.name);
-  if(cls)s.setAttribute('class',cls);
-  let h=`<g transform="scale(1,-1)" fill="none" stroke="currentColor" stroke-linejoin="${c.pen.join||'round'}">`;
-  if(c.pen.type==='mono') h+=`<path d="${b.d}" stroke-width="${c.pen.w}" stroke-linecap="${c.pen.cap}"/>`;
-  else{const N=22,a=c.pen.angle*Math.PI/180,L=c.pen.len;
-    h+=`<path id="${id}" d="${b.d}" stroke-width="${c.pen.thin}" stroke-linecap="round"/>`;
-    for(let i=0;i<N;i++){const t=i/(N-1)-0.5;h+=`<use href="#${id}" transform="translate(${r3(Math.cos(a)*L*t)},${r3(Math.sin(a)*L*t)})"/>`;}}
-  h+='</g><g transform="scale(1,-1)" fill="currentColor" stroke="none">';
-  b.fills.forEach(p=>h+=`<path d="${p}"/>`);
-  if(c.dot.type==='round') b.dots.forEach(([x,y])=>h+=`<circle cx="${r3(x)}" cy="${r3(y)}" r="${c.dot.r}"/>`);
-  h+='</g>';
-  h+=`<g class="skel" transform="scale(1,-1)" fill="none" stroke="var(--accent)" stroke-width="0.025"><path d="${b.d}"/></g>`;
-  s.innerHTML=h;return s;
-}
-const meter=n=>'<div class="meter">'+[1,2,3,4,5].map(i=>`<i class="${i<=n?'on':''}"></i>`).join('')+'</div>';
-function plate(c,el){
-  el.classList.add('plate');
-  el.innerHTML=`<div class="plate-head"><span class="tag">${c.tag}</span><h2>${c.name}</h2>
-     <p class="spirit"><span class="from">مستوحى من <b>${c.from}</b>. </span>${c.twist}</p></div>
-   <div class="specimen"></div>
-   <div class="tools"><div class="small-test"><span>نص</span></div>
-     <button class="skel-btn" type="button" id="skel-${c.id}" aria-pressed="false">الهيكل</button>
-     <span class="params">${c.params}</span></div>
-   <div class="verdict"><div><h3>النقد</h3><ul>${c.crit.map(x=>`<li>${x}</li>`).join('')}</ul>
-      <p class="keep"><b>ما يستحق البقاء:</b> ${c.keep}</p></div>
-      <div class="scores"><h3>تقييمي</h3>${Object.entries(c.scores).map(([k,v])=>`<div class="score"><span>${k}</span><b>${v}/5</b>${meter(v)}</div>`).join('')}</div></div>`;
-  el.querySelector('.specimen').appendChild(svg(c));
-  const st=el.querySelector('.small-test');st.appendChild(svg(c,'s1'));st.appendChild(svg(c,'s2'));
-  const btn=el.querySelector('.skel-btn');
-  btn.addEventListener('click',()=>{const on=el.classList.toggle('show-skel');btn.setAttribute('aria-pressed',on);});
-}
-const CRIT={
- a:{crit:['التباين المعكوس بنسبة ٢ إلى ١ خجول. في السطر الصغير يختفي تماماً ويصير مجرد نسخ عريض قليلاً. الروح المختلفة تظهر في العناوين فقط.',
-          'ذيل الميم المعزولة مستقيم ومتصلّب. في النسخ الحقيقي ينحني الذيل، وهنا يبدو كعصا مغروسة.',
-          'كأس التاء ضحل جداً مقارنة بالنسخ، فتفقد الكلمة الأخيرة ثقلها.',
-          'حواف المنحنيات خشنة لأن القلم محاكى بنسخ متكررة. عيب في طريقة الرسم، لكنه يجعل التقييم البصري أصعب.'],
-     keep:'أكثر تصميم متوازن. يُقرأ بسهولة، ومألوف للعين، وفيه لمسة غير متوقعة. أصلح خط نصوص بين الخمسة.',
-     scores:{'القراءة':4,'التفرد':3,'الانسجام':4,'قابلية التوسع':4}},
- b:{crit:['الميم الوسطية في «حمد» صارت كتلة بدون عين. الوزن الثقيل يحتاج عيوناً أكبر بكثير من هيكل الرقعة الأصلي.',
-          'شَرطة الياء تحت «بيت» تقترب من نقطة الباء وتكاد تلتصق بها.',
-          'السين المسطحة بلا أسنان صحيحة في الرقعة، لكنها في الحجم الكبير تبدو كخط فارغ. تحتاج بداية أوضح (رأس صغير مرفوع).',
-          'لا يصلح للنص الطويل أبداً. مكانه العناوين واللافتات والتغليف.'],
-     keep:'أقوى شخصية مع بقاء الشكل مألوفاً. الرقعة خط الكتابة اليومية، وتحويلها إلى كتلة ثقيلة للعناوين فكرة لم أرَ مثلها كثيراً.',
-     scores:{'القراءة':4,'التفرد':4,'الانسجام':4,'قابلية التوسع':3}},
- c:{crit:['روح الثلث تأتي من التباين الكبير بين الثخين والرفيع. حين جرّدته إلى سلك واحد، ضاعت الروح وبقي هيكل يشبه رسماً هندسياً.',
-          'في السطر الصغير يختفي تقريباً. وزن واحد رفيع جداً لا يصمد.',
-          'ذيل الميم يتمايل بلا اتجاه واضح، والترويسة على الألف واللام تبدو كأعلام صغيرة أكثر منها ترويسة.',
-          'الأسنان المدببة جميلة لكنها لا تتكرر في باقي الحروف، فتبدو العائلة غير مكتملة.'],
-     keep:'الكأس العميق في التاء والألف الطويلة يعطيان فخامة حقيقية. لو رجعنا للثلث، نرجع بتباين لا بسلك.',
-     scores:{'القراءة':2,'التفرد':4,'الانسجام':3,'قابلية التوسع':2}},
- d:{crit:['صعود السطر خفيف جداً (٨ درجات تقريباً). العين تقرأه كعدم محاذاة وليس كقرار. إما يصعد بوضوح أو لا يصعد.',
-          'أخذت من الديواني سمتين فقط (الصعود والذيل). الديواني الحقيقي يعيش على التداخل والتراكب، وهذا غير موجود هنا.',
-          'الخط الرفيع مع الصعود يجعل الكلمات تبدو مكتوبة على عجل، لا مصممة.',
-          'نقطتا التاء مزدحمتان داخل التفافة الكأس.'],
-     keep:'أسنان السين المتموجة وذيل الميم الملتف أجمل تفصيلتين في الجولة كلها. تستحق أن تُنقل لتصميم آخر.',
-     scores:{'القراءة':3,'التفرد':3,'الانسجام':2,'قابلية التوسع':2}},
- e:{crit:['الكوفي الثقيل بزوايا مستديرة موجود بكثرة في خطوط العناوين المعاصرة. الروح «المختلفة» هنا أضعف من باقي الخمسة.',
-          'التمديد الأفقي ١٢٠٪ يجعل الكلمات طويلة. «سلام» وحدها تأخذ مساحة كلمتين.',
-          'الميم المعزولة مربع بذيل، والميم الوسطية مربع صغير. شكل الميم يتكرر بلا تنويع.',
-          'الدال بزاوية مائلة في رأسها تبدو مستعارة من النسخ وليست كوفية.'],
-     keep:'أوضح قراءة في العناوين وأقوى حضور. خيار آمن لو أردت هوية بصرية قوية بسرعة.',
-     scores:{'القراءة':4,'التفرد':2,'الانسجام':4,'قابلية التوسع':4}},
-};
-CONCEPTS.forEach(c=>Object.assign(c,CRIT[c.id]));
-const GENERAL=[
- '<b>تصحيح من الجولة السابقة:</b> الحاء الأولى كانت تُقرأ كافاً («كمد»). قارنتها بحرف حقيقي ورسمتها من جديد: الرأس يمتد من اليسار إلى اليمين، ثم ينعطف وينزل مائلاً إلى السطر. الآن تُقرأ «حمد» في التصاميم الخمسة.',
- 'كل تصميم هنا هيكل الخط الأصلي مع تغيير واحد فقط. هذا يكفي لاختبار الروح، لكنه لا يصنع خطاً بعد. الخط الحقيقي يحتاج قرارات في كل حرف.',
- 'العينة ثلاث كلمات وعشرة أشكال فقط. ما عندنا العين، ولا الراء والواو النازلتان، ولا لام ألف، وهي الحروف اللي تفضح أي خط.',
- 'التقييمات رأيي الشخصي كمصمم، لا قياس. الحكم الأخير عندك.',
- 'أضعف نقطة مشتركة: الميم. في كل تصميم تقريباً الميم إما ثقيلة أو مسدودة أو ذيلها بلا اتجاه. تحتاج دراسة خاصة في الجولة الثانية.'];
-const PICK='أقترح نتعمق في «ب: رقعة كتلة» كخط عناوين، لأنه الأقوى شخصية مع بقاء الشكل مألوفاً، ومعه «أ: نسخ واقف» كخط نصوص مرافق. ونأخذ من «د» أسنان السين المتموجة وذيل الميم الملتف ونجربها فيهما.';
 
-const host=document.getElementById('plates');
-CONCEPTS.forEach(c=>{const s=document.createElement('section');host.appendChild(s);plate(c,s);});
-document.getElementById('general').innerHTML=GENERAL.map(x=>`<li>${x}</li>`).join('');
-document.getElementById('pick').textContent=PICK;
+(() => {
+const META = {
+ madar: { tag: 'أ', name: 'مدار', from: 'عكاظ، منحوت',
+   spirit: 'هندسي خفيف بسماكة واحدة وكشيدة واضحة. هادئ ومعماري، يصلح لهوية شركة.',
+   params: 'monoline 0.13 · curved skeleton · kashida 0.45',
+   crit: ['أقرب الخمسة لخطوط الشركات الموجودة. نظيف، لكنه آمن جداً، والروح المختلفة ضعيفة.',
+          'الكشيدة بنفس الطول في كل كلمة. في شعار عكاظ الكشيدة قرار في مكان واحد يعطي الكلمة إيقاعها، وهنا صارت عادة.',
+          'الوزن الخفيف يبهت في السطر الصغير.',
+          'الميم المعزولة تبدو قطعتين: حلقة، وذيل منفصل عنها بخط أفقي.'],
+   keep: 'متزن ومقروء. يصلح خطاً مرافقاً لأي هوية، أو أساساً لعائلة أوزان.',
+   scores: { 'القراءة': 4, 'التفرد': 2, 'الانسجام': 4, 'قابلية التوسع': 5 } },
+ hadd: { tag: 'ب', name: 'حدّ', from: 'داكن، سوق الدراجة',
+   spirit: 'الأفقي ثقيل والعمودي رفيع، والنهايات مقطوعة كالشفرة، والنقاط معيّنات. جذره خطي وروحه معاصرة.',
+   params: 'contrast 0.44 / 0.12 · blade cuts 35° · diamond dots',
+   crit: ['الأعمدة رفيعة جداً مقابل الأفقي. الألف واللام تبدو كخيوط، وفي السطر الصغير تكاد تختفي.',
+          'ذيل الميم المعزولة رفيع وطويل، ويبدو ضعيفاً تحت رأس ثقيل.',
+          'قريب من «داكن» في الفكرة العامة. يحتاج قراراً خاصاً به يبعده عنه، مثل ترويسة مميزة على الألف أو زاوية قطع مختلفة.',
+          'كأس التاء ثقيل جداً، والنقطتان داخله مزدحمتان.'],
+   keep: 'أقوى حضور وأوضح شخصية بين الخمسة، وأقرب لروح المراجع.',
+   scores: { 'القراءة': 3, 'التفرد': 4, 'الانسجام': 4, 'قابلية التوسع': 3 } },
+ qalab: { tag: 'ج', name: 'قالب', from: 'برانكو، bon، PLUS',
+   spirit: 'كوفي كتلي بزوايا قائمة وقطع ٤٥ درجة على رؤوس الحروف. ثقيل ومباشر.',
+   params: 'blocky 0.42 / 0.36 · angular skeleton · 45° cuts',
+   crit: ['الحاء صارت تقريباً الرقم ٧. تُقرأ داخل الكلمة، لكنها وحدها غامضة.',
+          'عين الميم الوسطية مربع صغير، وينسد في الحجم الصغير.',
+          'الكوفي الكتلي منتشر جداً في الشعارات الحالية. القطع بزاوية ٤٥ وحده لا يكفي للتميز.',
+          'ذيلا الراء والواو قطريان، وهذا يكسر منطق الزوايا القائمة. القرار غير محسوم بعد.'],
+   keep: 'قوي ومقروء في العناوين، وسهل التوسع لأنه مبني على قواعد بسيطة.',
+   scores: { 'القراءة': 4, 'التفرد': 3, 'الانسجام': 4, 'قابلية التوسع': 4 } },
+ harir: { tag: 'د', name: 'حرير', from: 'منحوت، فاشونيستا، مارسيليا',
+   spirit: 'تباين عالٍ بمحور مائل قليلاً، ونهايات تذوب إلى شعرة. فخم وناعم.',
+   params: 'contrast 0.26 / 0.065 · axis −12° · tapered ends',
+   crit: ['النهايات المدببة جميلة في الكبير، لكنها تختفي في السطر الصغير.',
+          'كأس التاء ثقيل جداً مقارنة بباقي الحروف، ويسحب العين.',
+          'ذيل الميم المعزولة إبرة. يحتاج نهاية أعرض.',
+          'الكشيدة في كل كلمة، فصارت ميكانيكية بدل ما تكون لمسة.'],
+   keep: 'أكثر الخمسة أناقة. يصلح للأزياء والعطور والضيافة.',
+   scores: { 'القراءة': 3, 'التفرد': 3, 'الانسجام': 3, 'قابلية التوسع': 3 } },
+ tabe: { tag: 'هـ', name: 'طابع', from: 'وهران، داماس، صفاء',
+   spirit: 'ثقيل ومستدير بالكامل، ودود وواضح من بعيد.',
+   params: 'monoline 0.40 · round terminals · compact',
+   crit: ['النهايات الدائرية في كل مكان تقرّبه من خطوط التطبيقات والأطفال. التفرد ضعيف.',
+          'رأس الدال الدائري بارز كأنه أذن.',
+          'المسافات بين الحروف ضيقة، فتبدو الكلمات ككتلة واحدة.',
+          'لا يحمل أي أثر من الخط العربي التقليدي؛ هو خط هندسي فقط.'],
+   keep: 'الأوضح قراءة في كل الأحجام، والأقل مخاطرة.',
+   scores: { 'القراءة': 5, 'التفرد': 2, 'الانسجام': 4, 'قابلية التوسع': 4 } },
+};
+const GENERAL = [
+  '<b>اعتراف:</b> الجولة السابقة كانت رسماً بخطوط، لا حروفاً. هذه الجولة بنيت فيها طريقة جديدة: الحرف شكل مصمت، والسماكة تتغير مع الاتجاه، والنهايات لها أنواع. هذا هو الحد الأدنى لخط حقيقي.',
+  'ثلاثة تصاميم (أ، ب، د) تشترك في نفس الهيكل، والفرق بينها في السماكة والنهايات. الهيكل نفسه يحتاج تنويعاً لكل اتجاه.',
+  'المراجع اللي أرسلتها تعيش على أشياء غير موجودة هنا بعد: التراكب بين الحروف، الكشيدة كعنصر تصميم في مكان محسوب، والتشكيل كزخرفة. هذه حروف خط، وليست شعارات بعد.',
+  '١٣ شكل حرف فقط. العين والكاف والقاف والهاء ولام ألف هي اللي تفضح الخط، وما رسمناها بعد.',
+  'التقييمات رأيي كمصمم، لا قياس. الحكم الأخير لك.'];
+const PICK = 'أقترح نتعمق في «ب: حدّ». هو الأقوى شخصية والأقرب لروح مراجعك. أول خطوة: نقوّي الأعمدة قليلاً حتى يصمد في الأحجام الصغيرة، ونصمم له ترويسة ألف خاصة تبعده عن «داكن». وكخيار ثانٍ آمن: «ج: قالب».';
+const TEXT = 'سلام حمد بيت نور';
+const meter = n => '<div class="meter">' + [1, 2, 3, 4, 5].map(i => `<i class="${i <= n ? 'on' : ''}"></i>`).join('') + '</div>';
+const host = document.getElementById('plates');
+DESIGNS.forEach(d => {
+  const m = META[d.id], el = document.createElement('section'); el.className = 'plate'; host.appendChild(el);
+  el.innerHTML = `<div class="plate-head"><span class="tag">${m.tag}</span><h2>${m.name}</h2>
+     <p class="spirit"><span class="from">مستوحى من <b>${m.from}</b>. </span>${m.spirit}</p></div>
+   <div class="specimen">${KHAT.svg(TEXT, d)}</div>
+   <div class="tools"><div class="small-test"><span>صغير</span>${KHAT.svg(TEXT, d, { cls: 's1' })}${KHAT.svg(TEXT, d, { cls: 's2' })}</div>
+     <button class="skel-btn" type="button" id="skel-${d.id}" aria-pressed="false">الهيكل</button>
+     <span class="params">${m.params}</span></div>
+   <div class="verdict"><div><h3>النقد</h3><ul>${m.crit.map(x => `<li>${x}</li>`).join('')}</ul>
+      <p class="keep"><b>ما يستحق البقاء:</b> ${m.keep}</p></div>
+      <div class="scores"><h3>تقييمي</h3>${Object.entries(m.scores).map(([k, v]) => `<div class="score"><span>${k}</span><b>${v}/5</b>${meter(v)}</div>`).join('')}</div></div>`;
+  const btn = el.querySelector('.skel-btn');
+  btn.addEventListener('click', () => { const on = el.classList.toggle('show-skel'); btn.setAttribute('aria-pressed', on); });
+});
+document.getElementById('general').innerHTML = GENERAL.map(x => `<li>${x}</li>`).join('');
+document.getElementById('pick').textContent = PICK;
 })();
 </script>
