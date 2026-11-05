@@ -6,6 +6,14 @@
 	<string>SnapStitch needs access to your photos to import screenshots for stitching.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>SnapStitch can save your stitched image back to your photo library.</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>ThmanyahSans-Light.otf</string>
+		<string>ThmanyahSans-Regular.otf</string>
+		<string>ThmanyahSans-Medium.otf</string>
+		<string>ThmanyahSans-Bold.otf</string>
+		<string>ThmanyahSans-Black.otf</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

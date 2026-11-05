@@ -22,6 +22,11 @@
 		EB5B1D9D5B2846319D378D44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 669ABEDD64D64609A3A91CAC /* Assets.xcassets */; };
 		4BE9604E469C4021B6B0889E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB872D8C0F414D3FB7C0B96C /* Preview Assets.xcassets */; };
 		DB115FA069C84A4F92A3A93C /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = A25A3E319F984FA3B83326C4 /* Theme.swift */; };
+		3BEC30B100C74366A55CD0D6 /* ThmanyahSans-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = DFA1FEDFD06146C398E58F27 /* ThmanyahSans-Light.otf */; };
+		2B8815CDA36A4CFBA90095DB /* ThmanyahSans-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 177DD381A8FF4BC4BA86F471 /* ThmanyahSans-Regular.otf */; };
+		950264C3E5A3425887EB643F /* ThmanyahSans-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA724894094860B64946F0 /* ThmanyahSans-Medium.otf */; };
+		1276D1728EC8485B8C4DF7C5 /* ThmanyahSans-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 30C9D83F0AE24324A76A9C70 /* ThmanyahSans-Bold.otf */; };
+		585B6ED45C0741EC8253B06C /* ThmanyahSans-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 972C63E626C846E1A4621961 /* ThmanyahSans-Black.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +47,11 @@
 		C2B67BDFF80E407AB7C32EE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CAD7A4BF9DF446129140E40E /* SnapStitch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SnapStitch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A25A3E319F984FA3B83326C4 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		DFA1FEDFD06146C398E58F27 /* ThmanyahSans-Light.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ThmanyahSans-Light.otf"; sourceTree = "<group>"; };
+		177DD381A8FF4BC4BA86F471 /* ThmanyahSans-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ThmanyahSans-Regular.otf"; sourceTree = "<group>"; };
+		5AEA724894094860B64946F0 /* ThmanyahSans-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ThmanyahSans-Medium.otf"; sourceTree = "<group>"; };
+		30C9D83F0AE24324A76A9C70 /* ThmanyahSans-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ThmanyahSans-Bold.otf"; sourceTree = "<group>"; };
+		972C63E626C846E1A4621961 /* ThmanyahSans-Black.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ThmanyahSans-Black.otf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +83,7 @@
 				BEFB3C856D6B4EC0BC426E36 /* ViewModels */,
 				AF06983DC20C4650AA86B537 /* Services */,
 				1A731B0A6753474CAAEB05EC /* Views */,
+				E32A2AC76F5E4708A245DE61 /* Fonts */,
 				669ABEDD64D64609A3A91CAC /* Assets.xcassets */,
 				C2B67BDFF80E407AB7C32EE3 /* Info.plist */,
 				24900D3A65EF4CBBAE94B378 /* Preview Content */,
@@ -136,6 +147,18 @@
 			sourceTree = "<group>";
 		};
 
+		E32A2AC76F5E4708A245DE61 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				DFA1FEDFD06146C398E58F27 /* ThmanyahSans-Light.otf */,
+				177DD381A8FF4BC4BA86F471 /* ThmanyahSans-Regular.otf */,
+				5AEA724894094860B64946F0 /* ThmanyahSans-Medium.otf */,
+				30C9D83F0AE24324A76A9C70 /* ThmanyahSans-Bold.otf */,
+				972C63E626C846E1A4621961 /* ThmanyahSans-Black.otf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -196,6 +219,11 @@
 			files = (
 				4BE9604E469C4021B6B0889E /* Preview Assets.xcassets in Resources */,
 				EB5B1D9D5B2846319D378D44 /* Assets.xcassets in Resources */,
+				3BEC30B100C74366A55CD0D6 /* ThmanyahSans-Light.otf in Resources */,
+				2B8815CDA36A4CFBA90095DB /* ThmanyahSans-Regular.otf in Resources */,
+				950264C3E5A3425887EB643F /* ThmanyahSans-Medium.otf in Resources */,
+				1276D1728EC8485B8C4DF7C5 /* ThmanyahSans-Bold.otf in Resources */,
+				585B6ED45C0741EC8253B06C /* ThmanyahSans-Black.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -16,11 +16,11 @@ struct ImportView: View {
                 .foregroundStyle(Theme.accent)
 
             Text("Combine Screenshots")
-                .font(.title2.bold())
+                .font(Theme.title2)
                 .foregroundStyle(Theme.ink)
 
             Text("Import multiple screenshots and stitch them into one long image — free, unlimited, no watermark.")
-                .font(.subheadline)
+                .font(Theme.subheadline)
                 .foregroundStyle(Theme.inkSoft)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
@@ -31,7 +31,7 @@ struct ImportView: View {
                 matching: .images
             ) {
                 Label("Import Screenshots", systemImage: "photo.on.rectangle.angled")
-                    .font(.headline)
+                    .font(Theme.headline)
                     .frame(maxWidth: .infinity)
                     .padding()
             }

@@ -26,11 +26,11 @@ struct ArrangeView: View {
 
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Screenshot")
-                                    .font(.subheadline.weight(.medium))
+                                    .font(Theme.subheadlineMedium)
                                     .foregroundStyle(Theme.ink)
                                 if !image.redactions.isEmpty {
                                     Label("\(image.redactions.count) redaction(s)", systemImage: "eye.slash")
-                                        .font(.caption)
+                                        .font(Theme.caption)
                                         .foregroundStyle(Theme.accent)
                                 }
                             }

@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 /// SnapStitch's visual language: a "contact sheet" — screenshots treated
 /// like film frames being reviewed and stitched together. Warm paper/dark
@@ -21,6 +22,40 @@ enum Theme {
     /// section eyebrows, and format tags, echoing camera/film metadata.
     static func mono(_ size: CGFloat = 11, weight: Font.Weight = .medium) -> Font {
         .system(size: size, weight: weight, design: .monospaced)
+    }
+
+    /// App text in Thmanyah Sans (Arabic + Latin), scaled with Dynamic Type
+    /// relative to `style`. Falls back to the system font if the bundled
+    /// font files are missing.
+    static func text(_ size: CGFloat, weight: Font.Weight = .regular, relativeTo style: Font.TextStyle = .body) -> Font {
+        .custom(AppFont.name(for: weight), size: size, relativeTo: style)
+    }
+
+    static let body = text(17)
+    static let headline = text(17, weight: .bold, relativeTo: .headline)
+    static let subheadline = text(15, relativeTo: .subheadline)
+    static let subheadlineMedium = text(15, weight: .medium, relativeTo: .subheadline)
+    static let caption = text(12, relativeTo: .caption)
+    static let title2 = text(22, weight: .bold, relativeTo: .title2)
+}
+
+/// The bundled Thmanyah Sans weights, addressed by PostScript name.
+/// Files live in `Fonts/` and are registered under `UIAppFonts` in Info.plist.
+enum AppFont {
+    static func name(for weight: Font.Weight) -> String {
+        switch weight {
+        case .ultraLight, .thin, .light: return "thmanyahsans-Light"
+        case .medium: return "thmanyahsans-Medium"
+        case .semibold, .bold: return "thmanyahsans-Bold"
+        case .heavy, .black: return "thmanyahsans-Black"
+        default: return "thmanyahsans-Regular"
+        }
+    }
+
+    /// UIKit counterpart, for appearance proxies such as the navigation bar.
+    static func uiFont(_ size: CGFloat, weight: Font.Weight = .regular, textStyle: UIFont.TextStyle = .body) -> UIFont {
+        let base = UIFont(name: name(for: weight), size: size) ?? .systemFont(ofSize: size)
+        return UIFontMetrics(forTextStyle: textStyle).scaledFont(for: base)
     }
 }
 

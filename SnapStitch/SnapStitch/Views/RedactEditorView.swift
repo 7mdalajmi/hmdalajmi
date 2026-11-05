@@ -74,7 +74,7 @@ struct RedactEditorView: View {
             .padding(.horizontal)
 
             Text("Drag over the parts of the screenshot you want to hide. Processed on-device.")
-                .font(.caption)
+                .font(Theme.caption)
                 .foregroundStyle(Theme.inkSoft)
                 .padding(.horizontal)
 
